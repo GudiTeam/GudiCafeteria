@@ -13,10 +13,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     abstract val initView: () -> Unit
     abstract val requestedPermissionList: List<String>
+    abstract val layoutResID: Int
     protected val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(layoutResID)
 
         if(isCheckRuntimePermission() && requestedPermissionList.isNotEmpty() &&
                 !checkPermission(requestedPermissionList)) {
