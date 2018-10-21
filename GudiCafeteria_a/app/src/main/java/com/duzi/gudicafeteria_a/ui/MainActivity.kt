@@ -2,12 +2,12 @@ package com.duzi.gudicafeteria_a.ui
 
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.LinearLayoutCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.ui.navi.ButtonView
+import com.duzi.gudicafeteria_a.ui.navi.ImageButtonSet
+import com.duzi.gudicafeteria_a.ui.navi.ThreeButtonView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
@@ -15,12 +15,13 @@ import kotlinx.android.synthetic.main.navigation_menu.*
 class MainActivity : BaseActivity() {
 
     override val layoutResID = R.layout.activity_main
-    override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.READ_EXTERNAL_STORAGE")
-    private lateinit var drawerToggle: ActionBarDrawerToggle
+    override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initLayout()
+        initMenu()
     }
 
     override val initView: () -> Unit = {
@@ -43,7 +44,48 @@ class MainActivity : BaseActivity() {
             else
                 drawerLayout.openDrawer(GravityCompat.START)
         }
-
-        navi_menu_root.layoutManager = LinearLayoutManager(this)
     }
+
+    private fun initMenu() {
+        naviMenuRoot.addView(ButtonView(this, "로그인") {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ThreeButtonView(this,
+                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ButtonView(this, "로그인") {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ThreeButtonView(this,
+                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ThreeButtonView(this,
+                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ThreeButtonView(this,
+                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ButtonView(this, "로그인") {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+        naviMenuRoot.addView(ThreeButtonView(this,
+                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        })
+    }
+
 }
