@@ -5,9 +5,7 @@ import android.support.v4.view.GravityCompat
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
-import com.duzi.gudicafeteria_a.ui.navi.ButtonView
-import com.duzi.gudicafeteria_a.ui.navi.ImageButtonSet
-import com.duzi.gudicafeteria_a.ui.navi.ThreeButtonView
+import com.duzi.gudicafeteria_a.ui.navi.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
@@ -56,34 +54,13 @@ class MainActivity : BaseActivity() {
                         ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
-        naviMenuRoot.addView(ButtonView(this, "로그인") {
+        naviMenuRoot.addView(AdvertisingView(this) {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
-        naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+        naviMenuRoot.addView(BasicView(this, "공지사항") {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
-        naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(ButtonView(this, "로그인") {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+        naviMenuRoot.addView(BasicView(this, "광고문의") {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
     }

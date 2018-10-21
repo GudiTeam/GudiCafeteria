@@ -5,7 +5,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.navi_three_button.view.*
 
-class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>, var closeDrawer: () -> Unit): NaviPartView(context) {
+class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>, var closeDrawer: () -> Unit): NaviBaseView(context) {
 
     init {
         val imageButtonList = listOf(imageButton1, imageButton2, imageButton3)

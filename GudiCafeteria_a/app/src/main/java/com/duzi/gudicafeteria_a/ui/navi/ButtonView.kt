@@ -6,7 +6,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.navi_single_button.view.*
 
-class ButtonView(context:Context?, title: String, var closeDrawer: () -> Unit) : NaviPartView(context) {
+class ButtonView(context:Context?, title: String, var closeDrawer: () -> Unit) : NaviBaseView(context) {
 
     init {
         btnMenuSingleButton.apply {
