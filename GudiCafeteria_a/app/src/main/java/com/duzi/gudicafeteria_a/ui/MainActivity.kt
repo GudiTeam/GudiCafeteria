@@ -42,6 +42,7 @@ class MainActivity : BaseActivity() {
             else
                 drawerLayout.openDrawer(GravityCompat.START)
         }
+
     }
 
     private fun initMenu() {

@@ -15,5 +15,36 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="OnClick" />
 
+    <android.support.constraint.Guideline
+        android:id="@+id/guideVerticalTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="60dp" />
+
+    <Button
+        android:id="@+id/icFilter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/guideVerticalTop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/icPlaceHolder"
+        android:drawableLeft="@drawable/ic_filter"
+        android:drawableStart="@drawable/ic_filter"
+        android:background="#00000000"
+        android:text="필터"/>
+
+    <Button
+        android:id="@+id/icPlaceHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/guideVerticalTop"
+        app:layout_constraintLeft_toRightOf="@+id/icFilter"
+        app:layout_constraintRight_toRightOf="parent"
+        android:drawableLeft="@drawable/ic_placeholder"
+        android:drawableStart="@drawable/ic_placeholder"
+        android:background="#00000000"
+        android:text="지도"/>
+
 
 </android.support.constraint.ConstraintLayout>
