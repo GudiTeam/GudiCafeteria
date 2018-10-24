@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.*
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -14,7 +15,15 @@ import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.layout_pull_load_more.view.*
 import kotlinx.android.synthetic.main.layout_pull_load_more_footer.view.*
 
-class PullLoadMoreRecyclerView(context: Context): LinearLayout(context) {
+class PullLoadMoreRecyclerView: LinearLayout {
+
+    constructor(context: Context) : super(context) {
+        init(context)
+    }
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init(context)
+    }
 
     private var hasMore = true
     private var isRefresh = false
@@ -23,12 +32,8 @@ class PullLoadMoreRecyclerView(context: Context): LinearLayout(context) {
     private var pushRefreshEnable = true
     lateinit var pullLoadMoreListener: PullLoadMoreListener
 
-    init {
-        init(context)
-    }
-
     private fun init(context: Context) {
-        val view = initLayout(context)
+        initLayout(context)
         swipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(context, android.R.color.holo_blue_bright),
                 ContextCompat.getColor(context, android.R.color.holo_green_light),
@@ -43,7 +48,6 @@ class PullLoadMoreRecyclerView(context: Context): LinearLayout(context) {
         recycler_view.setOnTouchListener(OnTouchRecyclerView())
 
         footerView.visibility = GONE
-        addView(view)
     }
 
     private fun initLayout(context: Context) = LayoutInflater.from(context).inflate(R.layout.layout_pull_load_more, this)
