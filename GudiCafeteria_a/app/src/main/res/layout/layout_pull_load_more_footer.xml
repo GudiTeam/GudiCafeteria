@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/area"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/transparent">
-    
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="@dimen/default_icon_width"
-        android:layout_height="@dimen/default_icon_height"
-        android:clickable="false"
+    android:id="@+id/loadMoreLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cfff">
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/loadMoreProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button_text"
+        app:layout_constraintRight_toLeftOf="@+id/loadMoreText"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        tools:src="@drawable/ic_filter" />
+        android:layout_marginRight="10dp"
+        style="@android:style/Widget.Holo.ProgressBar.Small" />
 
     <TextView
-        android:id="@+id/button_text"
+        android:id="@+id/loadMoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/icon"
+        app:layout_constraintLeft_toRightOf="@+id/loadMoreProgressBar"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
-        tools:text="필터"/>
+        tools:text="로딩중입니다" />
 
 </android.support.constraint.ConstraintLayout>

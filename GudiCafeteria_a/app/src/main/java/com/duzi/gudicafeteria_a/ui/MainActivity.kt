@@ -7,6 +7,7 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_image_text_button_left.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
 
@@ -42,6 +43,14 @@ class MainActivity : BaseActivity() {
             else
                 drawerLayout.openDrawer(GravityCompat.START)
         }
+
+        btnFilter.setOnClickListener {
+            Toast.makeText(this, "Filter Button clicked", Toast.LENGTH_SHORT).show()
+        }
+        btnMap.setOnClickListener {
+            Toast.makeText(this, "Map Button clicked", Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 

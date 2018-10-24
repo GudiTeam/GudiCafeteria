@@ -8,7 +8,6 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
-import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -18,6 +17,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.duzi.gudicafeteria_a.R
+import kotlinx.android.synthetic.main.layout_image_text_button_left.view.*
 
 class ImageTextButton : RelativeLayout {
 
@@ -46,9 +46,6 @@ class ImageTextButton : RelativeLayout {
         init(context, attrs!!)
     }
 
-    private var icon: ImageView? = null
-    private var title: TextView? = null
-    private var area: ConstraintLayout? = null
     private var positionType:IconPosition? = null
 
     companion object {
@@ -59,32 +56,24 @@ class ImageTextButton : RelativeLayout {
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun init(context: Context, attrs: AttributeSet?) {
-        val rootView: View = initLayout(context)
-        area = getArea(rootView)
-        icon = getIcon(rootView)
-        title = getTitle(rootView)
+        initLayout(context)
 
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageTextButton)
         val positionValue = typedArray.getInt(R.styleable.ImageTextButton_itb_icon_position, 1)
         positionType = IconPosition.values()[positionValue]
         initPadding(typedArray)
         initBackground(typedArray)
-        initTitle(typedArray, title!!)
-        initIcon(typedArray, icon!!)
+        initTitle(typedArray, button_text)
+        initIcon(typedArray, icon)
         typedArray.recycle()
     }
 
-    private fun initLayout(context: Context): View {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        return when(positionType) {
-            IconPosition.LEFT -> inflater.inflate(R.layout.layout_image_text_button_left, this)
-            else -> inflater.inflate(R.layout.layout_image_text_button_left, this)
+    private fun initLayout(context: Context) {
+        when(positionType) {
+            IconPosition.LEFT -> LayoutInflater.from(context).inflate(R.layout.layout_image_text_button_left, this)
+            else -> LayoutInflater.from(context).inflate(R.layout.layout_image_text_button_left, this)
         }
     }
-
-    private fun getArea(rootView: View): ConstraintLayout = rootView.findViewById(R.id.area)
-    private fun getIcon(parentView: View): ImageView = parentView.findViewById(R.id.icon)
-    private fun getTitle(parentView: View): TextView = parentView.findViewById(R.id.button_text)
 
     private fun initPadding(typedArray: TypedArray) {
         val padding = typedArray.getDimensionPixelOffset(R.styleable.ImageTextButton_itb_padding,
