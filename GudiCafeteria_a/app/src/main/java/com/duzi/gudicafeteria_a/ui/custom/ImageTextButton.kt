@@ -2,10 +2,14 @@ package com.duzi.gudicafeteria_a.ui.custom
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +21,17 @@ import com.duzi.gudicafeteria_a.R
 
 class ImageTextButton : RelativeLayout {
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    constructor(context: Context) : super(context) {
+        init(context, null)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init(context, attrs)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     constructor(context: Context,
                 attrs: AttributeSet? = null,
                 defStyleAttr:Int = 0) : super(context, attrs, defStyleAttr) {
@@ -42,7 +57,8 @@ class ImageTextButton : RelativeLayout {
         }
     }
 
-    private fun init(context: Context, attrs: AttributeSet) {
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun init(context: Context, attrs: AttributeSet?) {
         val rootView: View = initLayout(context)
         area = getArea(rootView)
         icon = getIcon(rootView)
@@ -77,8 +93,48 @@ class ImageTextButton : RelativeLayout {
             setPadding(padding, padding, padding, padding)
         }
     }
-    private fun initBackground(typedArray: TypedArray) {
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun initBackground(typedArray: TypedArray) {
+        val radius = typedArray.getDimensionPixelOffset(R.styleable.ImageTextButton_itb_radius,
+                resources.getDimensionPixelOffset(R.dimen.default_radius))
+        val normalBgColor = typedArray.getColor(R.styleable.ImageTextButton_itb_bg,
+                ContextCompat.getColor(context, R.color.default_bg))
+        var pressedBgColor = typedArray.getColor(R.styleable.ImageTextButton_itb_bg_pressed, -1)
+        if(pressedBgColor == -1) {
+            val alpha = Color.alpha(normalBgColor)
+            val red = Color.red(normalBgColor)
+            val green = Color.green(normalBgColor)
+            val blue = Color.blue(normalBgColor)
+            pressedBgColor = if(alpha < 0xFF) {
+                Color.argb(0xFF, red, green, blue)
+            } else {
+                Color.argb(0x90, red, green, blue)
+            }
+        }
+        val disabledBgColor = typedArray.getColor(R.styleable.ImageTextButton_itb_bg_disabled,
+                ContextCompat.getColor(context, R.color.default_bg_disabled))
+
+        val normalShape = GradientDrawable()
+        normalShape.setColor(normalBgColor)
+
+        val pressedShape = GradientDrawable()
+        pressedShape.setColor(pressedBgColor)
+
+        val disabledShape = GradientDrawable()
+        disabledShape.setColor(disabledBgColor)
+
+        if(radius > 0) {
+            normalShape.cornerRadius = radius.toFloat()
+            pressedShape.cornerRadius = radius.toFloat()
+            disabledShape.cornerRadius = radius.toFloat()
+        }
+
+        val bg = StateListDrawable()
+        bg.addState(intArrayOf(android.R.attr.state_pressed), pressedShape)
+        bg.addState(intArrayOf(android.R.attr.state_enabled), normalShape)
+        background = bg
+        isClickable = true
     }
     private fun initTitle(typedArray: TypedArray, textView: TextView) {
         val title = typedArray.getString(R.styleable.ImageTextButton_itb_text)
@@ -89,7 +145,7 @@ class ImageTextButton : RelativeLayout {
             val textSize = typedArray.getDimensionPixelSize(R.styleable.ImageTextButton_itb_text_size,
                     resources.getDimensionPixelSize(R.dimen.default_text_size))
             val textColor = typedArray.getColor(R.styleable.ImageTextButton_itb_text_color,
-                    resources.getColor(R.color.default_text_color))
+                    ContextCompat.getColor(context, R.color.default_text_color))
             val margin = typedArray.getDimensionPixelOffset(R.styleable.ImageTextButton_itb_icon_text_marggin,
                     resources.getDimensionPixelOffset(R.dimen.default_text_margin))
             textView.textSize = px2dip(textSize)
