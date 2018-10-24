@@ -97,6 +97,10 @@ class PullLoadMoreRecyclerView: LinearLayout {
 
     fun getSwipeRefreshEnable() = swipeRefreshLayout.isEnabled
 
+    /**
+     * 새로고침 아이콘 색상 변경
+     * 화살표가 한바퀴 돌 때마다 각각의 색상으로 나타남
+     */
     fun setColorSchemeResources(vararg colors: Int) {
         swipeRefreshLayout.setColorSchemeResources(*colors)
     }

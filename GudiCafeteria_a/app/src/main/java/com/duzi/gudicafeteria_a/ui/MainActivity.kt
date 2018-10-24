@@ -5,13 +5,15 @@ import android.support.v4.view.GravityCompat
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
+import com.duzi.gudicafeteria_a.ui.custom.recycler.RecyclerViewAdapter
 import com.duzi.gudicafeteria_a.ui.navi.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_image_text_button_left.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener {
 
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
@@ -36,6 +38,14 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onRefresh() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onLoadMore() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     private fun initLayout() {
         mainHamburger.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START))
@@ -51,7 +61,11 @@ class MainActivity : BaseActivity() {
             Toast.makeText(this, "Map Button clicked", Toast.LENGTH_SHORT).show()
         }
 
-
+        pullLoadMoreRecyclerView.setRefreshing(true)
+        pullLoadMoreRecyclerView.setLinearLayout()
+        pullLoadMoreRecyclerView.setFooterViewText("로딩중입니다")
+        pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
+        pullLoadMoreRecyclerView.setAdapter(RecyclerViewAdapter())
     }
 
     private fun initMenu() {
