@@ -1,10 +1,12 @@
 package com.duzi.gudicafeteria_a.ui
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.view.GravityCompat
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.ui.custom.recycler.DummyData
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.custom.recycler.RecyclerViewAdapter
 import com.duzi.gudicafeteria_a.ui.navi.*
@@ -17,6 +19,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
+
+    private val recyclerAdapter = RecyclerViewAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +43,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override fun onRefresh() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loadData()
     }
 
     override fun onLoadMore() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        loadData()
     }
 
     private fun initLayout() {
@@ -65,7 +69,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         pullLoadMoreRecyclerView.setLinearLayout()
         pullLoadMoreRecyclerView.setFooterViewText("로딩중입니다")
         pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
-        pullLoadMoreRecyclerView.setAdapter(RecyclerViewAdapter())
+        pullLoadMoreRecyclerView.setAdapter(recyclerAdapter)
+        loadData()
     }
 
     private fun initMenu() {
@@ -89,4 +94,19 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         })
     }
 
+    private fun loadData() {
+        Handler().postDelayed({
+            recyclerAdapter.addAllData(createDummy())
+            pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+        }, 1000)
+    }
+
+    private fun createDummy(): List<DummyData> {
+        val dummyList = arrayListOf<DummyData>()
+        for(i in 1..20) {
+            val dummy = DummyData("title $i", i, "address $i", i.toDouble(), i)
+            dummyList.add(dummy)
+        }
+        return dummyList
+    }
 }
