@@ -52,6 +52,8 @@ class PullLoadMoreRecyclerView: LinearLayout {
 
     private fun initLayout(context: Context) = LayoutInflater.from(context).inflate(R.layout.layout_pull_load_more, this)
 
+    fun getRecyclerView(): RecyclerView = recycler_view
+
     fun setLinearLayout() {
         recycler_view.layoutManager = LinearLayoutManager(context)
     }

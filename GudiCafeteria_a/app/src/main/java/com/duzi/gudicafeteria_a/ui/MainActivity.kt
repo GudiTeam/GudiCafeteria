@@ -3,6 +3,7 @@ package com.duzi.gudicafeteria_a.ui
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.GravityCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
@@ -43,6 +44,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override fun onRefresh() {
+        setRefresh()
         loadData()
     }
 
@@ -70,6 +72,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         pullLoadMoreRecyclerView.setFooterViewText("로딩중입니다")
         pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
         pullLoadMoreRecyclerView.setAdapter(recyclerAdapter)
+        pullLoadMoreRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         loadData()
     }
 
@@ -78,9 +81,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
             drawerLayout.closeDrawer(GravityCompat.START)
         })
         naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart_64_wb, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat_64_wb, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings_64_wb, "환경설정"))) {
+                listOf(ImageButtonSet(R.drawable.ic_heart, "찜하기"),
+                        ImageButtonSet(R.drawable.ic_chat, "리뷰관리"),
+                        ImageButtonSet(R.drawable.ic_settings, "환경설정"))) {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
         naviMenuRoot.addView(AdvertisingView(this) {
@@ -101,10 +104,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }, 1000)
     }
 
+    private fun setRefresh() {
+        recyclerAdapter.clearData()
+    }
+
     private fun createDummy(): List<DummyData> {
         val dummyList = arrayListOf<DummyData>()
         for(i in 1..20) {
-            val dummy = DummyData("title $i", i, "address $i", i.toDouble(), i)
+            val dummy = DummyData("한신아이티구내식당 $i", i , "서울 구로구 디지털로 272 한신아이티타워 $i", i.toDouble(), i)
             dummyList.add(dummy)
         }
         return dummyList

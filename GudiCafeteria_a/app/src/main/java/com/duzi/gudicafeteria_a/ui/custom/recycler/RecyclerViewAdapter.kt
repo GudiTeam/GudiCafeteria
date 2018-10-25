@@ -20,7 +20,7 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]
         holder.itemView.title.text = item.title
-        holder.itemView.distance.text = item.distance.toString()
+        holder.itemView.distance.text = item.distance.toString() + " km"
         holder.itemView.address.text = item.address
         holder.itemView.star.text = item.star.toString()
         holder.itemView.review.text = item.review.toString()
@@ -31,6 +31,10 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun addAllData(dataList: List<DummyData>) {
         this.dataList.addAll(dataList)
         notifyDataSetChanged()
+    }
+
+    fun clearData() {
+        this.dataList.clear()
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

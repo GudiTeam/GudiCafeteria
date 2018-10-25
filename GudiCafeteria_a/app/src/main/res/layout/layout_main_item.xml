@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/title"
@@ -12,6 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         tools:text="한신 IT 구내식당"/>
 
     <android.support.constraint.Guideline
