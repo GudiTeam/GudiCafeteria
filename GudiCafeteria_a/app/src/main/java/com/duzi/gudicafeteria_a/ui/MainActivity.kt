@@ -1,5 +1,9 @@
 package com.duzi.gudicafeteria_a.ui
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.GravityCompat
@@ -7,12 +11,14 @@ import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.data.source.DataRepository
 import com.duzi.gudicafeteria_a.ui.custom.recycler.DummyData
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.custom.recycler.RecyclerViewAdapter
 import com.duzi.gudicafeteria_a.ui.navi.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_image_text_button_left.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
 
@@ -28,6 +34,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
         initLayout()
         initMenu()
+        load()
     }
 
     override val initView: () -> Unit = {
@@ -95,6 +102,17 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         naviMenuRoot.addView(BasicView(this, "광고문의") {
             drawerLayout.closeDrawer(GravityCompat.START)
         })
+    }
+
+    private fun load() {
+        ViewModelProviders.of(this).get(CafeViewModel::class.java).getData()
+                .observe(this, Observer {
+                    for(cafe in it!!) {
+                        println(cafe.name)
+                    }
+                })
+
+        DataRepository.getInstance().loadData()
     }
 
     private fun loadData() {
