@@ -1,8 +1,6 @@
 package com.duzi.gudicafeteria_a.ui
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
@@ -11,12 +9,11 @@ import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
-import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.source.DataRepository
-import com.duzi.gudicafeteria_a.ui.custom.recycler.DummyData
+import com.duzi.gudicafeteria_a.cafe.DummyData
+import com.duzi.gudicafeteria_a.data.source.CafeRepository
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
-import com.duzi.gudicafeteria_a.ui.custom.recycler.RecyclerViewAdapter
 import com.duzi.gudicafeteria_a.ui.navi.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
@@ -27,14 +24,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
 
-    private val recyclerAdapter = RecyclerViewAdapter()
+    private val recyclerAdapter = CafeAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initLayout()
         initMenu()
-        load()
+        observeViewModel()
     }
 
     override val initView: () -> Unit = {
@@ -52,11 +49,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         setRefresh()
-        loadData()
+        CafeRepository.getInstance().loadData()
     }
 
     override fun onLoadMore() {
-        loadData()
+        CafeRepository.getInstance().loadData()
     }
 
     private fun initLayout() {
@@ -80,7 +77,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
         pullLoadMoreRecyclerView.setAdapter(recyclerAdapter)
         pullLoadMoreRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        loadData()
     }
 
     private fun initMenu() {
@@ -104,34 +100,19 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         })
     }
 
-    private fun load() {
+    private fun observeViewModel() {
         ViewModelProviders.of(this).get(CafeViewModel::class.java).getData()
                 .observe(this, Observer {
-                    for(cafe in it!!) {
-                        println(cafe.name)
+                    if (it != null) {
+                        recyclerAdapter.addAllData(it)
+                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
                     }
                 })
 
-        DataRepository.getInstance().loadData()
-    }
-
-    private fun loadData() {
-        Handler().postDelayed({
-            recyclerAdapter.addAllData(createDummy())
-            pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
-        }, 1000)
+        CafeRepository.getInstance().loadData()
     }
 
     private fun setRefresh() {
         recyclerAdapter.clearData()
-    }
-
-    private fun createDummy(): List<DummyData> {
-        val dummyList = arrayListOf<DummyData>()
-        for(i in 1..20) {
-            val dummy = DummyData("한신아이티구내식당 $i", i , "서울 구로구 디지털로 272 한신아이티타워 $i", i.toDouble(), i)
-            dummyList.add(dummy)
-        }
-        return dummyList
     }
 }

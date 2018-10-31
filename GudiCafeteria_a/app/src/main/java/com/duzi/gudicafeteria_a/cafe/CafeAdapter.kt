@@ -1,15 +1,16 @@
-package com.duzi.gudicafeteria_a.ui.custom.recycler
+package com.duzi.gudicafeteria_a.cafe
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
+import com.duzi.gudicafeteria_a.data.Cafe
 import kotlinx.android.synthetic.main.layout_main_item.view.*
 
-class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CafeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var dataList = arrayListOf<DummyData>()
+    private var dataList = arrayListOf<Cafe>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -19,16 +20,16 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]
-        holder.itemView.title.text = item.title
-        holder.itemView.distance.text = item.distance.toString() + " km"
-        holder.itemView.address.text = item.address
-        holder.itemView.star.text = item.star.toString()
-        holder.itemView.review.text = item.review.toString()
+        holder.itemView.title.text = item.cafe_Nm
+        holder.itemView.distance.text = "22 km"
+        holder.itemView.address.text = item.build_Addr
+        holder.itemView.star.text = "5"
+        holder.itemView.review.text = "6"
     }
 
     override fun getItemCount(): Int = dataList.size
 
-    fun addAllData(dataList: List<DummyData>) {
+    fun addAllData(dataList: List<Cafe>) {
         this.dataList.addAll(dataList)
         notifyDataSetChanged()
     }
