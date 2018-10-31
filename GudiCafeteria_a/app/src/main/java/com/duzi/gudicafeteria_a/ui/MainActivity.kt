@@ -55,11 +55,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         setRefresh()
-        CafeRepository.getInstance().loadData()
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
     }
 
     override fun onLoadMore() {
-        CafeRepository.getInstance().loadData()
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
     }
 
     private fun initLayout() {
@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun observeViewModel() {
-        ViewModelProviders.of(this).get(CafeViewModel::class.java).getData()
+        ViewModelProviders.of(this).get(CafeViewModel::class.java).getCafeList()
                 .observe(this, Observer {
                     if (it != null) {
                         recyclerAdapter.addAllData(it)
@@ -115,7 +115,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     }
                 })
 
-        CafeRepository.getInstance().loadData()
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
     }
 
     private fun setRefresh() {

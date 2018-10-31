@@ -46,5 +46,3 @@ class CafeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val review = view.review
     }
 }
-
-data class DummyData(val title: String, val distance: Int, val address: String, val star: Double, val review: Int)
