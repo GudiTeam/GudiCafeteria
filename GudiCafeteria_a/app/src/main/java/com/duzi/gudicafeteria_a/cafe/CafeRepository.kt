@@ -1,10 +1,10 @@
-package com.duzi.gudicafeteria_a.cafe.source
+package com.duzi.gudicafeteria_a.cafe
 
 import android.arch.lifecycle.MutableLiveData
-import com.duzi.gudicafeteria_a.cafe.service.CafeService
-import com.duzi.gudicafeteria_a.cafe.service.CafeService.Companion.HTTP_API_CAFE_URL
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.data.Menu
+import com.duzi.gudicafeteria_a.service.ApiService
+import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CafeRepository {
 
-    private val cafeService: CafeService by lazy {
-        CafeRepository.create()
+    private val apiService: ApiService by lazy {
+        create()
     }
 
     private val cafeList: MutableLiveData<List<Cafe>> = MutableLiveData()
@@ -43,7 +43,7 @@ class CafeRepository {
 
         // get data from retrofit
         return Observable.just("").subscribe()
-        /*return cafeService.getCafeList()
+        /*return apiService.getCafeList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -54,7 +54,7 @@ class CafeRepository {
     fun getCafeList() = cafeList
 
     fun loadCafeListPeriod(cafeId: String, start: Long, end: Long): Disposable {
-        return cafeService.getCafeListPeriod(cafeId, start, end)
+        return apiService.getCafeListPeriod(cafeId, start, end)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -69,22 +69,24 @@ class CafeRepository {
         private var INSTANCE: CafeRepository? = null
 
         fun getInstance() =
-                INSTANCE ?: synchronized(CafeRepository::class.java) {
-                    INSTANCE ?: CafeRepository().also { INSTANCE = it }
+                INSTANCE
+                        ?: synchronized(CafeRepository::class.java) {
+                    INSTANCE
+                            ?: CafeRepository().also { INSTANCE = it }
                 }
 
         fun distoryInstance() {
             INSTANCE = null
         }
 
-        fun create(): CafeService {
+        fun create(): ApiService {
             val retrofit = Retrofit.Builder()
-                    .baseUrl(HTTP_API_CAFE_URL)
+                    .baseUrl(HTTP_API_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
 
-            return retrofit.create(CafeService::class.java)
+            return retrofit.create(ApiService::class.java)
         }
     }
 }

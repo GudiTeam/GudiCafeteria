@@ -10,7 +10,7 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
-import com.duzi.gudicafeteria_a.cafe.source.CafeRepository
+import com.duzi.gudicafeteria_a.cafe.CafeRepository
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.navi.*
 import io.reactivex.disposables.CompositeDisposable

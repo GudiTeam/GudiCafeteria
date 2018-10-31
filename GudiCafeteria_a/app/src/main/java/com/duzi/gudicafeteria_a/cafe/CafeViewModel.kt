@@ -2,7 +2,6 @@ package com.duzi.gudicafeteria_a.cafe
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import com.duzi.gudicafeteria_a.cafe.source.CafeRepository
 import com.duzi.gudicafeteria_a.data.Cafe
 
 class CafeViewModel: ViewModel() {
