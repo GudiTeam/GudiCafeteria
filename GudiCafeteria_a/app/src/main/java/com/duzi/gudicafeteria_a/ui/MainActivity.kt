@@ -3,7 +3,6 @@ package com.duzi.gudicafeteria_a.ui
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
@@ -11,10 +10,10 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
-import com.duzi.gudicafeteria_a.cafe.DummyData
-import com.duzi.gudicafeteria_a.data.source.CafeRepository
+import com.duzi.gudicafeteria_a.cafe.source.CafeRepository
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.navi.*
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
@@ -25,6 +24,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
 
     private val recyclerAdapter = CafeAdapter()
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +32,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         initLayout()
         initMenu()
         observeViewModel()
+    }
+
+    override fun onDestroy() {
+        if(!compositeDisposable.isDisposed)
+            compositeDisposable.dispose()
+        super.onDestroy()
     }
 
     override val initView: () -> Unit = {

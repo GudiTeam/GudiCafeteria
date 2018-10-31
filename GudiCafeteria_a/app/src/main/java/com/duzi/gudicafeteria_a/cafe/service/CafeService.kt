@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.service
+package com.duzi.gudicafeteria_a.cafe.service
 
 import com.duzi.gudicafeteria_a.data.Cafe
 import io.reactivex.Observable

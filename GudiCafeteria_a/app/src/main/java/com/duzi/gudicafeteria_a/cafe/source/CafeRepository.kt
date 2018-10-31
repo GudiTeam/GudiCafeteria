@@ -1,14 +1,16 @@
-package com.duzi.gudicafeteria_a.data.source
+package com.duzi.gudicafeteria_a.cafe.source
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.data.Menu
-import com.duzi.gudicafeteria_a.service.CafeService
-import com.duzi.gudicafeteria_a.service.CafeService.Companion.HTTP_API_CAFE_URL
+import com.duzi.gudicafeteria_a.cafe.service.CafeService
+import com.duzi.gudicafeteria_a.cafe.service.CafeService.Companion.HTTP_API_CAFE_URL
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class CafeRepository {
@@ -19,15 +21,7 @@ class CafeRepository {
 
     private val mutableData: MutableLiveData<List<Cafe>> = MutableLiveData()
 
-    fun loadData() {
-        // get data from retrofit
-        val disposable = cafeService.getCafeList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    mutableData.postValue(it)
-                }
-
+    fun loadData(): Disposable {
         val menu_L = Menu("CAFE001", "20181023", "L", "MENUIMG", "MENUDIR",
                 "흰쌀밥_02L23", "된장찌개_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23",
                 "사이드1_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23",
@@ -45,6 +39,15 @@ class CafeRepository {
 
         val dataList:List<Cafe> = listOf(cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1)
         mutableData.postValue(dataList)
+
+        // get data from retrofit
+
+        return cafeService.getCafeList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    mutableData.postValue(it)
+                }
     }
 
     fun getData(): LiveData<List<Cafe>> = mutableData
@@ -65,6 +68,7 @@ class CafeRepository {
             val retrofit = Retrofit.Builder()
                     .baseUrl(HTTP_API_CAFE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
 
             return retrofit.create(CafeService::class.java)
