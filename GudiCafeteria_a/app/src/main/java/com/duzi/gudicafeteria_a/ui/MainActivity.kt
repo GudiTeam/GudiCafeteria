@@ -16,6 +16,8 @@ import com.duzi.gudicafeteria_a.ui.navi.*
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
+import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +33,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private val compositeDisposable = CompositeDisposable()
     private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
+
+    private lateinit var loginView: LoginView
+    private lateinit var mainMenuView: MainMenuView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +53,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override val initView: () -> Unit = {
-        // TODO 네트워크 작업
-        Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+        // TODO 퍼미션 허가 후에 UI와 상관없는 네트워크 작업
     }
 
     override fun onBackPressed() {
@@ -93,11 +97,23 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun initMenu() {
-        val loginView = ButtonView(this, "Kakao 로그인", "#FFF600") {
-            closeDrawer()
-            Session.getCurrentSession().checkAndImplicitOpen()
-            Session.getCurrentSession().open(authType, this)
+        loginView = LoginView(this, "Kakao 로그인", "#FFF600").apply {
+            setLoginListener {
+                closeDrawer()
+                Session.getCurrentSession().checkAndImplicitOpen()
+                Session.getCurrentSession().open(authType, this@MainActivity)
+            }
+
+            setLogoutListener {
+                UserManagement.getInstance().requestLogout(object: LogoutResponseCallback() {
+                    override fun onCompleteLogout() {
+                        loginView.setLogout()
+                        //TODO 상단 프로필 내리기
+                    }
+                })
+            }
         }
+        if(Session.getCurrentSession().checkAndImplicitOpen()) loginView.setLogin() // 로그인 상태일 경우
         naviMenuRoot.addView(loginView)
 
         val imageButtonSet = listOf(
@@ -106,14 +122,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 ImageButtonSet(R.drawable.ic_settings, "환경설정")
         )
 
-        val mainMenu = ThreeButtonView(this, imageButtonSet)
-        mainMenu.setBtn1ClickListener {  }
-        mainMenu.setBtn2ClickListener {  }
-        mainMenu.setBtn3ClickListener {  }
-        naviMenuRoot.addView(mainMenu)
+        mainMenuView = MainMenuView(this, imageButtonSet)
+        mainMenuView.setBtn1ClickListener {  }
+        mainMenuView.setBtn2ClickListener {  }
+        mainMenuView.setBtn3ClickListener {  }
+        naviMenuRoot.addView(mainMenuView)
 
         naviMenuRoot.addView(AdvertisingView(this) { closeDrawer() })
-        naviMenuRoot.addView(BasicView(this, "공지사항") { closeDrawer() })
+        naviMenuRoot.addView(BasicView(this, "공지사항"){ closeDrawer() })
         naviMenuRoot.addView(BasicView(this, "광고문의") { closeDrawer() })
     }
 
@@ -125,6 +141,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
             override fun onSessionOpened() {
                 Toast.makeText(this@MainActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+                loginView.setLogin()
+                // TODO 상단 프로필 올리기
             }
         }
         Session.getCurrentSession().addCallback(sessionCallback)

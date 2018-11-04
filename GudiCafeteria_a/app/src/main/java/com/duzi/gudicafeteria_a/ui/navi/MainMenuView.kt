@@ -5,7 +5,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.navi_three_button.view.*
 
-class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>)
+class MainMenuView(context: Context?, imageButtonSet: List<ImageButtonSet>)
     : NaviBaseView(context) {
 
     init {
