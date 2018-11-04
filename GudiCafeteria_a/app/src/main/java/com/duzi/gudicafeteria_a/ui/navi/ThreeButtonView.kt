@@ -5,7 +5,8 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.navi_three_button.view.*
 
-class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>, var closeDrawer: () -> Unit): NaviBaseView(context) {
+class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>)
+    : NaviBaseView(context) {
 
     init {
         val imageButtonList = listOf(imageButton1, imageButton2, imageButton3)
@@ -17,19 +18,16 @@ class ThreeButtonView(context: Context?, imageButtonSet: List<ImageButtonSet>, v
     }
 
     override fun layoutRes(): Int = R.layout.navi_three_button
-    override fun setupButtonsEvents() {
-        Btn1.setOnClickListener {
-            Toast.makeText(context, "Btn1 clicked", Toast.LENGTH_SHORT).show()
-            closeDrawer()
-        }
-        Btn2.setOnClickListener {
-            Toast.makeText(context, "Btn2 clicked", Toast.LENGTH_SHORT).show()
-            closeDrawer()
-        }
-        Btn3.setOnClickListener {
-            Toast.makeText(context, "Btn3 clicked", Toast.LENGTH_SHORT).show()
-            closeDrawer()
-        }
+    override fun setupButtonsEvents() = Unit
+
+    fun setBtn1ClickListener(event: () -> Unit) {
+        Btn1.setOnClickListener { event() }
+    }
+    fun setBtn2ClickListener(event: () -> Unit) {
+        Btn2.setOnClickListener { event() }
+    }
+    fun setBtn3ClickListener(event: () -> Unit) {
+        Btn3.setOnClickListener { event() }
     }
 }
 

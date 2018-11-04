@@ -9,10 +9,14 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.cafe.CafeAdapter
-import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.cafe.CafeRepository
+import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.navi.*
+import com.kakao.auth.AuthType
+import com.kakao.auth.ISessionCallback
+import com.kakao.auth.Session
+import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
@@ -25,6 +29,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private val recyclerAdapter = CafeAdapter()
     private val compositeDisposable = CompositeDisposable()
+    private lateinit var sessionCallback: ISessionCallback
+    private val authType = AuthType.KAKAO_LOGIN_ALL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         initLayout()
         initMenu()
         observeViewModel()
+        initSession()
     }
 
     override fun onDestroy() {
@@ -86,24 +93,41 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun initMenu() {
-        naviMenuRoot.addView(ButtonView(this, "로그인") {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(ThreeButtonView(this,
-                listOf(ImageButtonSet(R.drawable.ic_heart, "찜하기"),
-                        ImageButtonSet(R.drawable.ic_chat, "리뷰관리"),
-                        ImageButtonSet(R.drawable.ic_settings, "환경설정"))) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(AdvertisingView(this) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(BasicView(this, "공지사항") {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
-        naviMenuRoot.addView(BasicView(this, "광고문의") {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        })
+        val loginView = ButtonView(this, "Kakao 로그인", "#FFF600") {
+            closeDrawer()
+            Session.getCurrentSession().checkAndImplicitOpen()
+            Session.getCurrentSession().open(authType, this)
+        }
+        naviMenuRoot.addView(loginView)
+
+        val imageButtonSet = listOf(
+                ImageButtonSet(R.drawable.ic_heart, "찜하기"),
+                ImageButtonSet(R.drawable.ic_chat, "리뷰관리"),
+                ImageButtonSet(R.drawable.ic_settings, "환경설정")
+        )
+
+        val mainMenu = ThreeButtonView(this, imageButtonSet)
+        mainMenu.setBtn1ClickListener {  }
+        mainMenu.setBtn2ClickListener {  }
+        mainMenu.setBtn3ClickListener {  }
+        naviMenuRoot.addView(mainMenu)
+
+        naviMenuRoot.addView(AdvertisingView(this) { closeDrawer() })
+        naviMenuRoot.addView(BasicView(this, "공지사항") { closeDrawer() })
+        naviMenuRoot.addView(BasicView(this, "광고문의") { closeDrawer() })
+    }
+
+    private fun initSession() {
+        sessionCallback = object: ISessionCallback {
+            override fun onSessionOpenFailed(exception: KakaoException?) {
+                Toast.makeText(this@MainActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSessionOpened() {
+                Toast.makeText(this@MainActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+            }
+        }
+        Session.getCurrentSession().addCallback(sessionCallback)
     }
 
     private fun observeViewModel() {
@@ -120,5 +144,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private fun setRefresh() {
         recyclerAdapter.clearData()
+    }
+
+    private fun closeDrawer() {
+        drawerLayout.closeDrawer(GravityCompat.START)
     }
 }

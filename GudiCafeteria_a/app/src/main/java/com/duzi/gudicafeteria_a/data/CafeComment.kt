@@ -1,6 +1,6 @@
 package com.duzi.gudicafeteria_a.data
 
-class CafeComment(
+data class CafeComment(
         val INS_USER_DTM: Double,
         val USER_ID: String,
         val CAFE_ID: String,

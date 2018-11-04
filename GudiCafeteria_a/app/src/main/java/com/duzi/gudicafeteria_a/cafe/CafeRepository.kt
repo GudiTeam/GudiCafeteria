@@ -69,10 +69,8 @@ class CafeRepository {
         private var INSTANCE: CafeRepository? = null
 
         fun getInstance() =
-                INSTANCE
-                        ?: synchronized(CafeRepository::class.java) {
-                    INSTANCE
-                            ?: CafeRepository().also { INSTANCE = it }
+                INSTANCE ?: synchronized(CafeRepository::class.java) {
+                    INSTANCE ?: CafeRepository().also { INSTANCE = it }
                 }
 
         fun distoryInstance() {
