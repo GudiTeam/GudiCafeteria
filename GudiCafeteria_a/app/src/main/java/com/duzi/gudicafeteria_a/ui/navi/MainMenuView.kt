@@ -1,7 +1,6 @@
 package com.duzi.gudicafeteria_a.ui.navi
 
 import android.content.Context
-import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import kotlinx.android.synthetic.main.navi_three_button.view.*
 
