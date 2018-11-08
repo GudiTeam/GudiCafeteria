@@ -67,15 +67,15 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override fun sortByDistance() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this@MainActivity, "거리순 정렬", Toast.LENGTH_SHORT).show()
     }
 
     override fun sortBycreatedAt() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this@MainActivity, "생성순 정렬", Toast.LENGTH_SHORT).show()
     }
 
     override fun sortByStar() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this@MainActivity, "평점순 정렬", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRefresh() {
@@ -96,7 +96,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         btnFilter.setOnClickListener {
-            FilterBottomDialog().setFilterListener(this)
+            FilterBottomDialog.getInstance().setFilterListener(this)
+
                     .show(supportFragmentManager)
         }
         btnMap.setOnClickListener {
