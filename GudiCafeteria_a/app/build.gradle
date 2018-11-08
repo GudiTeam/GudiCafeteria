@@ -61,4 +61,7 @@ dependencies {
 
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.14.0'
     implementation group: 'com.kakao.sdk', name: 'push', version: '1.14.0'
+
+    //bottom dialog
+    implementation 'me.shaohui:bottomdialog:1.1.9'
 }

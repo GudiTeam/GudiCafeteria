@@ -11,6 +11,8 @@ import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.cafe.CafeRepository
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
+import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.navi.*
 import com.kakao.auth.AuthType
@@ -24,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_menu.*
 
-class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener {
+class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener, FilterListener {
 
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
@@ -64,6 +66,18 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
+    override fun sortByDistance() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun sortBycreatedAt() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun sortByStar() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onRefresh() {
         setRefresh()
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
@@ -82,7 +96,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         btnFilter.setOnClickListener {
-            Toast.makeText(this, "Filter Button clicked", Toast.LENGTH_SHORT).show()
+            FilterBottomDialog().setFilterListener(this)
+                    .show(supportFragmentManager)
         }
         btnMap.setOnClickListener {
             Toast.makeText(this, "Map Button clicked", Toast.LENGTH_SHORT).show()
