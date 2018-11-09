@@ -20,6 +20,7 @@ class CafeRepository {
     }
 
     private val cafeList: MutableLiveData<List<Cafe>> = MutableLiveData()
+    private val cafeListCache: ArrayList<Cafe> = arrayListOf()
     private val cafeListPeriod: MutableLiveData<List<Cafe>> = MutableLiveData()
 
     fun loadCafeList(): Disposable {
@@ -38,7 +39,9 @@ class CafeRepository {
                 menu_L, menu_D)
 
 
-        val dataList:List<Cafe> = listOf(cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1)
+        val dataList:List<Cafe> = listOf(cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1,
+                cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1, cafe1)
+        cafeListCache.addAll(dataList)
         cafeList.postValue(dataList)
 
         // get data from retrofit
@@ -52,6 +55,7 @@ class CafeRepository {
     }
 
     fun getCafeList() = cafeList
+    fun getCafeListCache(): List<Cafe> = cafeListCache
 
     fun loadCafeListPeriod(cafeId: String, start: Long, end: Long): Disposable {
         return apiService.getCafeListPeriod(cafeId, start, end)

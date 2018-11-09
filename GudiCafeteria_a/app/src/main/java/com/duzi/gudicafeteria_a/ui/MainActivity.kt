@@ -2,6 +2,7 @@ package com.duzi.gudicafeteria_a.ui
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.widget.DividerItemDecoration
@@ -14,6 +15,7 @@ import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
+import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
 import com.kakao.auth.AuthType
 import com.kakao.auth.ISessionCallback
@@ -66,6 +68,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
+
+
     override fun sortByDistance() {
         Toast.makeText(this@MainActivity, "거리순 정렬", Toast.LENGTH_SHORT).show()
     }
@@ -78,6 +82,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         Toast.makeText(this@MainActivity, "평점순 정렬", Toast.LENGTH_SHORT).show()
     }
 
+
+
     override fun onRefresh() {
         setRefresh()
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
@@ -86,6 +92,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override fun onLoadMore() {
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
     }
+
 
     private fun initLayout() {
         mainHamburger.setOnClickListener {
@@ -97,11 +104,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
         btnFilter.setOnClickListener {
             FilterBottomDialog.getInstance().setFilterListener(this)
-
                     .show(supportFragmentManager)
         }
+
         btnMap.setOnClickListener {
-            Toast.makeText(this, "Map Button clicked", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
 
         pullLoadMoreRecyclerView.setRefreshing(true)

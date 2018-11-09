@@ -64,4 +64,7 @@ dependencies {
 
     //bottom dialog
     implementation 'me.shaohui:bottomdialog:1.1.9'
+
+    // kakao map
+    implementation files('libs/libDaumMapAndroid.jar')
 }

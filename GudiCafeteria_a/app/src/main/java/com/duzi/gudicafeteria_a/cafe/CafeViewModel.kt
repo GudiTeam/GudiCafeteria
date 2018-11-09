@@ -9,6 +9,7 @@ class CafeViewModel: ViewModel() {
 
     private val cafeList: LiveData<List<Cafe>> = repo.getCafeList()
     fun getCafeList() = cafeList
+    fun getCafeListCache(): List<Cafe> = repo.getCafeListCache()
 
     private val cafeListPeriod: LiveData<List<Cafe>> = repo.getCafeListPeriod()
     fun getCafeListPeriod() = cafeListPeriod

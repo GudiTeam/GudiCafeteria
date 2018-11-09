@@ -20,11 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".auth.LoginActivity"></activity>
+        <activity android:name=".auth.LoginActivity" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="0d1c3cfb52ffe0b392951ddc30aaade9" />
+
+        <activity android:name=".ui.map.MapActivity"></activity>
     </application>
 
 </manifest>
