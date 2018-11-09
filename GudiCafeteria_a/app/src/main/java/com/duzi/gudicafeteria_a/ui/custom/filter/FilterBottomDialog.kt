@@ -18,6 +18,21 @@ class FilterBottomDialog: BaseBottomDialog() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog.window.attributes.windowAnimations = R.style.FilterDialogTheme
+
+        distance.setOnClickListener {
+            listener.sortByDistance()
+            dialog.dismiss()
+        }
+
+        star.setOnClickListener {
+            listener.sortByStar()
+            dialog.dismiss()
+        }
+
+        created.setOnClickListener {
+            listener.sortBycreatedAt()
+            dialog.dismiss()
+        }
     }
 
     override fun getLayoutRes(): Int {
@@ -25,19 +40,10 @@ class FilterBottomDialog: BaseBottomDialog() {
     }
 
     override fun bindView(v: View?) {
-        v?.findViewById<Button>(R.id.distance)?.setOnClickListener {
-            listener.sortByDistance()
-            dialog.dismiss()
-        }
-        v?.findViewById<Button>(R.id.star)?.setOnClickListener {
-            listener.sortByStar()
-            dialog.dismiss()
-        }
-        v?.findViewById<Button>(R.id.created)?.setOnClickListener {
-            listener.sortBycreatedAt()
-            dialog.dismiss()
-        }
+        // findViewById 필요없음
     }
+
+
 
     override fun getHeight(): Int = 800
 
