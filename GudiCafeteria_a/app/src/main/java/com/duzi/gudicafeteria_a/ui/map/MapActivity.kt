@@ -27,6 +27,7 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+        // TODO cache에 값이 없으면 네트워크에서 받아오기
         val cafeList = ViewModelProviders.of(this)
                 .get(CafeViewModel::class.java)
                 .getCafeListCache()

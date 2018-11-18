@@ -12,9 +12,11 @@ import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.cafe.CafeRepository
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
+import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
 import com.kakao.auth.AuthType
@@ -33,7 +35,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
 
-    private val recyclerAdapter = CafeAdapter()
+    private val recyclerAdapter = CafeAdapter { position -> onClick(position) }
     private val compositeDisposable = CompositeDisposable()
     private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
@@ -86,11 +88,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         setRefresh()
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
     }
 
     override fun onLoadMore() {
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
     }
 
 
@@ -117,6 +119,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
         pullLoadMoreRecyclerView.setAdapter(recyclerAdapter)
         pullLoadMoreRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+    }
+
+    private fun onClick(position: Int) {
+        val cafe: Cafe = ViewModelProviders.of(this).get(CafeViewModel::class.java).getCafeListCache()[position]
+        val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
+        intent.putExtra("cafe", cafe)
+
+        startActivity(intent)
     }
 
     private fun initMenu() {
@@ -180,7 +190,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     }
                 })
 
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList())
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
     }
 
     private fun setRefresh() {

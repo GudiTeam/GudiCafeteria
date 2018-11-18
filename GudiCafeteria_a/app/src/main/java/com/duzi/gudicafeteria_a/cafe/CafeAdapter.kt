@@ -8,7 +8,7 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
 import kotlinx.android.synthetic.main.layout_main_item.view.*
 
-class CafeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CafeAdapter(private val listener: (Int) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var dataList = arrayListOf<Cafe>()
 
@@ -25,6 +25,10 @@ class CafeAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder.itemView.address.text = item.build_Addr
         holder.itemView.star.text = "5"
         holder.itemView.review.text = "6"
+
+        holder.itemView.setOnClickListener {
+            listener.invoke(position)
+        }
     }
 
     override fun getItemCount(): Int = dataList.size

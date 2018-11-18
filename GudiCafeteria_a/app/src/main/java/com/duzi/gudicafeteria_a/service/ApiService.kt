@@ -3,13 +3,14 @@ package com.duzi.gudicafeteria_a.service
 import com.duzi.gudicafeteria_a.data.Cafe
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
 
     // Cafe 전체리스트
-    @GET("")
-    fun getCafeList(): Observable<List<Cafe>>
+    @GET("/Cafeteria_S/allcafes/{today}")
+    fun getCafeList(@Path("today") today: String): Observable<List<Cafe>>
 
     // 지정된 기간 + 카페 Id에 해당되는 Cafe 리스트
     @GET("")
@@ -27,6 +28,6 @@ interface ApiService {
     // 유저 정보 ( 로그인/삭제 )
 
     companion object {
-        val HTTP_API_BASE_URL = "http://xxx.xxxx.xxx/"
+        val HTTP_API_BASE_URL = "http://54.180.100.89:8080/"
     }
 }

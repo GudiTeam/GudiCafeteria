@@ -1,5 +1,9 @@
 package com.duzi.gudicafeteria_a.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Cafe(
         val cafe_Id: String,
         val cafe_Nm: String,
@@ -18,8 +22,6 @@ data class Cafe(
         val build_Y: Double,
         val build_Score: Double,
         val use_YN: String,
-        val menu_L: Menu,
-        val menu_D: Menu
-)
-
-
+        val menu_L: Menu?,
+        val menu_D: Menu?
+) : Parcelable

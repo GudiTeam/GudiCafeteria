@@ -2,4 +2,10 @@
     <string name="app_name">GudiCafeteria_a</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="menu_fragment">메뉴</string>
+    <string name="review_fragment">리뷰</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

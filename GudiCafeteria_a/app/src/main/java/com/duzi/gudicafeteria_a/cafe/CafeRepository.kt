@@ -23,8 +23,8 @@ class CafeRepository {
     private val cafeListCache: ArrayList<Cafe> = arrayListOf()
     private val cafeListPeriod: MutableLiveData<List<Cafe>> = MutableLiveData()
 
-    fun loadCafeList(): Disposable {
-        val menu_L = Menu("CAFE001", "20181023", "L", "MENUIMG", "MENUDIR",
+    fun loadCafeList(date: String): Disposable {
+        /*val menu_L = Menu("CAFE001", "20181023", "L", "MENUIMG", "MENUDIR",
                 "흰쌀밥_02L23", "된장찌개_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23",
                 "사이드1_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23", "사이드1_02L23",
                 "사이드1_02L23")
@@ -45,13 +45,15 @@ class CafeRepository {
         cafeList.postValue(dataList)
 
         // get data from retrofit
-        return Observable.just("").subscribe()
-        /*return apiService.getCafeList()
+        return Observable.just("").subscribe() */
+
+        return apiService.getCafeList(date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
+                    cafeListCache.addAll(it)
                     cafeList.postValue(it)
-                }*/
+                }
     }
 
     fun getCafeList() = cafeList
