@@ -1,16 +1,13 @@
 package com.duzi.gudicafeteria_a.ui.detail
 
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.TextView
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
-import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 
 class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnFragmentInteractionListener, ReviewFragment.OnFragmentInteractionListener {
@@ -22,17 +19,10 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnFragmentInteract
         setContentView(R.layout.activity_cafe_detail)
 
         cafe = intent.getParcelableExtra("cafe")
-        if(cafe.menu_L != null && cafe.menu_D != null)
-            Toast.makeText(this,
-                    "${cafe.build_Nm} ${cafe.cafe_Id} ${cafe.oper_Time} ${cafe.menu_L?.cafe_Id} ${cafe.menu_D?.cafe_Id}",
-                    Toast.LENGTH_SHORT).show()
-
+        cafeTitle.text = cafe.cafe_Nm
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
-        
 
         viewpager.adapter = CafeDetailTabAdapter(this, supportFragmentManager, tabLayout.tabCount)
         viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -51,6 +41,14 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnFragmentInteract
 
             }
         })
+
+        for(i in 0 until tabLayout.tabCount) {
+            val tab = tabLayout.getTabAt(i)
+            val relativeLayout = LayoutInflater.from(this).inflate(R.layout.tab_layout, tabLayout, false)
+            val tabTextView = relativeLayout.findViewById<TextView>(R.id.tab_title)
+            tabTextView.text = tab!!.text
+            tab.customView = relativeLayout
+        }
     }
 
     override fun onFragmentInteraction(uri: Uri) {
