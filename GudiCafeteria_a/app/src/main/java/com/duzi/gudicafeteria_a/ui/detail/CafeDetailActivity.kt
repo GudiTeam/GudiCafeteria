@@ -1,8 +1,11 @@
 package com.duzi.gudicafeteria_a.ui.detail
 
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
@@ -25,14 +28,29 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnFragmentInteract
                     Toast.LENGTH_SHORT).show()
 
 
-        val pages = FragmentPagerItems.with(this)
-                .add(R.string.menu_fragment, MenuFragment::class.java)
-                .add(R.string.review_fragment, ReviewFragment::class.java)
-                .create()
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
+        
 
-        val adapter = FragmentPagerItemAdapter(supportFragmentManager, pages)
-        viewpager.adapter = adapter
-        viewpagerTab.setViewPager(viewpager)
+        viewpager.adapter = CafeDetailTabAdapter(this, supportFragmentManager, tabLayout.tabCount)
+        viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val position = tab!!.position
+                viewpager.currentItem = position
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+        })
     }
 
     override fun onFragmentInteraction(uri: Uri) {

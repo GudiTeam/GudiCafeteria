@@ -6,6 +6,7 @@
     xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ui.detail.CafeDetailActivity">
 
     <android.support.constraint.Guideline
@@ -76,51 +77,32 @@
         app:layout_constraintTop_toTopOf="@+id/guideHori3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent" >
 
-        <com.ogaclejapan.smarttablayout.SmartTabLayout
-            android:id="@+id/viewpagerTab"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/viewpager"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:stl_indicatorAlwaysInCenter="false"
-            app:stl_indicatorWithoutPadding="false"
-            app:stl_indicatorInFront="false"
-            app:stl_indicatorInterpolation="smart"
-            app:stl_indicatorGravity="bottom"
-            app:stl_indicatorColor="#40C4FF"
-            app:stl_indicatorThickness="4dp"
-            app:stl_indicatorWidth="auto"
-            app:stl_indicatorCornerRadius="2dp"
-            app:stl_overlineColor="#4D000000"
-            app:stl_overlineThickness="0dp"
-            app:stl_underlineColor="#4D000000"
-            app:stl_underlineThickness="1dp"
-            app:stl_dividerColor="#4D000000"
-            app:stl_dividerThickness="1dp"
-            app:stl_defaultTabBackground="?attr/selectableItemBackground"
-            app:stl_defaultTabTextAllCaps="true"
-            app:stl_defaultTabTextColor="#FC000000"
-            app:stl_defaultTabTextSize="12sp"
-            app:stl_defaultTabTextHorizontalPadding="16dp"
-            app:stl_defaultTabTextMinWidth="0dp"
-            app:stl_distributeEvenly="false"
-            app:stl_clickable="true"
-            app:stl_titleOffset="24dp"
-            app:stl_drawDecorationAfterTab="false"
-            />
+            app:tabBackground="@drawable/tablayout_selector"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextColor="@android:color/black"
+            app:tabTextColor="@color/tab_text_basic">
+
+        </android.support.design.widget.TabLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/viewpagerTab"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:background="@android:color/white"
             />
 
     </android.support.constraint.ConstraintLayout>

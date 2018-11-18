@@ -10,4 +10,7 @@
     <color name="default_text_color">#ffffff</color>
 
     <color name="split_border">#CECEC4</color>
+    <color name="basic_background">#FFFFFF</color>
+
+    <color name="tab_text_basic">#CECEC4</color>
 </resources>
