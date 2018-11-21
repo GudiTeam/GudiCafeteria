@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
@@ -19,11 +20,14 @@ import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
-import com.kakao.auth.AuthType
-import com.kakao.auth.ISessionCallback
-import com.kakao.auth.Session
+import com.kakao.auth.*
+import com.kakao.auth.network.response.AccessTokenInfoResponse
+import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.LogoutResponseCallback
+import com.kakao.usermgmt.callback.MeV2ResponseCallback
+import com.kakao.usermgmt.callback.UnLinkResponseCallback
+import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -49,6 +53,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         initLayout()
         initMenu()
         observeViewModel()
+        requestAccessTokenInfo()
         initSession()
     }
 
@@ -56,6 +61,13 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         if(!compositeDisposable.isDisposed)
             compositeDisposable.dispose()
         super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data))
+            return
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override val initView: () -> Unit = {
@@ -105,7 +117,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         btnFilter.setOnClickListener {
-            FilterBottomDialog.getInstance().setFilterListener(this)
+            FilterBottomDialog.getInstance()
+                    .setFilterListener(this)
                     .show(supportFragmentManager)
         }
 
@@ -133,20 +146,19 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         loginView = LoginView(this, "Kakao 로그인", "#FFF600").apply {
             setLoginListener {
                 closeDrawer()
-                Session.getCurrentSession().checkAndImplicitOpen()
-                Session.getCurrentSession().open(authType, this@MainActivity)
+                requestLogin()
             }
 
             setLogoutListener {
-                UserManagement.getInstance().requestLogout(object: LogoutResponseCallback() {
-                    override fun onCompleteLogout() {
-                        loginView.setLogout()
-                        //TODO 상단 프로필 내리기
-                    }
-                })
+                closeDrawer()
+                requestLogout()
             }
         }
-        if(Session.getCurrentSession().checkAndImplicitOpen()) loginView.setLogin() // 로그인 상태일 경우
+
+        // 카카오 계정으로 로그인 상태
+        if(Session.getCurrentSession().isOpened)
+            loginView.setLogin()
+
         naviMenuRoot.addView(loginView)
 
         val imageButtonSet = listOf(
@@ -158,7 +170,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         mainMenuView = MainMenuView(this, imageButtonSet)
         mainMenuView.setBtn1ClickListener {  }
         mainMenuView.setBtn2ClickListener {  }
-        mainMenuView.setBtn3ClickListener {  }
+        mainMenuView.setBtn3ClickListener {
+            // kakao unlink
+            closeDrawer()
+            requestUnLink()
+        }
         naviMenuRoot.addView(mainMenuView)
 
         naviMenuRoot.addView(AdvertisingView(this) { closeDrawer() })
@@ -168,17 +184,24 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private fun initSession() {
         sessionCallback = object: ISessionCallback {
+            // 로그인 실패 상태
             override fun onSessionOpenFailed(exception: KakaoException?) {
-                Toast.makeText(this@MainActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "로그인 실패 ${exception?.errorType?.name}", Toast.LENGTH_SHORT).show()
             }
 
+            // 로그인 성공 상태
             override fun onSessionOpened() {
                 Toast.makeText(this@MainActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
                 loginView.setLogin()
-                // TODO 상단 프로필 올리기
+                requestMe()
             }
         }
         Session.getCurrentSession().addCallback(sessionCallback)
+
+        // 토근 만료시 갱신
+        if(Session.getCurrentSession().isOpenable) {
+            Session.getCurrentSession().checkAndImplicitOpen()
+        }
     }
 
     private fun observeViewModel() {
@@ -199,5 +222,87 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private fun closeDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    private fun requestMe() {
+        val keys = arrayListOf("properties.nickname", "properties.profile_image", "properties.thumbnail_image")
+        UserManagement.getInstance().me(keys, object: MeV2ResponseCallback() {
+            override fun onSuccess(result: MeV2Response?) {
+                // TODO 상단 프로필 올리기
+                Toast.makeText(this@MainActivity,
+                        "id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
+                        Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSessionClosed(errorResult: ErrorResult?) {
+                // TODO RedirectLogin
+            }
+        })
+    }
+
+    private fun requestLogin() {
+        Session.getCurrentSession().checkAndImplicitOpen()
+        Session.getCurrentSession().open(authType, this@MainActivity)
+    }
+
+    private fun requestLogout() {
+        UserManagement.getInstance().requestLogout(object: LogoutResponseCallback() {
+            override fun onCompleteLogout() {
+                runOnUiThread {
+                    loginView.setLogout()
+                    Toast.makeText(this@MainActivity, "로그아웃 UI 완료 & 프로필 내리기", Toast.LENGTH_SHORT).show()
+                    //TODO 상단 프로필 내리기
+                }
+            }
+
+
+        })
+    }
+
+    private fun requestAccessTokenInfo() {
+        AuthService.getInstance().requestAccessTokenInfo(object: ApiResponseCallback<AccessTokenInfoResponse>() {
+            override fun onSuccess(result: AccessTokenInfoResponse?) {
+                // 유저id와 토큰 만료기간 체크
+                Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNotSignedUp() {
+                // TODO 미가입일 경우 오는데 이때 플래그 값을 변경하여 개발자 앱 서버로 전달하여 회원 가입을 한다
+                Toast.makeText(this@MainActivity, "미가입일 경우 오는데 이때 플래그 값을 변경하여 개발자 앱 서버로 전달하여 회원 가입을 한다", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSessionClosed(errorResult: ErrorResult?) {
+                // TODO redirect login
+                Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun requestUnLink() {
+        val appendMessage = getString(R.string.com_kakao_confirm_unlink)
+        AlertDialog.Builder(this)
+                .setMessage(appendMessage)
+                .setPositiveButton(getString(R.string.com_kakao_ok_button)) { dialog, _ ->
+                    UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
+                        override fun onSuccess(result: Long?) {
+                            loginView.setLogout()
+                            Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onSessionClosed(errorResult: ErrorResult?) {
+                            Toast.makeText(this@MainActivity, "세션이 종료된 상태", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onNotSignedUp() {
+                            Toast.makeText(this@MainActivity, "미가입 상태", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                    dialog.dismiss()
+                }
+                .setNegativeButton(getString(R.string.com_kakao_cancel_button)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
     }
 }
