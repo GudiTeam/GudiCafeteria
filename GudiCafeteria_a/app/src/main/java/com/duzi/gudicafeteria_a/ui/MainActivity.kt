@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
+import android.util.Log
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
@@ -28,6 +29,7 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
+import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -58,9 +60,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         if(!compositeDisposable.isDisposed)
             compositeDisposable.dispose()
-        super.onDestroy()
+
+        Session.getCurrentSession().removeCallback(sessionCallback)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -192,7 +196,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
             // 로그인 성공 상태
             override fun onSessionOpened() {
                 Toast.makeText(this@MainActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-                loginView.setLogin()
                 requestMe()
             }
         }
@@ -228,14 +231,20 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         val keys = arrayListOf("properties.nickname", "properties.profile_image", "properties.thumbnail_image")
         UserManagement.getInstance().me(keys, object: MeV2ResponseCallback() {
             override fun onSuccess(result: MeV2Response?) {
-                // TODO 상단 프로필 올리기
                 Toast.makeText(this@MainActivity,
-                        "id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
+                        "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
                         Toast.LENGTH_SHORT).show()
+
+                loginView.setLogin()
+                // TODO 상단 프로필 올리기
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
-                // TODO RedirectLogin
+                // TODO Redirect Login.
+                Toast.makeText(this@MainActivity,
+                        "errorCode:${errorResult?.errorCode}",
+                        Toast.LENGTH_SHORT).show()
+
             }
         })
     }
@@ -254,8 +263,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     //TODO 상단 프로필 내리기
                 }
             }
-
-
         })
     }
 
@@ -266,14 +273,13 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onNotSignedUp() {
-                // TODO 미가입일 경우 오는데 이때 플래그 값을 변경하여 개발자 앱 서버로 전달하여 회원 가입을 한다
-                Toast.makeText(this@MainActivity, "미가입일 경우 오는데 이때 플래그 값을 변경하여 개발자 앱 서버로 전달하여 회원 가입을 한다", Toast.LENGTH_SHORT).show()
-            }
-
             override fun onSessionClosed(errorResult: ErrorResult?) {
                 // TODO redirect login
                 Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onNotSignedUp() {
+                // not happened
             }
         })
     }
