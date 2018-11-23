@@ -2,8 +2,6 @@ package com.duzi.gudicafeteria_a.ui.custom.tablayout;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -16,41 +14,44 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.duzi.gudicafeteria_a.R;
 import com.duzi.gudicafeteria_a.ui.custom.tablayout.listener.LoadHeaderImagesListener;
 import com.duzi.gudicafeteria_a.ui.custom.tablayout.listener.OnTabSelectedListener;
 
+import java.util.Objects;
+
 /**
  * https://github.com/hugeterry/CoordinatorTabLayout
  */
 public class CoordinatorTabLayout extends CoordinatorLayout {
-    private int[] mImageArray, mColorArray;
+    private int[] imageArray, colorArray;
 
-    private Context mContext;
-    private Toolbar mToolbar;
-    private ActionBar mActionbar;
-    private TabLayout mTabLayout;
-    private ImageView mImageView;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private LoadHeaderImagesListener mLoadHeaderImagesListener;
-    private OnTabSelectedListener mOnTabSelectedListener;
+    private Context context;
+    private Toolbar toolbar;
+    private ActionBar actionBar;
+    private TabLayout tabLayout;
+    private ImageView imageView;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+    private LoadHeaderImagesListener loadHeaderImagesListener;
+    private OnTabSelectedListener onTabSelectedListener;
 
     public CoordinatorTabLayout(Context context) {
         super(context);
-        mContext = context;
+        this.context = context;
     }
 
     public CoordinatorTabLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        this.context = context;
         if (!isInEditMode()) {
             initView(context);
         }
@@ -58,7 +59,7 @@ public class CoordinatorTabLayout extends CoordinatorLayout {
 
     public CoordinatorTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
+        this.context = context;
         if (!isInEditMode()) {
             initView(context);
         }
@@ -67,87 +68,99 @@ public class CoordinatorTabLayout extends CoordinatorLayout {
     private void initView(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_coordinatortablayout, this, true);
         initToolbar();
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingtoolbarlayout);
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mImageView = (ImageView) findViewById(R.id.imageview);
+        collapsingToolbarLayout = findViewById(R.id.collapsingtoolbarlayout);
+        tabLayout = findViewById(R.id.tabLayout);
+        imageView = findViewById(R.id.imageview);
     }
 
     private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        ((AppCompatActivity) mContext).setSupportActionBar(mToolbar);
-        mActionbar = ((AppCompatActivity) mContext).getSupportActionBar();
+        toolbar = findViewById(R.id.toolbar);
+        ((AppCompatActivity) context).setSupportActionBar(toolbar);
+        actionBar = ((AppCompatActivity) context).getSupportActionBar();
+    }
+
+    private void setTabLayoutDefault() {
+
+        if (imageArray != null) {
+            imageView.setImageResource(imageArray[0]);
+        }
+        if (colorArray != null) {
+            collapsingToolbarLayout.setContentScrimColor(
+                    ContextCompat.getColor(context, colorArray[0]));
+        }
     }
 
 
     public CoordinatorTabLayout setTitle(String title) {
-        if (mActionbar != null) {
-            mActionbar.setTitle(title);
+        if (actionBar != null) {
+            actionBar.setTitle(title);
         }
         return this;
     }
 
     public CoordinatorTabLayout setBackEnable(Boolean canBack) {
-        if (canBack && mActionbar != null) {
-            mActionbar.setDisplayHomeAsUpEnabled(true);
-            mActionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_white_24dp);
+        if (canBack && actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_white_24dp);
         }
         return this;
     }
 
 
     public CoordinatorTabLayout setImageArray(@NonNull int[] imageArray) {
-        mImageArray = imageArray;
+        this.imageArray = imageArray;
         return this;
     }
 
 
     public CoordinatorTabLayout setImageArray(@NonNull int[] imageArray, @NonNull int[] colorArray) {
-        mImageArray = imageArray;
-        mColorArray = colorArray;
+        this.imageArray = imageArray;
+        this.colorArray = colorArray;
         return this;
     }
 
 
     public CoordinatorTabLayout setContentScrimColorArray(@NonNull int[] colorArray) {
-        mColorArray = colorArray;
+        this.colorArray = colorArray;
         return this;
     }
 
-    private void setupTabLayout() {
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+    private void setupTabLayout(ViewPager viewPager) {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mImageView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.anim_dismiss));
-                if (mLoadHeaderImagesListener == null) {
-                    if (mImageArray != null) {
-                        mImageView.setImageResource(mImageArray[tab.getPosition()]);
+                viewPager.setCurrentItem(tab.getPosition());
+                imageView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_dismiss));
+                if (loadHeaderImagesListener == null) {
+                    if (imageArray != null) {
+                        imageView.setImageResource(imageArray[tab.getPosition()]);
                     }
                 } else {
-                    mLoadHeaderImagesListener.loadHeaderImages(mImageView, tab);
+                    loadHeaderImagesListener.loadHeaderImages(imageView, tab);
                 }
-                if (mColorArray != null) {
-                    mCollapsingToolbarLayout.setContentScrimColor(
-                            ContextCompat.getColor(mContext, mColorArray[tab.getPosition()]));
+                if (colorArray != null) {
+                    collapsingToolbarLayout.setContentScrimColor(
+                            ContextCompat.getColor(context, colorArray[tab.getPosition()]));
                 }
-                mImageView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.anim_show));
+                imageView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_show));
 
-                if (mOnTabSelectedListener != null) {
-                    mOnTabSelectedListener.onTabSelected(tab);
+                if (onTabSelectedListener != null) {
+                    onTabSelectedListener.onTabSelected(tab);
                 }
 
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                if (mOnTabSelectedListener != null) {
-                    mOnTabSelectedListener.onTabUnselected(tab);
+                if (onTabSelectedListener != null) {
+                    onTabSelectedListener.onTabUnselected(tab);
                 }
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if (mOnTabSelectedListener != null) {
-                    mOnTabSelectedListener.onTabReselected(tab);
+                if (onTabSelectedListener != null) {
+                    onTabSelectedListener.onTabReselected(tab);
                 }
             }
         });
@@ -155,41 +168,41 @@ public class CoordinatorTabLayout extends CoordinatorLayout {
 
 
     public CoordinatorTabLayout setTabMode(@TabLayout.Mode int mode) {
-        mTabLayout.setTabMode(mode);
+        tabLayout.setTabMode(mode);
         return this;
     }
 
 
-    public CoordinatorTabLayout setupWithViewPager(ViewPager viewPager) {
-        setupTabLayout();
-        mTabLayout.setupWithViewPager(viewPager);
+    public CoordinatorTabLayout setupWithViewpager(ViewPager viewPager) {
+        setupTabLayout(viewPager);
+        setTabLayoutDefault();
         return this;
     }
 
 
     public ActionBar getActionBar() {
-        return mActionbar;
+        return actionBar;
     }
 
 
     public TabLayout getTabLayout() {
-        return mTabLayout;
+        return tabLayout;
     }
 
 
     public ImageView getImageView() {
-        return mImageView;
+        return imageView;
     }
 
 
     public CoordinatorTabLayout setLoadHeaderImagesListener(LoadHeaderImagesListener loadHeaderImagesListener) {
-        mLoadHeaderImagesListener = loadHeaderImagesListener;
+        this.loadHeaderImagesListener = loadHeaderImagesListener;
         return this;
     }
 
 
     public CoordinatorTabLayout addOnTabSelectedListener(OnTabSelectedListener onTabSelectedListener) {
-        mOnTabSelectedListener = onTabSelectedListener;
+        this.onTabSelectedListener = onTabSelectedListener;
         return this;
     }
 
@@ -210,8 +223,8 @@ public class CoordinatorTabLayout extends CoordinatorLayout {
                             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        if (mToolbar != null) {
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mToolbar.getLayoutParams();
+        if (toolbar != null) {
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
             layoutParams.setMargins(
                     layoutParams.leftMargin,
                     layoutParams.topMargin + SystemView.getStatusBarHeight(activity),
@@ -227,7 +240,7 @@ public class CoordinatorTabLayout extends CoordinatorLayout {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return this;
         } else {
-            mToolbar.setPadding(0, SystemView.getStatusBarHeight(activity) >> 1, 0, 0);
+            toolbar.setPadding(0, SystemView.getStatusBarHeight(activity) >> 1, 0, 0);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
