@@ -6,15 +6,14 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 
 class CafeDetailTabAdapter(private val context: Context,
-                           private val fm: FragmentManager,
-                           internal var totalTabs: Int) : FragmentPagerAdapter(fm) {
+                           fm: FragmentManager,
+                           private val cafeId: Int,
+                           private var totalTabs: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment? {
         return when (position) {
-            0 -> MenuFragment()
-            1 -> ReviewFragment()
-            2 -> MenuFragment()
-            3 -> ReviewFragment()
+            0 -> MenuFragment.newInstance(cafeId)
+            1 -> ReviewFragment.newInstance(cafeId)
 
             else -> null
         }

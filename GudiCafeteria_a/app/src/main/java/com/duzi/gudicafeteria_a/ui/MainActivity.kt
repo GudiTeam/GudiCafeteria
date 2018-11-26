@@ -139,9 +139,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun onClick(position: Int) {
-        val cafe: Cafe = ViewModelProviders.of(this).get(CafeViewModel::class.java).getCafeListCache()[position]
         val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
-        intent.putExtra("cafe", cafe)
+        intent.putExtra("position", position)
 
         startActivity(intent)
     }

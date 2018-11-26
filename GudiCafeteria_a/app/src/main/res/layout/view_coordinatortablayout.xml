@@ -114,8 +114,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="@+id/guideH1"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV1"
-                    android:layout_marginTop="16dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoTextTop"
                     android:text="가격"/>
 
                 <TextView
@@ -124,8 +123,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/priceTag"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV1"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     android:text="운영시간"/>
 
                 <TextView
@@ -134,8 +132,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/operationTag"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV1"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     android:text="주소"/>
 
                 <TextView
@@ -144,8 +141,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/address"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV1"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     android:text="전화번호"/>
 
 
@@ -155,8 +151,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="@+id/guideH1"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV2"
-                    android:layout_marginTop="16dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoTextTop"
                     tools:text="8000원"/>
 
                 <TextView
@@ -165,8 +160,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/priceTag"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV2"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     tools:text="점심 - 11:30 ~ 13:30, 저녁 17:30 ~ 19:00"/>
 
                 <TextView
@@ -175,8 +169,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/operationTag"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV2"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     android:maxLines="2"
                     tools:text="서울 구로구 디지털로29길 01\n 에이스테크노타워1차"/>
 
@@ -186,8 +179,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/address"
                     app:layout_constraintLeft_toLeftOf="@+id/guideV2"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@android:color/black"
+                    style="@style/MenuInfoText"
                     tools:text="02-999-0001"/>
 
                 <View

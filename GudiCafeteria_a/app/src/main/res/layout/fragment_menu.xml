@@ -7,71 +7,81 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView01"
+        <android.support.constraint.Guideline
+            android:id="@+id/guideVC"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:text="Hello World 01 !" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideV1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideV2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideH1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="16dp"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideH2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="66dp"/>
 
         <TextView
-            android:id="@+id/textView02"
+            android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView01"
-            android:text="Hello World 02 !" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/guideH1"
+            app:layout_constraintBottom_toBottomOf="@+id/guideH2"
+            app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            tools:text="2018.10.13" />
 
         <TextView
-            android:id="@+id/textView03"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView02"
-            android:text="Hello World 03 !" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/guideH2"
+            app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+            app:layout_constraintRight_toRightOf="@+id/guideVC"
+            android:background="@drawable/menu_title_left_style"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:text="점심"
+            tools:text="점심"/>
 
         <TextView
-            android:id="@+id/textView04"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView03"
-            android:text="Hello World 04 !" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/guideH2"
+            app:layout_constraintLeft_toLeftOf="@+id/guideVC"
+            app:layout_constraintRight_toRightOf="@+id/guideV2"
+            android:background="@drawable/menu_title_right_style"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:text="저녁"
+            tools:text="저녁"/>
 
-        <TextView
-            android:id="@+id/textView05"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView04"
-            android:text="Hello World 05 !" />
+    </android.support.constraint.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/textView06"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView05"
-            android:text="Hello World 06 !" />
-
-        <TextView
-            android:id="@+id/textView07"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView06"
-            android:text="Hello World 07 !" />
-
-        <TextView
-            android:id="@+id/textView08"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView07"
-            android:text="Hello World 08 !" />
-
-        <TextView
-            android:id="@+id/textView09"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView08"
-            android:text="Hello World 09 !" />
-
-    </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

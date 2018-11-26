@@ -23,4 +23,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MenuInfoTextTop" parent="@android:style/Widget.TextView">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MenuInfoText" parent="@android:style/Widget.TextView">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>
