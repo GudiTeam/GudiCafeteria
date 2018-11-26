@@ -20,14 +20,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.duzi.gudicafeteria_a.R;
 import com.duzi.gudicafeteria_a.ui.custom.tablayout.listener.LoadHeaderImagesListener;
 import com.duzi.gudicafeteria_a.ui.custom.tablayout.listener.OnTabSelectedListener;
-
-import java.util.Objects;
 
 /**
  * https://github.com/hugeterry/CoordinatorTabLayout

@@ -16,34 +16,23 @@
         android:background="@android:color/white"
         app:elevation="0dp">
 
-        <!--
-        # layout_scrollFlags
-        - scroll
-        - enterAlways
-        - enterAlwaysCollapsed
-        - exidUntilCollapsed
-        - snap
-        - snapMargins
-
-        # layout_collapseMode
-        - pin                               고정
-        - parallax                          사라짐
-
-        # layout_collapseParallaxMultiplier
-
-        -->
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsingtoolbarlayout"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
+            app:collapsedTitleTextAppearance="@style/ToolBarTitleText"
+            app:expandedTitleMarginEnd="48dp"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleTextAppearance="@style/transparentText"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/headLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
-                app:layout_collapseMode="parallax">
+                app:layout_collapseMode="pin"
+                app:layout_collapseParallaxMultiplier="0.7">
 
                 <ImageView
                     android:id="@+id/imageview"
@@ -51,20 +40,28 @@
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/guideH1"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:contentDescription="@string/imageView" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/guideH1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:background="@android:color/black"
                     android:alpha="0.6"
                     />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideH1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.6"/>
 
                 <TextView
                     android:id="@+id/cafeTitle"
@@ -86,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     app:layout_constraintTop_toBottomOf="@+id/cafeTitle"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/guideH1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
@@ -94,30 +91,129 @@
                     app:srb_fillColor="#EDED40"
                     app:srb_numberOfStars="5"
                     app:srb_rating="3"
-                    app:srb_starSize="30dp"
+                    app:srb_starSize="25dp"
                     app:srb_stepSize="0.5" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideV1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="24dp"/>
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideV2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="96dp"/>
+
+                <TextView
+                    android:id="@+id/priceTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@+id/guideH1"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/black"
+                    android:text="가격"/>
+
+                <TextView
+                    android:id="@+id/operationTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/priceTag"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:text="운영시간"/>
+
+                <TextView
+                    android:id="@+id/addressTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/operationTag"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:text="주소"/>
+
+                <TextView
+                    android:id="@+id/telTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/address"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV1"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:text="전화번호"/>
+
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@+id/guideH1"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV2"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/black"
+                    tools:text="8000원"/>
+
+                <TextView
+                    android:id="@+id/operation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/priceTag"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV2"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    tools:text="점심 - 11:30 ~ 13:30, 저녁 17:30 ~ 19:00"/>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/operationTag"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV2"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:maxLines="2"
+                    tools:text="서울 구로구 디지털로29길 01\n 에이스테크노타워1차"/>
+
+                <TextView
+                    android:id="@+id/tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/address"
+                    app:layout_constraintLeft_toLeftOf="@+id/guideV2"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    tools:text="02-999-0001"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="3dp"
+                    android:background="#D6D1D5"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </android.support.constraint.ConstraintLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:minHeight="?attr/actionBarSize"
-                android:gravity="top"
+                android:layout_height="?attr/actionBarSize"
                 app:titleTextColor="@android:color/white"
-                app:layout_collapseMode="pin"
-                app:titleMarginTop="14dp"/>
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                app:tabBackground="@drawable/tablayout_selector"
-                app:tabIndicatorHeight="0dp" />
+                app:layout_collapseMode="pin" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            app:tabBackground="@drawable/tablayout_selector"
+            app:tabIndicatorHeight="0dp" />
 
     </android.support.design.widget.AppBarLayout>
 
