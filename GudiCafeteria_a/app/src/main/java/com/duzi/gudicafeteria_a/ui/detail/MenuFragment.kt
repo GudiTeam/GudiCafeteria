@@ -47,7 +47,7 @@ class MenuFragment : Fragment() {
     }
 
     private fun initView(view: View) {
-        
+
     }
 
     private fun observeViewModel(position: Int): Cafe {
