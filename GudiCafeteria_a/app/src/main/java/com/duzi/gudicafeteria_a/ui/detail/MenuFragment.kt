@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
+import kotlinx.android.synthetic.main.fragment_menu.*
 
 class MenuFragment : Fragment() {
     private lateinit var cafe: Cafe
@@ -24,11 +27,19 @@ class MenuFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_menu, container, false)
+                              savedInstanceState: Bundle?): View?
+            = inflater.inflate(R.layout.fragment_menu, container, false)
+
+    override fun onResume() {
+        super.onResume()
         cafe = observeViewModel(cafeId!!)
-        initView(view)
-        return view
+
+        if(cafe.menu_L == null || cafe.menu_D == null) {
+            showNothing()
+            return
+        }
+
+        date.text = cafe.menu_L?.menu_Date
     }
 
     override fun onAttach(context: Context) {
@@ -45,8 +56,14 @@ class MenuFragment : Fragment() {
         listener = null
     }
 
-    private fun initView(view: View) {
+    private fun showNothing() {
+        nothing.visibility = VISIBLE
+        menuLayout.visibility = INVISIBLE
+    }
 
+    private fun showMenu() {
+        nothing.visibility = INVISIBLE
+        menuLayout.visibility = VISIBLE
     }
 
     private fun observeViewModel(position: Int): Cafe {

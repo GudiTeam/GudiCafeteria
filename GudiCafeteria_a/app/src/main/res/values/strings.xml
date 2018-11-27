@@ -11,4 +11,20 @@
     <string name="imageView">ImageView</string>
     <string name="star">찜하기</string>
     <string name="share">공유</string>
+    <string name="no_menu">오늘 식당 메뉴가 없습니다.</string>
+    <string name="lunch">점심</string>
+    <string name="rice">밥</string>
+    <string name="soup">국</string>
+    <string name="side1">사이드1</string>
+    <string name="side2">사이드2</string>
+    <string name="side3">사이드3</string>
+    <string name="side4">사이드4</string>
+    <string name="side5">사이드5</string>
+    <string name="side6">사이드6</string>
+    <string name="side7">사이드7</string>
+    <string name="side8">사이드8</string>
+    <string name="dinner">저녁</string>
+    <string name="dessert1">디저트1</string>
+    <string name="dessert2">디저트2</string>
+    <string name="week_menu">일주일 식단 보기</string>
 </resources>
