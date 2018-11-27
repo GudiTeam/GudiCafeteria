@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
-import kotlinx.android.synthetic.main.fragment_menu.*
 
 class MenuFragment : Fragment() {
     private lateinit var cafe: Cafe

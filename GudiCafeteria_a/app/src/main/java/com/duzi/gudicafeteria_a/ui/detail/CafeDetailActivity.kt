@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
@@ -58,6 +59,14 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
                 collapsingtoolbarlayout.title = " "
             }
         })
+
+        star.setOnClickListener {
+            Toast.makeText(this@CafeDetailActivity, "찜하기", Toast.LENGTH_SHORT).show()
+        }
+
+        share.setOnClickListener {
+            Toast.makeText(this@CafeDetailActivity, "공유하기", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun showWeeklyMenu(startDate: String) {
