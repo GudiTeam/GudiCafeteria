@@ -23,6 +23,8 @@ class CafeAdapter(private val listener: (Int) -> Unit): RecyclerView.Adapter<Rec
         holder.itemView.title.text = item.cafe_Nm
         holder.itemView.distance.text = "22 km"
         holder.itemView.address.text = item.build_Addr
+        holder.itemView.price.text = "${item.price}원"
+        holder.itemView.operation.text = item.oper_Time
         holder.itemView.star.text = "5"
         holder.itemView.review.text = "6"
 
@@ -46,6 +48,8 @@ class CafeAdapter(private val listener: (Int) -> Unit): RecyclerView.Adapter<Rec
         val title = view.title
         val distance = view.distance
         val address = view.address
+        val price = view.price
+        val operation = view.operation
         val star = view.star
         val review = view.review
     }

@@ -38,7 +38,7 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
 
 
         val imageArray = intArrayOf(R.mipmap.bg_ios, R.mipmap.bg_js)
-        val colorArray = intArrayOf(android.R.color.holo_blue_light, android.R.color.holo_green_light)
+        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimary)
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))

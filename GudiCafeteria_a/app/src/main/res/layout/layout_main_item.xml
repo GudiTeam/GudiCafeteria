@@ -4,37 +4,89 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="8dp">
+    android:background="?android:attr/selectableItemBackground">
 
+    <!-- base guide -->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideVB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideVE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideHB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="8dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideHE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="8dp"/>
+
+    <!-- guide -->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideH1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="32dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideH2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="56dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideH3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="80dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideH4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="104dp"/>
+
+    <!-- contents -->
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideHB"
+        app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+        app:layout_constraintRight_toRightOf="@+id/guideVE"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         tools:text="한신 IT 구내식당"/>
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideHorizontal1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="24dp"/>
 
     <TextView
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/guideHorizontal1"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideH1"
+        app:layout_constraintLeft_toLeftOf="@+id/guideVB"
         tools:text="12km"/>
 
     <View
         android:id="@+id/divLine"
-        android:layout_width="1dp"
+        android:layout_width="0.8dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@id/distance"
         app:layout_constraintBottom_toBottomOf="@+id/distance"
@@ -46,31 +98,52 @@
         android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/guideHorizontal1"
+        app:layout_constraintTop_toTopOf="@id/guideH1"
         app:layout_constraintLeft_toRightOf="@+id/divLine"
         android:layout_marginLeft="4dp"
         tools:text="서울 구로구 디지털로 272 한신아이티타워"/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideHorizontal2"
+    <TextView
+        android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="48dp"/>
+        app:layout_constraintTop_toTopOf="@+id/guideH2"
+        app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+        tools:text="5000원"/>
+
+    <View
+        android:id="@+id/divLine2"
+        android:layout_width="0.8dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/price"
+        app:layout_constraintBottom_toBottomOf="@+id/price"
+        app:layout_constraintLeft_toRightOf="@+id/price"
+        android:layout_marginLeft="4dp"
+        android:background="#DBD3D0" />
+
+    <TextView
+        android:id="@+id/operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/guideH2"
+        app:layout_constraintLeft_toRightOf="@+id/divLine2"
+        android:layout_marginLeft="4dp"
+        tools:text="점심 - 12:00 ~ 13:30, 저녁 17:30 ~ 19:00"/>
 
     <ImageView
         android:id="@+id/icStar"
         android:layout_width="12dp"
-        android:layout_height="12dp"
-        app:layout_constraintTop_toTopOf="@+id/guideHorizontal2"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/star"
+        app:layout_constraintBottom_toBottomOf="@+id/star"
+        app:layout_constraintLeft_toLeftOf="@+id/guideVB"
         android:src="@drawable/ic_star"/>
 
     <TextView
         android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/guideHorizontal2"
+        app:layout_constraintTop_toTopOf="@+id/guideH3"
         app:layout_constraintLeft_toRightOf="@+id/icStar"
         android:layout_marginLeft="4dp"
         tools:text="4.5"/>
@@ -78,8 +151,9 @@
     <ImageView
         android:id="@+id/icReview"
         android:layout_width="12dp"
-        android:layout_height="12dp"
-        app:layout_constraintTop_toTopOf="@id/guideHorizontal2"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/review"
+        app:layout_constraintBottom_toBottomOf="@+id/review"
         app:layout_constraintLeft_toRightOf="@+id/star"
         android:layout_marginLeft="8dp"
         android:src="@drawable/ic_review"/>
@@ -88,7 +162,7 @@
         android:id="@+id/review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/guideHorizontal2"
+        app:layout_constraintTop_toTopOf="@+id/guideH3"
         app:layout_constraintLeft_toRightOf="@+id/icReview"
         android:layout_marginLeft="4dp"
         tools:text="45"/>
