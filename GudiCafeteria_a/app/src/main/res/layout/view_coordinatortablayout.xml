@@ -214,6 +214,17 @@
                     android:background="@drawable/star_selector"
                     android:text="@string/star" />
 
+                <ImageView
+                    android:id="@+id/star_anim"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="380dp"
+                    android:layout_marginLeft="100dp"
+                    android:src="@drawable/ic_plus_one"
+                    android:visibility="invisible" />
+
                 <Button
                     android:id="@+id/share"
                     android:layout_width="0dp"

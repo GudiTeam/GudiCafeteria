@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.cafe.CafeViewModel
@@ -61,7 +65,22 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         })
 
         star.setOnClickListener {
-            Toast.makeText(this@CafeDetailActivity, "찜하기", Toast.LENGTH_SHORT).show()
+            val animation = AnimationUtils.loadAnimation(this@CafeDetailActivity,
+                    R.anim.anim_heart_plus)
+            animation.setAnimationListener(object: Animation.AnimationListener {
+                override fun onAnimationRepeat(p0: Animation?) {
+                    // nothing
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    star_anim.visibility = INVISIBLE
+                }
+
+                override fun onAnimationStart(p0: Animation?) {
+                    star_anim.visibility = VISIBLE
+                }
+            })
+            star_anim.startAnimation(animation)
         }
 
         share.setOnClickListener {
