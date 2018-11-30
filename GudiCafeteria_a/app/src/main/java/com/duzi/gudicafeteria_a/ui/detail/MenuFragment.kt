@@ -10,7 +10,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
 import kotlinx.android.synthetic.main.fragment_menu.*
 

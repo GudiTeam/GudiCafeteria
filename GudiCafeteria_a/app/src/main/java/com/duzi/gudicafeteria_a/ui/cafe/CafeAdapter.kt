@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.cafe
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

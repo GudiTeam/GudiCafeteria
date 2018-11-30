@@ -12,28 +12,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="8dp"/>
+        app:layout_constraintGuide_begin="16dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideVE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="8dp"/>
+        app:layout_constraintGuide_end="16dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideHB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="8dp"/>
+        app:layout_constraintGuide_begin="16dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideHE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="8dp"/>
+        app:layout_constraintGuide_end="16dp"/>
 
     <!-- guide -->
     <android.support.constraint.Guideline
@@ -41,28 +41,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="32dp"/>
+        app:layout_constraintGuide_begin="40dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideH2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="56dp"/>
+        app:layout_constraintGuide_begin="64dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideH3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="80dp"/>
+        app:layout_constraintGuide_begin="88dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideH4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="104dp"/>
+        app:layout_constraintGuide_begin="124dp"/>
 
     <!-- contents -->
     <TextView

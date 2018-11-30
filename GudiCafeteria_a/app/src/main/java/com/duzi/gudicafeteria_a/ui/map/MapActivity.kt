@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import kotlinx.android.synthetic.main.activity_map.*
 import net.daum.mf.map.api.MapView
 

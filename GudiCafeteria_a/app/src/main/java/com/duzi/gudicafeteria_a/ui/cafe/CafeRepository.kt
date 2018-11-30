@@ -1,11 +1,9 @@
-package com.duzi.gudicafeteria_a.cafe
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.Menu
 import com.duzi.gudicafeteria_a.service.ApiService
 import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

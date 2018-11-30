@@ -7,20 +7,21 @@ import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
-import android.util.Log
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
-import com.duzi.gudicafeteria_a.cafe.CafeAdapter
-import com.duzi.gudicafeteria_a.cafe.CafeRepository
-import com.duzi.gudicafeteria_a.cafe.CafeViewModel
-import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.ui.autopager.AutoPagerAdapter
+import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
+import com.duzi.gudicafeteria_a.ui.cafe.CafeRepository
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
+import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
+import com.jude.rollviewpager.hintview.IconHintView
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
 import com.kakao.network.ErrorResult
@@ -29,7 +30,6 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
-import com.kakao.util.OptionalBoolean
 import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -120,6 +120,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        val imageIdList = arrayListOf(
+                R.mipmap.food1, R.mipmap.food2,
+                R.mipmap.food3, R.mipmap.food4,
+                R.mipmap.food5, R.mipmap.food6,
+                R.mipmap.food7)
+        auto_view_pager.setOnItemClickListener { Toast.makeText(this,"Item $it clicked",Toast.LENGTH_SHORT).show() }
+        auto_view_pager.setAdapter(AutoPagerAdapter(auto_view_pager, imageIdList))
+
         btnFilter.setOnClickListener {
             FilterBottomDialog.getInstance()
                     .setFilterListener(this)
@@ -181,7 +189,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         naviMenuRoot.addView(mainMenuView)
 
         naviMenuRoot.addView(AdvertisingView(this) { closeDrawer() })
-        naviMenuRoot.addView(BasicView(this, "공지사항"){ closeDrawer() })
+        naviMenuRoot.addView(BasicView(this, "공지사항"){
+            closeDrawer()
+            startActivity(Intent(this@MainActivity, NoticeActivity::class.java))
+        })
         naviMenuRoot.addView(BasicView(this, "광고문의") { closeDrawer() })
     }
 

@@ -12,7 +12,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
@@ -41,8 +41,8 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         tel.text = cafe.build_Tel
 
 
-        val imageArray = intArrayOf(R.mipmap.bg_ios, R.mipmap.bg_js)
-        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimary)
+        val imageArray = intArrayOf(R.mipmap.food2, R.mipmap.food5)
+        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark)
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))

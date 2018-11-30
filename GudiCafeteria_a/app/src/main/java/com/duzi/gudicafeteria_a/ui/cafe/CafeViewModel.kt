@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.cafe
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel

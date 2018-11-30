@@ -26,7 +26,8 @@
             android:value="0d1c3cfb52ffe0b392951ddc30aaade9" />
 
         <activity android:name=".ui.map.MapActivity" />
-        <activity android:name=".ui.detail.CafeDetailActivity"></activity>
+        <activity android:name=".ui.detail.CafeDetailActivity" />
+        <activity android:name=".ui.notice.NoticeActivity"></activity>
     </application>
 
 </manifest>

@@ -27,4 +27,5 @@
     <string name="dessert1">디저트1</string>
     <string name="dessert2">디저트2</string>
     <string name="week_menu">일주일 식단 보기</string>
+    <string name="notice">공지사항</string>
 </resources>
