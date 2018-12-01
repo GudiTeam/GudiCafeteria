@@ -28,4 +28,8 @@
     <string name="dessert2">디저트2</string>
     <string name="week_menu">일주일 식단 보기</string>
     <string name="notice">공지사항</string>
+    <string name="review_write">리뷰를 남겨주세요</string>
+    <string name="sort_help">도움순</string>
+    <string name="sort_created">작성순</string>
+    <string name="no_review">리뷰가 없습니다</string>
 </resources>

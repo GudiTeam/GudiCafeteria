@@ -82,6 +82,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/guideH1"
         app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+        android:textColor="@android:color/black"
         tools:text="12km"/>
 
     <View
@@ -101,6 +102,7 @@
         app:layout_constraintTop_toTopOf="@id/guideH1"
         app:layout_constraintLeft_toRightOf="@+id/divLine"
         android:layout_marginLeft="4dp"
+        android:textColor="@android:color/black"
         tools:text="서울 구로구 디지털로 272 한신아이티타워"/>
 
     <TextView
@@ -109,6 +111,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/guideH2"
         app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+        android:textColor="@android:color/black"
         tools:text="5000원"/>
 
     <View
@@ -128,6 +131,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideH2"
         app:layout_constraintLeft_toRightOf="@+id/divLine2"
         android:layout_marginLeft="4dp"
+        android:textColor="@android:color/black"
         tools:text="점심 - 12:00 ~ 13:30, 저녁 17:30 ~ 19:00"/>
 
     <ImageView
@@ -137,7 +141,7 @@
         app:layout_constraintTop_toTopOf="@+id/star"
         app:layout_constraintBottom_toBottomOf="@+id/star"
         app:layout_constraintLeft_toLeftOf="@+id/guideVB"
-        android:src="@drawable/ic_star"/>
+        android:src="@drawable/ic_star_color"/>
 
     <TextView
         android:id="@+id/star"
@@ -146,6 +150,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideH3"
         app:layout_constraintLeft_toRightOf="@+id/icStar"
         android:layout_marginLeft="4dp"
+        android:textColor="@android:color/black"
         tools:text="4.5"/>
 
     <ImageView
@@ -156,7 +161,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/review"
         app:layout_constraintLeft_toRightOf="@+id/star"
         android:layout_marginLeft="8dp"
-        android:src="@drawable/ic_review"/>
+        android:src="@drawable/ic_review_color2"/>
 
     <TextView
         android:id="@+id/review"
@@ -165,6 +170,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideH3"
         app:layout_constraintLeft_toRightOf="@+id/icReview"
         android:layout_marginLeft="4dp"
+        android:textColor="@android:color/black"
         tools:text="45"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="16dp">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideH1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="60dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/split_border"
+        tools:src="@mipmap/nick"/>
+
+    <TextView
+        android:id="@+id/userId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/userImage"
+        app:layout_constraintLeft_toRightOf="@+id/userImage"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        tools:text="맛난집조아"/>
+
+    <com.iarcuschin.simpleratingbar.SimpleRatingBar
+        android:id="@+id/reviewRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/userId"
+        app:layout_constraintLeft_toRightOf="@+id/userImage"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="8dp"
+        app:srb_borderColor="#EDED40"
+        app:srb_fillColor="#EDED40"
+        app:srb_numberOfStars="5"
+        app:srb_rating="3"
+        app:srb_starSize="20dp"
+        app:srb_stepSize="0.5"
+        app:srb_isIndicator="true"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/reviewRatingBar"
+        app:layout_constraintLeft_toRightOf="@+id/reviewRatingBar"
+        android:layout_marginLeft="8dp"
+        tools:text="이번 주"/>
+
+    <TextView
+        android:id="@+id/reviewContents"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/userImage"
+        app:layout_constraintLeft_toLeftOf="@+id/reviewRatingBar"
+        android:layout_marginTop="8dp"
+        android:maxLines="100"
+        tools:text="배달빠르고 매장에서 먹던 맛 그대로네요 ㅎㅎ 좋아요 ! 다시 방문하고싶어요~~~\n요즘 보기 드문 음식점이였어요"/>
+
+</android.support.constraint.ConstraintLayout>

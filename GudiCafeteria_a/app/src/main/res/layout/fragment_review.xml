@@ -7,57 +7,165 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView01"
+        <android.support.constraint.Guideline
+            android:id="@+id/guideVB"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:text="Hello World 01 !" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp"/>
 
-        <TextView
-            android:id="@+id/textView02"
+        <android.support.constraint.Guideline
+            android:id="@+id/guideVE"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView01"
-            android:text="Hello World 02 !" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp"/>
 
-        <TextView
-            android:id="@+id/textView03"
+        <android.support.constraint.Guideline
+            android:id="@+id/guideHB"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView02"
-            android:text="Hello World 03 !" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="16dp"/>
 
-        <TextView
-            android:id="@+id/textView04"
+        <android.support.constraint.Guideline
+            android:id="@+id/guideHE"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView03"
-            android:text="Hello World 04 !" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="16dp"/>
 
-        <TextView
-            android:id="@+id/textView05"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView04"
-            android:text="Hello World 05 !" />
+        <Button
+            android:id="@+id/review_write"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="@+id/guideHB"
+            app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+            app:layout_constraintRight_toRightOf="@+id/guideVE"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableStart="@drawable/ic_review_color"
+            android:drawableLeft="@drawable/ic_review_color"
+            android:drawablePadding="-100dp"
+            android:paddingLeft="100dp"
+            android:background="@drawable/review_selector"
+            android:text="@string/review_write" />
 
-        <TextView
-            android:id="@+id/textView06"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView05"
-            android:text="Hello World 06 !" />
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/review_write"
+            app:layout_constraintLeft_toLeftOf="@+id/guideVB"
+            app:layout_constraintRight_toRightOf="@+id/guideVE"
+            android:layout_marginTop="40dp">
 
-        <TextView
-            android:id="@+id/textView07"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/textView06"
-            android:text="Hello World 07 !" />
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/nothing_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
 
-    </RelativeLayout>
+                <ImageView
+                    android:id="@+id/default_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:src="@drawable/ic_default_menu"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/default_image"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@android:color/black"
+                    android:gravity="center"
+                    android:text="@string/no_review" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/review_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/totalReviewCountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    tools:text="총 170개의 리뷰가 있어요"/>
+
+                <TextView
+                    android:id="@+id/sortHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/totalReviewCountText"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/default_textview_selector"
+                    android:text="@string/sort_help" />
+
+                <View
+                    android:id="@+id/divideV1"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/sortHelp"
+                    app:layout_constraintBottom_toBottomOf="@+id/sortHelp"
+                    app:layout_constraintRight_toLeftOf="@+id/sortHelp"
+                    android:layout_marginRight="4dp"
+                    android:background="@color/split_border"
+                    />
+
+                <TextView
+                    android:id="@+id/sortCreated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/totalReviewCountText"
+                    app:layout_constraintRight_toLeftOf="@+id/divideV1"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/default_textview_selector"
+                    android:text="@string/sort_created" />
+
+                <View
+                    android:id="@+id/divideH1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/sortCreated"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/split_border"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/divideH1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="8dp"
+                    tools:listitem="@layout/review_list_item"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.v4.widget.NestedScrollView>

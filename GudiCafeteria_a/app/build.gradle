@@ -85,8 +85,8 @@ dependencies {
     implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
     // auto scroll viewpager
-    implementation ('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
-        exclude module: 'support-v4'
-    }
     implementation 'com.jude:rollviewpager:1.4.6'
+
+    // circlerImageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
