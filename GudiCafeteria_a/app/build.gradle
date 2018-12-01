@@ -4,8 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-// kotlin에서 kapt를 별도 선언해줘야함
-// 안해주면 Glide에서 GlideApp이 자동으로 생성 안됨
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -96,4 +94,5 @@ dependencies {
     //image
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
 }

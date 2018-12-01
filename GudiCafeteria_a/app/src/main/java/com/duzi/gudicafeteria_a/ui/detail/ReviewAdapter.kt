@@ -5,9 +5,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Review
+import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.review_list_item.view.*
 
 class ReviewAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -20,7 +20,7 @@ class ReviewAdapter(private val context: Context): RecyclerView.Adapter<Recycler
     override fun getItemCount(): Int = 30
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Glide.with(context)
+        GlideApp.with(context)
                 .load("http://cdnweb01.wikitree.co.kr/webdata/editor/201603/23/img_20160323162857_ecbc80a5.jpg")
                 .into(holder.itemView.userImage)
 
