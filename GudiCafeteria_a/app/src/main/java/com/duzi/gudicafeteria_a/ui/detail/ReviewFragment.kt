@@ -3,14 +3,19 @@ package com.duzi.gudicafeteria_a.ui.detail
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
+import com.duzi.gudicafeteria_a.data.Review
+import kotlinx.android.synthetic.main.fragment_review.*
+import kotlinx.android.synthetic.main.fragment_review.view.*
 
 class ReviewFragment : Fragment() {
     private var cafeId: Int? = null
     private var listener: OnReviewFragmentListener? = null
+    private lateinit var adapter: ReviewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,12 +25,9 @@ class ReviewFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_review, container, false)
-        initView(view)
-        return view
+                              savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_review, container, false)
 
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,8 +43,14 @@ class ReviewFragment : Fragment() {
         listener = null
     }
 
-    private fun initView(view: View) {
+    override fun onResume() {
+        super.onResume()
 
+        totalReviewCountText.text = "총 30개의 리뷰가 있어요"
+
+        adapter = ReviewAdapter(context!!)
+        reviewRecyclerView.layoutManager = LinearLayoutManager(activity)
+        reviewRecyclerView.adapter = adapter
     }
 
     interface OnReviewFragmentListener {

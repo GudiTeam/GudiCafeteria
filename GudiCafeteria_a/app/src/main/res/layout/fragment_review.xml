@@ -49,7 +49,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:drawableStart="@drawable/ic_review_color"
             android:drawableLeft="@drawable/ic_review_color"
-            android:drawablePadding="-100dp"
+            android:drawablePadding="-90dp"
             android:paddingLeft="100dp"
             android:background="@drawable/review_selector"
             android:text="@string/review_write" />
@@ -154,6 +154,7 @@
                     />
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/reviewRecyclerView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/divideH1"

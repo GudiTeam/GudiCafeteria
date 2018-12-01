@@ -107,6 +107,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/guideH2"
                 app:layout_constraintRight_toRightOf="@+id/guideV2"
                 android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/default_textview_selector"
                 android:text="@string/week_menu"/>
 

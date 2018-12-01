@@ -9,6 +9,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
@@ -40,6 +41,10 @@ class MenuFragment : Fragment() {
         }
 
         date.text = cafe.menu_L?.menu_Date
+
+        weeklyMenu.setOnClickListener {
+            Toast.makeText(activity, "이번주 메뉴 보기", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onAttach(context: Context) {
