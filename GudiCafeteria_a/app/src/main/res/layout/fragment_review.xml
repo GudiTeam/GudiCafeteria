@@ -51,7 +51,7 @@
             android:drawableLeft="@drawable/ic_review_color"
             android:drawablePadding="-90dp"
             android:paddingLeft="100dp"
-            android:background="@drawable/review_selector"
+            android:background="@drawable/rect_all_radius_selector"
             android:text="@string/review_write" />
 
         <FrameLayout

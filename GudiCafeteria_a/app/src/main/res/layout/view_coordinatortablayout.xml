@@ -211,7 +211,7 @@
                     android:drawableLeft="@drawable/ic_heart"
                     android:drawablePadding="-30dp"
                     android:paddingLeft="50dp"
-                    android:background="@drawable/star_selector"
+                    android:background="@drawable/rect_left_radius_selector"
                     android:text="@string/star" />
 
                 <ImageView
@@ -238,7 +238,7 @@
                     android:drawableLeft="@drawable/ic_share"
                     android:drawablePadding="-30dp"
                     android:paddingLeft="50dp"
-                    android:background="@drawable/share_selector"
+                    android:background="@drawable/rect_right_radius_selector"
                     android:text="@string/share" />
 
                 <View
