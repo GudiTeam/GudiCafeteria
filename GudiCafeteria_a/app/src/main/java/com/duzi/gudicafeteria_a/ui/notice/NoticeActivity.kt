@@ -81,12 +81,12 @@ class NoticeActivity : AppCompatActivity() {
                 holder.itemView.notice_date.text = "2018-07-11"
 
                 val sb = StringBuilder()
-                sb.append("안녕하세요 구디식당입니다\n")
+                sb.append("안녕하세요 구내식당입니다\n")
                         .append("10월 이벤트 혜택알림 수신 동의 이벤트 당첨자를 발표합니다.\n")
                         .append("이벤트 혜택알림을 수신 동의 하신 분들 중 3,000명에게 5,000원 할인 쿠폰을 쿠폰함으로 지급하였습니다.\n")
                         .append("\n\n")
                         .append("다양한 이벤트로 찾아오겠습니다 :) 감사합니다~\n")
-                        .append("구디식당 드림.\n")
+                        .append("구내식당 드림.\n")
                 holder.itemView.notice_content.text = sb.toString()
                 holder.itemView.isSelected = isSelected
                 holder.itemView.expandable_layout.setExpanded(isSelected, false)
