@@ -4,7 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
@@ -21,7 +24,6 @@ import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.navi.*
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
-import com.jude.rollviewpager.hintview.IconHintView
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
 import com.kakao.network.ErrorResult
@@ -48,10 +50,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private lateinit var loginView: LoginView
     private lateinit var mainMenuView: MainMenuView
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initToolbar()
         initLayout()
         initMenu()
         observeViewModel()
@@ -111,15 +115,36 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
     }
 
+    private fun initToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
+
+        drawerToggle = ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        )
+        drawerLayout.addDrawerListener(drawerToggle)
+
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                collapsingtoolbarlayout.title = getString(R.string.app_name)
+                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
+                collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.white))
+            } else {
+                collapsingtoolbarlayout.title = " "
+                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
+                collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.transparent))
+            }
+        })
+    }
 
     private fun initLayout() {
-        mainHamburger.setOnClickListener {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START))
-                drawerLayout.closeDrawer(GravityCompat.START)
-            else
-                drawerLayout.openDrawer(GravityCompat.START)
-        }
-
         val imageIdList = arrayListOf(
                 R.mipmap.food1, R.mipmap.food2,
                 R.mipmap.food3, R.mipmap.food4,
