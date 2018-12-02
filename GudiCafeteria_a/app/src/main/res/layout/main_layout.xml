@@ -67,7 +67,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/guideH3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/btnMap"
-        view:itb_bg="#11356B"
+        view:itb_bg="@color/colorPrimaryDark"
         view:itb_icon="@drawable/ic_filter"
         view:itb_text="필터" />
 
@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/guideH3"
         app:layout_constraintLeft_toRightOf="@+id/btnFilter"
         app:layout_constraintRight_toRightOf="parent"
-        view:itb_bg="#11356B"
+        view:itb_bg="@color/colorPrimaryDark"
         view:itb_icon="@drawable/ic_placeholder"
         view:itb_text="지도" />
 
