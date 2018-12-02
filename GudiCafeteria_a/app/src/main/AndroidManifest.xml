@@ -20,16 +20,23 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="0d1c3cfb52ffe0b392951ddc30aaade9" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.map.MapActivity" />
-        <activity android:name=".ui.detail.CafeDetailActivity" />
-        <activity android:name=".ui.notice.NoticeActivity"/>
+        <activity android:name=".ui.map.MapActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.detail.CafeDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.notice.NoticeActivity"
+            android:screenOrientation="portrait"/>
+        
     </application>
 
 </manifest>
