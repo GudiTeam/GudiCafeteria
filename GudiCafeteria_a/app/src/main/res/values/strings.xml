@@ -33,4 +33,13 @@
     <string name="sort_created">작성순</string>
     <string name="no_review">리뷰가 없습니다</string>
     <string name="map">지도</string>
+    <string name="logout">카카오계정 로그아웃</string>
+    <string name="kakao_login">카카오계정으로 로그인</string>
+    <string name="favorite">찜하기</string>
+    <string name="review_manage">리뷰관리</string>
+    <string name="setting">환경설정</string>
+    <string name="advertising_image_view">Advertising Image View</string>
+    <string name="developer">made by KJH and JSH</string>
+    <string name="advertise_require">광고문의</string>
+    <string name="developer_info">개발자 및 오픈소스 정보</string>
 </resources>

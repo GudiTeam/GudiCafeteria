@@ -33,4 +33,12 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="NavigationSquareMenu" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/navigation_menu_vertical_line</item>
+        <item name="android:paddingTop">30dp</item>
+        <item name="android:drawablePadding">-15dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

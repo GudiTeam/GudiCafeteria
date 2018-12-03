@@ -10,6 +10,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
@@ -22,7 +24,6 @@ import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
-import com.duzi.gudicafeteria_a.ui.navi.*
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
@@ -36,7 +37,7 @@ import com.kakao.util.exception.KakaoException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
-import kotlinx.android.synthetic.main.navigation_menu.*
+import kotlinx.android.synthetic.main.navigation_view.*
 
 class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener, FilterListener {
 
@@ -48,8 +49,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
 
-    private lateinit var loginView: LoginView
-    private lateinit var mainMenuView: MainMenuView
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -175,46 +174,50 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun initMenu() {
-        loginView = LoginView(this, "Kakao 로그인", "#FFF600").apply {
-            setLoginListener {
-                closeDrawer()
-                requestLogin()
-            }
+        btnLogin.setOnClickListener {
+            closeDrawer()
+            requestLogin()
+        }
 
-            setLogoutListener {
-                closeDrawer()
-                requestLogout()
-            }
+        btnLogout.setOnClickListener {
+            closeDrawer()
+            requestLogout()
         }
 
         // 카카오 계정으로 로그인 상태
         if(Session.getCurrentSession().isOpened)
-            loginView.setLogin()
+            setLogin()
 
-        naviMenuRoot.addView(loginView)
 
-        val imageButtonSet = listOf(
-                ImageButtonSet(R.drawable.ic_heart, "찜하기"),
-                ImageButtonSet(R.drawable.ic_chat, "리뷰관리"),
-                ImageButtonSet(R.drawable.ic_settings, "환경설정")
-        )
+        btnFavorite.setOnClickListener {
+            closeDrawer()
+        }
 
-        mainMenuView = MainMenuView(this, imageButtonSet)
-        mainMenuView.setBtn1ClickListener {  }
-        mainMenuView.setBtn2ClickListener {  }
-        mainMenuView.setBtn3ClickListener {
-            // kakao unlink
+        btnReview.setOnClickListener {
+            closeDrawer()
+        }
+
+        btnSettings.setOnClickListener {  // kakao unlink
             closeDrawer()
             requestUnLink()
         }
-        naviMenuRoot.addView(mainMenuView)
 
-        naviMenuRoot.addView(AdvertisingView(this) { closeDrawer() })
-        naviMenuRoot.addView(BasicView(this, "공지사항"){
+        btnBottomAdvertising.setOnClickListener {
+            closeDrawer()
+        }
+
+        noticeView.setOnClickListener {
             closeDrawer()
             startActivity(Intent(this@MainActivity, NoticeActivity::class.java))
-        })
-        naviMenuRoot.addView(BasicView(this, "광고문의") { closeDrawer() })
+        }
+
+        adRequireView.setOnClickListener {
+            closeDrawer()
+        }
+
+        developerView.setOnClickListener {
+            closeDrawer()
+        }
     }
 
     private fun initSession() {
@@ -266,7 +269,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
                         Toast.LENGTH_SHORT).show()
 
-                loginView.setLogin()
+                setLogin()
                 // TODO 상단 프로필 올리기
             }
 
@@ -289,7 +292,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         UserManagement.getInstance().requestLogout(object: LogoutResponseCallback() {
             override fun onCompleteLogout() {
                 runOnUiThread {
-                    loginView.setLogout()
+                    setLogout()
                     Toast.makeText(this@MainActivity, "로그아웃 UI 완료 & 프로필 내리기", Toast.LENGTH_SHORT).show()
                     //TODO 상단 프로필 내리기
                 }
@@ -322,7 +325,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 .setPositiveButton(getString(R.string.com_kakao_ok_button)) { dialog, _ ->
                     UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
                         override fun onSuccess(result: Long?) {
-                            loginView.setLogout()
+                            setLogout()
                             Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
                         }
 
@@ -353,5 +356,15 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
         collapsingtoolbarlayout.title = " "
         collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.transparent))
+    }
+
+    private fun setLogin() {
+        btnLogout.visibility = VISIBLE
+        btnLogin.visibility = INVISIBLE
+    }
+
+    private fun setLogout() {
+        btnLogout.visibility = INVISIBLE
+        btnLogin.visibility = VISIBLE
     }
 }

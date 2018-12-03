@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.data.Review
 import kotlinx.android.synthetic.main.fragment_review.*
-import kotlinx.android.synthetic.main.fragment_review.view.*
 
 class ReviewFragment : Fragment() {
     private var cafeId: Int? = null
@@ -45,6 +43,8 @@ class ReviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        //TODO 리뷰 뷰모델 구현
 
         totalReviewCountText.text = "총 30개의 리뷰가 있어요"
 

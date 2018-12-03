@@ -15,4 +15,6 @@
     <color name="tab_basic_background">#CECEC4</color>
 
     <color name="tab_text_basic">#CECEC4</color>
+    <color name="kakao_color">#FFF600</color>
+    <color name="kakao_text_color">#49280B</color>
 </resources>

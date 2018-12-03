@@ -65,6 +65,7 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
             }
         })
 
+        // TODO 좋아요 뷰모델 구현
         star.setOnClickListener {
             val animation = AnimationUtils.loadAnimation(this@CafeDetailActivity,
                     R.anim.anim_heart_plus)
@@ -82,6 +83,9 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
                 }
             })
             star_anim.startAnimation(animation)
+
+            //TODO 서버에서 좋아요 리스트 받아오거나 로컬에서 좋아요 리스트 받아서 분기처리
+            //TODO 좋아요 API CALL
         }
 
         share.setOnClickListener {
