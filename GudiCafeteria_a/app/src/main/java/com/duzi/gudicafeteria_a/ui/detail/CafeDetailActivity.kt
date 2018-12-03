@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -42,7 +43,7 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
 
 
         val imageArray = intArrayOf(R.mipmap.food2, R.mipmap.food5)
-        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimaryDark)
+        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimary)
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
@@ -58,9 +59,9 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
-                collapsingtoolbarlayout.title = cafe.cafe_Nm
+                appBarCollapsed()
             } else {
-                collapsingtoolbarlayout.title = " "
+                appBarExpanded()
             }
         })
 
@@ -108,5 +109,15 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         return ViewModelProviders.of(this)
                 .get(CafeViewModel::class.java)
                 .getCafeListCache()[position]
+    }
+
+    private fun appBarCollapsed() {
+        collapsingtoolbarlayout.title = cafe.cafe_Nm
+        collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@CafeDetailActivity, R.color.colorPrimary))
+    }
+
+    private fun appBarExpanded() {
+        collapsingtoolbarlayout.title = " "
+        collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@CafeDetailActivity, android.R.color.transparent))
     }
 }

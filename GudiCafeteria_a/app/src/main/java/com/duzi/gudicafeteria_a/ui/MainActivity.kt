@@ -133,13 +133,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
-                collapsingtoolbarlayout.title = getString(R.string.app_name)
-                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
-                collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.white))
+                appBarCollapsed()
             } else {
-                collapsingtoolbarlayout.title = " "
-                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
-                collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.transparent))
+                appBarExpanded()
             }
         })
     }
@@ -345,5 +341,17 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     dialog.dismiss()
                 }
                 .show()
+    }
+
+    private fun appBarCollapsed() {
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
+        collapsingtoolbarlayout.title = getString(R.string.app_name)
+        collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.white))
+    }
+
+    private fun appBarExpanded() {
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp)
+        collapsingtoolbarlayout.title = " "
+        collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@MainActivity, android.R.color.transparent))
     }
 }
