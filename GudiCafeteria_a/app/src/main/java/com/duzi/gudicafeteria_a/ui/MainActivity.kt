@@ -186,8 +186,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         // 카카오 계정으로 로그인 상태
-        if(Session.getCurrentSession().isOpened)
-            setLogin()
+        if(Session.getCurrentSession().isOpened) {
+            requestMe()
+        }
 
 
         btnFavorite.setOnClickListener {
