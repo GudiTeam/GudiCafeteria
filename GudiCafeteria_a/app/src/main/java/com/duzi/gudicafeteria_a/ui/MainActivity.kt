@@ -25,6 +25,7 @@ import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
+import com.duzi.gudicafeteria_a.util.GlideApp
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
 import com.kakao.network.ErrorResult
@@ -270,7 +271,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         Toast.LENGTH_SHORT).show()
 
                 setLogin()
-                // TODO 상단 프로필 올리기
+                userId.text = result?.nickname
+                GlideApp.with(this@MainActivity)
+                        .load(result?.profileImagePath)
+                        .into(userImage)
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
@@ -293,8 +297,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
             override fun onCompleteLogout() {
                 runOnUiThread {
                     setLogout()
-                    Toast.makeText(this@MainActivity, "로그아웃 UI 완료 & 프로필 내리기", Toast.LENGTH_SHORT).show()
-                    //TODO 상단 프로필 내리기
+
+                    userId.text = getString(R.string.app_name)
+                    GlideApp.with(this@MainActivity)
+                            .load(R.mipmap.ic_launcher_round)
+                            .into(userImage)
+
                 }
             }
         })
