@@ -4,10 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
+import com.duzi.gudicafeteria_a.util.TAG
 import kotlinx.android.synthetic.main.fragment_review.*
 
 class ReviewFragment : Fragment() {
@@ -41,8 +43,8 @@ class ReviewFragment : Fragment() {
         listener = null
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         //TODO 리뷰 뷰모델 구현
 
@@ -51,6 +53,12 @@ class ReviewFragment : Fragment() {
         adapter = ReviewAdapter(context!!)
         reviewRecyclerView.layoutManager = LinearLayoutManager(activity)
         reviewRecyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "onResume")
     }
 
     interface OnReviewFragmentListener {

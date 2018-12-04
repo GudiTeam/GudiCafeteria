@@ -16,9 +16,15 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- 카카오 API Key -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="0d1c3cfb52ffe0b392951ddc30aaade9" />
+            android:value="@string/kakao_api_key" />
+
+        <!-- 지도 API Key 선언 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <activity android:name=".ui.MainActivity"
             android:screenOrientation="portrait">

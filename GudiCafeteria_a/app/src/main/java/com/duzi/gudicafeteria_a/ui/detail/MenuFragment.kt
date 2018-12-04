@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -13,6 +14,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.util.TAG
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 class MenuFragment : Fragment() {
@@ -31,8 +33,9 @@ class MenuFragment : Fragment() {
                               savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_menu, container, false)
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
         cafe = observeViewModel(cafeId!!)
 
         if(cafe.menu_L == null || cafe.menu_D == null) {
@@ -43,8 +46,14 @@ class MenuFragment : Fragment() {
         date.text = cafe.menu_L?.menu_Date
 
         weeklyMenu.setOnClickListener {
-            Toast.makeText(activity, "이번주 메뉴 보기", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "이번주 메뉴 보기", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d(TAG, "onResume")
     }
 
     override fun onAttach(context: Context) {

@@ -243,8 +243,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
+    private fun getViewModel(): CafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+
     private fun observeViewModel() {
-        ViewModelProviders.of(this).get(CafeViewModel::class.java).getCafeList()
+        getViewModel().getCafeList()
                 .observe(this, Observer {
                     if (it != null) {
                         recyclerAdapter.addAllData(it)
@@ -256,6 +258,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun setRefresh() {
+        getViewModel().clearCache()
         recyclerAdapter.clearData()
     }
 

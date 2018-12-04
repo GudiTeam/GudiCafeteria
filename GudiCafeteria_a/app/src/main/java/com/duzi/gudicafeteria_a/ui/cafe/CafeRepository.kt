@@ -33,6 +33,7 @@ class CafeRepository {
 
     fun getCafeList() = cafeList
     fun getCafeListCache(): List<Cafe> = cafeListCache
+    fun clearCache() = cafeListCache.clear()
 
     fun loadCafeListPeriod(cafeId: String, start: Long, end: Long): Disposable {
         return apiService.getCafeListPeriod(cafeId, start, end)

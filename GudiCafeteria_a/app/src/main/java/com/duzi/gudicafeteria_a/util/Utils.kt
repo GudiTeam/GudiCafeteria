@@ -5,9 +5,9 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
-import android.util.DisplayMetrics
 import android.view.View
 
+val TAG = "Cafeteria"
 
 object Utils {
 
