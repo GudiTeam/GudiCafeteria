@@ -10,7 +10,7 @@ class MapAdapter(private val context: Context,
                  fm: FragmentManager,
                  private val cafes: ArrayList<Cafe>): FragmentPagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment = MapFragment.newInstance(cafes[position])
+    override fun getItem(position: Int): Fragment = MapFragment.newInstance(position, cafes[position])
 
     override fun getCount(): Int = cafes.size
 

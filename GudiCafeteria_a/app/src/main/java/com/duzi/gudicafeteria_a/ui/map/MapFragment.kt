@@ -1,6 +1,7 @@
 package com.duzi.gudicafeteria_a.ui.map
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -8,15 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import kotlinx.android.synthetic.main.fragment_map_item.*
 
 class MapFragment: Fragment() {
 
+    private var position: Int? = null
     private var cafe: Cafe? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            position = it.getInt("position")
             cafe = it.getParcelable("cafe")
         }
     }
@@ -28,6 +32,12 @@ class MapFragment: Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        mapCardView.setOnClickListener {
+            val intent = Intent(activity, CafeDetailActivity::class.java)
+            intent.putExtra("position", position)
+            startActivity(intent)
+        }
 
         distance.text = "500m"
         price.text = "${cafe?.price}원"
@@ -59,9 +69,10 @@ class MapFragment: Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(cafe: Cafe) =
+        fun newInstance(position: Int, cafe: Cafe) =
                 MapFragment().apply {
                     arguments = Bundle().apply {
+                        putInt("position", position)
                         putParcelable("cafe", cafe)
                     }
                 }

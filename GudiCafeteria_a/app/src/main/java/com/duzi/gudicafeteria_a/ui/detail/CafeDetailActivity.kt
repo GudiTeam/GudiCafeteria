@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
 
@@ -40,10 +41,9 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         operation.text = cafe.oper_Time
         address.text = "${cafe.build_Addr}\n${cafe.build_Nm}"
         tel.text = cafe.build_Tel
-
-
-        val imageArray = intArrayOf(R.mipmap.food2, R.mipmap.food5)
-        val colorArray = intArrayOf(R.color.colorPrimary, R.color.colorPrimary)
+        GlideApp.with(this)
+                .load(cafe.cafe_img_Dir)
+                .into(imageview)
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
@@ -54,7 +54,6 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         coordinatortablayout.setTranslucentStatusBar(this)
                 .setTitle(cafe.cafe_Nm)
                 .setBackEnable(true)
-                .setImageArray(imageArray, colorArray)
                 .setupWithViewpager(viewpager)
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->

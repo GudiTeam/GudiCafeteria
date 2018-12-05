@@ -17,4 +17,7 @@
     <color name="tab_text_basic">#CECEC4</color>
     <color name="kakao_color">#FFF600</color>
     <color name="kakao_text_color">#49280B</color>
+
+    <color name="MAP_ITEM_STATE_PRESSED_COLOR">#D0EADD</color>
+    <color name="MAP_ITEM_STATE_DEFAULT_COLOR">#FFFFFF</color>
 </resources>
