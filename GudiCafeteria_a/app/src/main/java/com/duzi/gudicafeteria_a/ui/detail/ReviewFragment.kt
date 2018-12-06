@@ -13,14 +13,14 @@ import com.duzi.gudicafeteria_a.util.TAG
 import kotlinx.android.synthetic.main.fragment_review.*
 
 class ReviewFragment : Fragment() {
-    private var cafeId: Int? = null
+    private var cafeId: String? = null
     private var listener: OnReviewFragmentListener? = null
     private lateinit var adapter: ReviewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            cafeId = it.getInt("cafeId")
+            cafeId = it.getString("cafeId")
         }
     }
 
@@ -69,10 +69,10 @@ class ReviewFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(cafeId: Int) =
+        fun newInstance(cafeId: String) =
                 ReviewFragment().apply {
                     arguments = Bundle().apply {
-                        putInt("cafeId", cafeId)
+                        putString("cafeId", cafeId)
                     }
                 }
     }

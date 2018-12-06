@@ -45,7 +45,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val layoutResID = R.layout.activity_main
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
 
-    private val recyclerAdapter = CafeAdapter { position -> onClick(position) }
+    private val recyclerAdapter = CafeAdapter { cafeId -> onClick(cafeId) }
     private val compositeDisposable = CompositeDisposable()
     private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
@@ -167,9 +167,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         pullLoadMoreRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
     }
 
-    private fun onClick(position: Int) {
+    private fun onClick(cafeId: String) {
         val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
-        intent.putExtra("position", position)
+        val bundle = Bundle()
+        bundle.putString("CAFE_ID", cafeId)
+        intent.putExtras(bundle)
 
         startActivity(intent)
     }

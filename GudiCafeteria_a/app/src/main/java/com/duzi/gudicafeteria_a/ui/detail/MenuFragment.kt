@@ -21,14 +21,16 @@ import com.duzi.gudicafeteria_a.util.TAG
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 class MenuFragment : Fragment() {
-    private lateinit var cafe: Cafe
-    private var cafeId: Int? = null
+
+    private lateinit var cafeDetailViewModel: CafeDetailViewModel
+
+    private var cafeId: String? = null
     private var listener: OnMenuFragmentListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            cafeId = it.getInt("cafeId")
+            cafeId = it.getString("cafeId")
         }
     }
 
@@ -39,14 +41,13 @@ class MenuFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        cafe = observeViewModel(cafeId!!)
+        cafeDetailViewModel = ViewModelProviders.of(this).get(CafeDetailViewModel::class.java)
+        //cafeDetailViewModel.setCafeId(cafeId!!)
+        cafeDetailViewModel.getCafe().observe(this, Observer {
+            cafe -> display(cafe!!)
+        })
 
-        if(cafe.menu_L == null || cafe.menu_D == null) {
-            showNothing()
-            return
-        }
 
-        date.text = cafe.menu_L?.menu_Date
 
         weeklyMenu.setOnClickListener {
             ViewModelProviders.of(this).get(CafeListViewModel::class.java)
@@ -80,6 +81,15 @@ class MenuFragment : Fragment() {
         listener = null
     }
 
+    private fun display(cafe: Cafe) {
+        if(cafe.menu_L == null || cafe.menu_D == null) {
+            showNothing()
+            return
+        }
+
+        date.text = cafe.menu_L.menu_Date
+    }
+
     private fun showNothing() {
         nothing.visibility = VISIBLE
         menuLayout.visibility = INVISIBLE
@@ -90,22 +100,16 @@ class MenuFragment : Fragment() {
         menuLayout.visibility = VISIBLE
     }
 
-    private fun observeViewModel(position: Int): Cafe {
-        return ViewModelProviders.of(this)
-                .get(CafeListViewModel::class.java)
-                .getCacheCafes()[position]
-    }
-
     interface OnMenuFragmentListener {
         fun showWeeklyMenu(startDate: String)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(cafeId: Int) =
+        fun newInstance(cafeId: String) =
                 MenuFragment().apply {
                     arguments = Bundle().apply {
-                        putInt("cafeId", cafeId)
+                        putString("cafeId", cafeId)
                     }
                 }
     }

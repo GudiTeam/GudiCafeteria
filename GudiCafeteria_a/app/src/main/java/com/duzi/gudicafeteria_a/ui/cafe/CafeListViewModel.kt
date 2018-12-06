@@ -37,9 +37,6 @@ class CafeListViewModel: ViewModel() {
 
     // 일주일치 식당+메뉴 요청    ex) 20181201 ~ 20181208 의 식당+메뉴
     fun reqeustWeeklyMenus(input: WeeklyMenusQuery) {
-        //if(input == query.value)
-        //    return
-
         query.value = input
     }
 

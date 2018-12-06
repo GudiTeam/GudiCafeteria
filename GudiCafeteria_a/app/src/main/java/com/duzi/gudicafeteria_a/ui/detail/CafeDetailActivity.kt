@@ -1,6 +1,7 @@
 package com.duzi.gudicafeteria_a.ui.detail
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -13,55 +14,26 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
 
 class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentListener, ReviewFragment.OnReviewFragmentListener {
 
-    private lateinit var cafe: Cafe
+    private lateinit var cafeDetailViewModel: CafeDetailViewModel
 
-    @SuppressLint("SetTextI18n", "NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cafe_detail)
 
-        val position= intent.getIntExtra("position", -1)
-        if(position == -1) {
-            return
-        }
+        val cafeId= intent.extras.getString("CAFE_ID")
 
-        cafe = observeViewModel(position)
-
-        // TODO CoordinatorLayout을 커스텀으로 만들었는데 헤더레이아웃은 내부에서 처리하는 방법을 생각해보자
-        cafeTitle.text = cafe.cafe_Nm
-        price.text = "${cafe.price}원"
-        operation.text = cafe.oper_Time
-        address.text = "${cafe.build_Addr}\n${cafe.build_Nm}"
-        tel.text = cafe.build_Tel
-        GlideApp.with(this)
-                .load(cafe.cafe_img_Dir)
-                .into(imageview)
-
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
-
-        viewpager.adapter = CafeDetailTabAdapter(this, supportFragmentManager, position, tabLayout.tabCount)
-        viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-
-        coordinatortablayout.setTranslucentStatusBar(this)
-                .setTitle(cafe.cafe_Nm)
-                .setBackEnable(true)
-                .setupWithViewpager(viewpager)
-
-        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
-                appBarCollapsed()
-            } else {
-                appBarExpanded()
-            }
+        cafeDetailViewModel = ViewModelProviders.of(this).get(CafeDetailViewModel::class.java)
+        cafeDetailViewModel.setCafeId(cafeId)
+        cafeDetailViewModel.getCafe().observe(this, Observer {
+            cafe -> displayCafeInfo(cafe!!)
         })
 
         // TODO 좋아요 뷰모델 구현
@@ -108,14 +80,39 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun observeViewModel(position: Int): Cafe {
-        return ViewModelProviders.of(this)
-                .get(CafeListViewModel::class.java)
-                .getCacheCafes()[position]
+    @SuppressLint("SetTextI18n", "NewApi")
+    private fun displayCafeInfo(cafe: Cafe) {
+        cafeTitle.text = cafe.cafe_Nm
+        price.text = "${cafe.price}원"
+        operation.text = cafe.oper_Time
+        address.text = "${cafe.build_Addr}\n${cafe.build_Nm}"
+        tel.text = cafe.build_Tel
+        GlideApp.with(this)
+                .load(cafe.cafe_img_Dir)
+                .into(imageview)
+
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
+
+        viewpager.adapter = CafeDetailTabAdapter(this, supportFragmentManager, cafe.cafe_Id, tabLayout.tabCount)
+        viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+
+        coordinatortablayout.setTranslucentStatusBar(this)
+                .setTitle(cafe.cafe_Nm)
+                .setBackEnable(true)
+                .setupWithViewpager(viewpager)
+
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
+                appBarCollapsed(cafe.cafe_Nm)
+            } else {
+                appBarExpanded()
+            }
+        })
     }
 
-    private fun appBarCollapsed() {
-        collapsingtoolbarlayout.title = cafe.cafe_Nm
+    private fun appBarCollapsed(title: String) {
+        collapsingtoolbarlayout.title = title
         collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@CafeDetailActivity, R.color.colorPrimary))
     }
 

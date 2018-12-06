@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter
 
 class CafeDetailTabAdapter(private val context: Context,
                            fm: FragmentManager,
-                           private val cafeId: Int,
+                           private val cafeId: String,
                            private var totalTabs: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment? {

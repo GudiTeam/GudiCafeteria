@@ -22,6 +22,7 @@ class CafeRepository {
 
     private val cafeList: MutableLiveData<List<Cafe>> = MutableLiveData()
     private val cafeListCache: ArrayList<Cafe> = arrayListOf()
+    private val cafesMap = HashMap<String, Cafe>()
 
     // 해당날짜의 카페 리스트 네트워크에서 받기
     fun loadCafeList(date: String): Disposable {
@@ -30,6 +31,9 @@ class CafeRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     cafeListCache.addAll(it)
+                    for(cafe in it) {
+                        cafesMap[cafe.cafe_Id] = cafe
+                    }
                     cafeList.postValue(it)
                 }
     }
@@ -39,6 +43,14 @@ class CafeRepository {
     fun getCacheCafes(): List<Cafe> = cafeListCache
     // pull to refresh 할때 캐시데이터 삭제
     fun clearCache() = cafeListCache.clear()
+
+
+    // 식당 상세페이지
+    private val cafe: MutableLiveData<Cafe> = MutableLiveData()
+    fun getCafeById(id: String): LiveData<Cafe> {
+        cafe.value = cafesMap[id]
+        return cafe
+    }
 
 
     private val weeklyMenus: MutableLiveData<List<Menu>> = MutableLiveData()
