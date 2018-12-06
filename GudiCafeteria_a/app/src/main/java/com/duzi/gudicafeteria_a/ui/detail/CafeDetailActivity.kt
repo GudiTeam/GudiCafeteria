@@ -13,7 +13,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
@@ -110,8 +110,8 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
 
     private fun observeViewModel(position: Int): Cafe {
         return ViewModelProviders.of(this)
-                .get(CafeViewModel::class.java)
-                .getCafeListCache()[position]
+                .get(CafeListViewModel::class.java)
+                .getCacheCafes()[position]
     }
 
     private fun appBarCollapsed() {

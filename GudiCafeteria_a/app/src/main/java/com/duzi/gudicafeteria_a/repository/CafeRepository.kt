@@ -1,9 +1,12 @@
-package com.duzi.gudicafeteria_a.ui.cafe
+package com.duzi.gudicafeteria_a.repository
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.data.Menu
 import com.duzi.gudicafeteria_a.service.ApiService
 import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
+import com.duzi.gudicafeteria_a.ui.cafe.WeeklyMenusQuery
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -19,8 +22,8 @@ class CafeRepository {
 
     private val cafeList: MutableLiveData<List<Cafe>> = MutableLiveData()
     private val cafeListCache: ArrayList<Cafe> = arrayListOf()
-    private val cafeListPeriod: MutableLiveData<List<Cafe>> = MutableLiveData()
 
+    // 해당날짜의 카페 리스트 네트워크에서 받기
     fun loadCafeList(date: String): Disposable {
         return apiService.getCafeList(date)
                 .subscribeOn(Schedulers.io())
@@ -31,20 +34,30 @@ class CafeRepository {
                 }
     }
 
-    fun getCafeList() = cafeList
-    fun getCafeListCache(): List<Cafe> = cafeListCache
+    // 카페리스트와 카페리스트 캐시 접근
+    fun getCafes() = cafeList
+    fun getCacheCafes(): List<Cafe> = cafeListCache
+    // pull to refresh 할때 캐시데이터 삭제
     fun clearCache() = cafeListCache.clear()
 
-    fun loadCafeListPeriod(cafeId: String, start: Long, end: Long): Disposable {
-        return apiService.getCafeListPeriod(cafeId, start, end)
+
+    private val weeklyMenus: MutableLiveData<List<Menu>> = MutableLiveData()
+
+    // 일주일치 식단 데이터 네트워크에서 받기
+    private fun loadWeeklyMenus(cafeId: String, start: Long, end: Long): Disposable {
+        return apiService.getWeeklyMenus(cafeId, start, end)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    cafeListPeriod.postValue(it)
+                    weeklyMenus.postValue(it)
                 }
     }
 
-    fun getCafeListPeriod() = cafeListPeriod
+    // 일주일치 식단 데이터 접근
+    fun getWeeklyMenus(query: WeeklyMenusQuery): LiveData<List<Menu>> {
+        loadWeeklyMenus(query.cafeId, query.start, query.end)
+        return weeklyMenus
+    }
 
 
     companion object {

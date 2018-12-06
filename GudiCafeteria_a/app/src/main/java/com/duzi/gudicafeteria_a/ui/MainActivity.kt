@@ -17,8 +17,8 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.ui.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
-import com.duzi.gudicafeteria_a.ui.cafe.CafeRepository
-import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.repository.CafeRepository
+import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
@@ -243,10 +243,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
-    private fun getViewModel(): CafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+    private fun getViewModel(): CafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
 
     private fun observeViewModel() {
-        getViewModel().getCafeList()
+        getViewModel().getCafes()
                 .observe(this, Observer {
                     if (it != null) {
                         recyclerAdapter.addAllData(it)

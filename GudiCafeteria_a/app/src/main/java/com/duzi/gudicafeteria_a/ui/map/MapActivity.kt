@@ -8,7 +8,7 @@ import android.view.View.GONE
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.util.Utils.bitmapDescriptorFromVector
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -68,7 +68,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap.setOnMarkerClickListener(this)
         googleMap.setOnMapClickListener(this)
 
-        lists.addAll(getViewModel().getCafeListCache())
+        lists.addAll(getViewModel().getCacheCafes())
 
         for(cafe in lists) {
             val marker = googleMap.addMarker(MarkerOptions()
@@ -134,5 +134,5 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
-    private fun getViewModel(): CafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+    private fun getViewModel(): CafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
 }

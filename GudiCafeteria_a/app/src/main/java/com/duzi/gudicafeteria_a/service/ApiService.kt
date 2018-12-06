@@ -1,6 +1,7 @@
 package com.duzi.gudicafeteria_a.service
 
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.data.Menu
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,10 +14,10 @@ interface ApiService {
     fun getCafeList(@Path("today") today: String): Observable<List<Cafe>>
 
     // 지정된 기간 + 카페 Id에 해당되는 Cafe 리스트
-    @GET("")
-    fun getCafeListPeriod(@Query("id") id: String,
-                          @Query("start") start: Long,
-                          @Query("end") end: Long): Observable<List<Cafe>>
+    @GET("/Cafeteria_S/cafemenu/{id}/{start}/{end}")
+    fun getWeeklyMenus(@Path("id") id: String,
+                       @Path("start") start: Long,
+                       @Path("end") end: Long): Observable<List<Menu>>
 
 
     // 카페 Id에 해당되는 댓글 목록 리스트 ( 상세페이지에서 댓글리스트 출력/댓글달기)
