@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.data.Menu
+import com.duzi.gudicafeteria_a.data.Review
 import com.duzi.gudicafeteria_a.service.ApiService
 import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
 import com.duzi.gudicafeteria_a.ui.cafe.WeeklyMenusQuery
@@ -25,8 +26,8 @@ class CafeRepository {
     private val cafesMap = HashMap<String, Cafe>()
 
     // 해당날짜의 카페 리스트 네트워크에서 받기
-    fun loadCafeList(date: String): Disposable {
-        return apiService.getCafeList(date)
+    fun loadCafeList(date: String, sortType: Int, lat: Double, lon: Double, count: Int): Disposable {
+        return apiService.getCafeList(date, sortType, lat, lon, count)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -51,6 +52,19 @@ class CafeRepository {
         cafe.value = cafesMap[id]
         return cafe
     }
+
+    private val comments: MutableLiveData<List<Review>> = MutableLiveData()
+    fun getCommentsById(id: String): LiveData<List<Review>> {
+        // TODO [ISSUE]Call 대신 Observable을 했을 경우 이 disposable을 어떻게 관리할지 찾아보기,
+        val disposable = apiService.getComments(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    comments.postValue(it)
+                }
+        return comments
+    }
+
 
 
     private val weeklyMenus: MutableLiveData<List<Menu>> = MutableLiveData()

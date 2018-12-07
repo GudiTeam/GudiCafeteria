@@ -15,12 +15,11 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
 
-class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentListener, ReviewFragment.OnReviewFragmentListener {
+class CafeDetailActivity : AppCompatActivity() {
 
     private lateinit var cafeDetailViewModel: CafeDetailViewModel
 
@@ -30,11 +29,15 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
 
         val cafeId= intent.extras.getString("CAFE_ID")
 
-        cafeDetailViewModel = ViewModelProviders.of(this).get(CafeDetailViewModel::class.java)
-        cafeDetailViewModel.setCafeId(cafeId)
-        cafeDetailViewModel.getCafe().observe(this, Observer {
-            cafe -> displayCafeInfo(cafe!!)
-        })
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
+
+        viewpager.adapter = CafeDetailTabAdapter(supportFragmentManager, tabLayout.tabCount)
+        viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+
+        coordinatortablayout.setTranslucentStatusBar(this)
+                .setBackEnable(true)
+                .setupWithViewpager(viewpager)
 
         // TODO 좋아요 뷰모델 구현
         star.setOnClickListener {
@@ -62,22 +65,12 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
         share.setOnClickListener {
             Toast.makeText(this@CafeDetailActivity, "공유하기", Toast.LENGTH_SHORT).show()
         }
-    }
 
-    override fun showWeeklyMenu(startDate: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onReviewCreate() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onReviewModify() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onReviewDelete() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        cafeDetailViewModel = ViewModelProviders.of(this).get(CafeDetailViewModel::class.java)
+        cafeDetailViewModel.setCafeId(cafeId)
+        cafeDetailViewModel.getCafe().observe(this, Observer {
+            cafe -> displayCafeInfo(cafe!!)
+        })
     }
 
     @SuppressLint("SetTextI18n", "NewApi")
@@ -91,16 +84,6 @@ class CafeDetailActivity : AppCompatActivity() , MenuFragment.OnMenuFragmentList
                 .load(cafe.cafe_img_Dir)
                 .into(imageview)
 
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
-
-        viewpager.adapter = CafeDetailTabAdapter(this, supportFragmentManager, cafe.cafe_Id, tabLayout.tabCount)
-        viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-
-        coordinatortablayout.setTranslucentStatusBar(this)
-                .setTitle(cafe.cafe_Nm)
-                .setBackEnable(true)
-                .setupWithViewpager(viewpager)
 
         appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if(Math.abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {

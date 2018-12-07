@@ -10,14 +10,16 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
+import android.util.Log
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.data.User
+import com.duzi.gudicafeteria_a.repository.CafeRepository
 import com.duzi.gudicafeteria_a.ui.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
-import com.duzi.gudicafeteria_a.repository.CafeRepository
 import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
@@ -39,6 +41,9 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener, FilterListener {
 
@@ -49,6 +54,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private val compositeDisposable = CompositeDisposable()
     private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
+    private lateinit var cafeListViewModel: CafeListViewModel
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
@@ -108,11 +114,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         setRefresh()
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
     override fun onLoadMore() {
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
     private fun initToolbar() {
@@ -245,10 +251,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
-    private fun getViewModel(): CafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
-
     private fun observeViewModel() {
-        getViewModel().getCafes()
+        cafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
+        cafeListViewModel.getCafes()
                 .observe(this, Observer {
                     if (it != null) {
                         recyclerAdapter.addAllData(it)
@@ -256,11 +261,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     }
                 })
 
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023"))
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
     private fun setRefresh() {
-        getViewModel().clearCache()
+        cafeListViewModel.clearCache()
         recyclerAdapter.clearData()
     }
 
@@ -277,9 +282,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         Toast.LENGTH_SHORT).show()
 
                 setLogin()
-                userId.text = result?.nickname
+                requestSignUp(result?.id.toString(), result?.nickname!!, result.profileImagePath!!, "")
+                userId.text = result.nickname
                 GlideApp.with(this@MainActivity)
-                        .load(result?.profileImagePath)
+                        .load(result.profileImagePath)
                         .into(userImage)
             }
 
@@ -358,6 +364,20 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     dialog.dismiss()
                 }
                 .show()
+    }
+
+    private fun requestSignUp(userId: String, nickName: String, userImg: String, remark: String) {
+        CafeRepository.create().insertUser(User(userId, nickName, userImg, remark)).enqueue(object: Callback<Int> {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                Log.d(com.duzi.gudicafeteria_a.util.TAG, "requestSignUp Error ${t.message}")
+                t.printStackTrace()
+            }
+
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                val body = response.body()
+                Log.d(com.duzi.gudicafeteria_a.util.TAG, "requestSignUp Success : $body")
+            }
+        })
     }
 
     private fun appBarCollapsed() {
