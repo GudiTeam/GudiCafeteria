@@ -3,8 +3,10 @@ package com.duzi.gudicafeteria_a.ui
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -28,6 +30,8 @@ import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.duzi.gudicafeteria_a.util.GlideApp
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
 import com.kakao.network.ErrorResult
@@ -48,15 +52,16 @@ import retrofit2.Response
 class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener, FilterListener {
 
     override val layoutResID = R.layout.activity_main
-    override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION")
+    override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
 
-    private val recyclerAdapter = CafeAdapter { cafeId -> onClick(cafeId) }
-    private val compositeDisposable = CompositeDisposable()
-    private lateinit var sessionCallback: ISessionCallback
     private val authType = AuthType.KAKAO_LOGIN_ALL
-    private lateinit var cafeListViewModel: CafeListViewModel
+    private val compositeDisposable = CompositeDisposable()
 
+    private lateinit var recyclerAdapter: CafeAdapter
+    private lateinit var sessionCallback: ISessionCallback
+    private lateinit var cafeListViewModel: CafeListViewModel
     private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +72,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         observeViewModel()
         requestAccessTokenInfo()
         initSession()
+        initLocation()
     }
 
     override fun onDestroy() {
@@ -165,21 +171,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
             startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
 
+        recyclerAdapter = CafeAdapter { cafeId -> onClick(cafeId) }
+
         pullLoadMoreRecyclerView.setRefreshing(true)
         pullLoadMoreRecyclerView.setLinearLayout()
         pullLoadMoreRecyclerView.setFooterViewText("로딩중입니다")
         pullLoadMoreRecyclerView.setOnPullLoadMoreListener(this)
         pullLoadMoreRecyclerView.setAdapter(recyclerAdapter)
         pullLoadMoreRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-    }
-
-    private fun onClick(cafeId: String) {
-        val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("CAFE_ID", cafeId)
-        intent.putExtras(bundle)
-
-        startActivity(intent)
     }
 
     private fun initMenu() {
@@ -251,6 +250,20 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
+    private fun initLocation() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, it.latitude, it.longitude, 1))
+        }.addOnFailureListener {
+            compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 2, 0.0, 0.0, 1))
+        }
+    }
+
     private fun observeViewModel() {
         cafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
         cafeListViewModel.getCafes()
@@ -260,8 +273,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
                     }
                 })
-
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
     private fun setRefresh() {
@@ -400,5 +411,14 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private fun setLogout() {
         btnLogout.visibility = INVISIBLE
         btnLogin.visibility = VISIBLE
+    }
+
+    private fun onClick(cafeId: String) {
+        val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("CAFE_ID", cafeId)
+        intent.putExtras(bundle)
+
+        startActivity(intent)
     }
 }
