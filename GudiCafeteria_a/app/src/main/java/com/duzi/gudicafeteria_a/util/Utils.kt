@@ -15,6 +15,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 val TAG = "Cafeteria"
+val sortByDisance = 1
+val sortByValue = 2
 
 object Utils {
 

@@ -30,6 +30,8 @@ import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.duzi.gudicafeteria_a.util.GlideApp
+import com.duzi.gudicafeteria_a.util.sortByDisance
+import com.duzi.gudicafeteria_a.util.sortByValue
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kakao.auth.*
@@ -120,10 +122,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         setRefresh()
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
+        requestCafes("20181023")
     }
 
     override fun onLoadMore() {
+        requestCafes("20181023")
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
@@ -257,11 +260,25 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, it.latitude, it.longitude, 1))
-        }.addOnFailureListener {
-            compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 2, 0.0, 0.0, 1))
-        }
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if(location == null) {
+                        Toast.makeText(this@MainActivity, "get current location fail", Toast.LENGTH_SHORT).show()
+                        requestCafes("20181023")
+                    } else {
+                        requestCafes("20181023", sortByDisance, location.latitude, location.longitude, 1)
+                        Toast.makeText(this@MainActivity, "get current location success", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    requestCafes("20181023")
+                    Toast.makeText(this@MainActivity, "get current location fail", Toast.LENGTH_SHORT).show()
+                    it.printStackTrace()
+                }
+    }
+
+    private fun requestCafes(date: String, sortType: Int = sortByValue, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
+        compositeDisposable.add(CafeRepository.getInstance().loadCafeList(date, sortType, lat, lon, count))
     }
 
     private fun observeViewModel() {
