@@ -34,9 +34,14 @@ class MapFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         mapCardView.setOnClickListener {
-            val intent = Intent(activity, CafeDetailActivity::class.java)
-            intent.putExtra("position", position)
-            startActivity(intent)
+
+            Intent(activity, CafeDetailActivity::class.java).let {
+                val bundle = Bundle()
+                bundle.putString("CAFE_ID", cafe?.cafe_Id)
+                it.putExtras(bundle)
+                startActivity(it)
+            }
+
         }
 
         distance.text = "500m"
