@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 val TAG = "Cafeteria"
 val sortByDisance = 1
 val sortByValue = 2
+val sortByCreated = 3
 
 object Utils {
 
@@ -72,4 +73,17 @@ object Utils {
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
+    fun isGranted(context: Context, permissions: Array<String>): Boolean {
+        for(permission in permissions) {
+            if(!isGranted(context, permission)) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun isGranted(context: Context, permission: String): Boolean =
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+
 }

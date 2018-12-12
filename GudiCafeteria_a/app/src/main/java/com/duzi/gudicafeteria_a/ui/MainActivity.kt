@@ -1,10 +1,12 @@
 package com.duzi.gudicafeteria_a.ui
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -29,11 +31,8 @@ import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
-import com.duzi.gudicafeteria_a.util.GlideApp
-import com.duzi.gudicafeteria_a.util.sortByDisance
-import com.duzi.gudicafeteria_a.util.sortByValue
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.duzi.gudicafeteria_a.util.*
+import com.google.android.gms.location.*
 import com.kakao.auth.*
 import com.kakao.auth.network.response.AccessTokenInfoResponse
 import com.kakao.network.ErrorResult
@@ -64,6 +63,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private lateinit var cafeListViewModel: CafeListViewModel
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +75,18 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         observeViewModel()
         requestAccessTokenInfo()
         initSession()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        setRefresh()
         initLocation()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onDestroy() {
@@ -253,31 +265,49 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun initLocation() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if(!Utils.isGranted(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)))
             return
-        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationRequest = LocationRequest.create()
+        locationRequest.run {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 60 * 1000
+        }
+
+        locationCallback = object: LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                locationResult?.let {
+                    for((i, location) in it.locations.withIndex()) {
+                        Log.d(TAG, "#$i ${location.latitude} , ${location.longitude}")
+                    }
+                }
+            }
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+
         fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if(location == null) {
-                        Toast.makeText(this@MainActivity, "get current location fail", Toast.LENGTH_SHORT).show()
                         requestCafes("20181023")
+                        Log.e(TAG, "location get fail")
                     } else {
                         requestCafes("20181023", sortByDisance, location.latitude, location.longitude, 1)
-                        Toast.makeText(this@MainActivity, "get current location success", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "${location.latitude} , ${location.longitude}")
                     }
                 }
                 .addOnFailureListener {
                     requestCafes("20181023")
-                    Toast.makeText(this@MainActivity, "get current location fail", Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, "location error is ${it.message}")
                     it.printStackTrace()
                 }
+
+
     }
 
-    private fun requestCafes(date: String, sortType: Int = sortByValue, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
+    private fun requestCafes(date: String, sortType: Int = sortByCreated, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
         compositeDisposable.add(CafeRepository.getInstance().loadCafeList(date, sortType, lat, lon, count))
     }
 
