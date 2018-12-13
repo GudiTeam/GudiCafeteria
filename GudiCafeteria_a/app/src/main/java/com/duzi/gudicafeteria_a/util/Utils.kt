@@ -14,10 +14,10 @@ import android.view.View
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
-val TAG = "Cafeteria"
-val sortByDisance = 1
-val sortByValue = 2
-val sortByCreated = 3
+const val TAG = "Cafeteria"
+const val sortByDisance = 1
+const val sortByValue = 2
+const val sortByCreated = 3
 
 object Utils {
 
