@@ -1,9 +1,6 @@
 package com.duzi.gudicafeteria_a.service
 
-import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.Menu
-import com.duzi.gudicafeteria_a.data.Review
-import com.duzi.gudicafeteria_a.data.User
+import com.duzi.gudicafeteria_a.data.*
 import io.reactivex.Observable
 import org.w3c.dom.Comment
 import retrofit2.Call
@@ -43,7 +40,19 @@ interface ApiService {
     fun getMyComments(@Path("userId") userId: String): Observable<List<Review>>
 
     // 공지사항 전체리스트
+    @GET("Cafeteria_S/allnotices")
+    fun getAllNotices(): Observable<List<Notice>>
+
     // 유저 Id에 해당되는 즐겨찾기 리스트 ( 즐겨찾기 관리/수정/삭제)
+    @GET("Cafeteria_S/allfavorites/{userId}")
+    fun getAllFavoritesById(@Path("userId") userId: String): Observable<List<Favorite>>
+
+    @POST("Cafeteria_S/favorite/insert")
+    fun insertFavorite(@Body favorite: Favorite): Call<Int>
+
+    @DELETE("Cafeteria_S/favorite/delete/{cafe_id}/{user_id}")
+    fun deleteFavorite(@Path("cafeId") cafeId: String,
+                       @Path("userId") userId: String)
 
     // 유저 정보 ( 로그인/삭제 )
     @GET("/Cafeteria_S/user/{userId}")
