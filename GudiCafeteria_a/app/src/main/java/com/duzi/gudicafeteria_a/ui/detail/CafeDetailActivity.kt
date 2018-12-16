@@ -73,12 +73,6 @@ class CafeDetailActivity : AppCompatActivity() {
         cafeViewModel.getCafe().observe(this, Observer {
             cafe -> displayCafeInfo(cafe!!)
         })
-
-        cafeViewModel.getCommentsWithUser().observe(this, Observer {
-            for(rwu in it!!) {
-                Log.d(com.duzi.gudicafeteria_a.util.TAG, "${rwu.review.comment} ${rwu.user.user_Nm}")
-            }
-        })
     }
 
     @SuppressLint("SetTextI18n", "NewApi")

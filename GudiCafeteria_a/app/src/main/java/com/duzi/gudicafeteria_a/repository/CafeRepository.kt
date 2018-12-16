@@ -24,65 +24,32 @@ class CafeRepository {
         create()
     }
 
-    private val cafeList: MutableLiveData<List<Cafe>> = MutableLiveData()
-    private val cafeListCache: ArrayList<Cafe> = arrayListOf()
-    private val cafesMap = HashMap<String, Cafe>()
+    private val cafeListCache: ArrayList<Cafe> = arrayListOf()  // 지도화면에서 사용할 카페리스트 캐시
+    private val cafesMap = HashMap<String, Cafe>()  // 상세페이지에서 사용할 카페리스트 캐시
 
     // 해당날짜의 카페 리스트 네트워크에서 받기
-    fun loadCafeList(date: String, sortType: Int, lat: Double, lon: Double, count: Int): Disposable {
-        return apiService.getCafeList(date, sortType, lat, lon, count)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    cafeListCache.addAll(it)
-                    for(cafe in it) {
-                        cafesMap[cafe.cafe_Id] = cafe
-                    }
-                    cafeList.postValue(it)
-                }
+    fun loadCafeList(date: String, sortType: Int, lat: Double, lon: Double, count: Int):  Observable<List<Cafe>> =
+            apiService.getCafeList(date, sortType, lat, lon, count)
+
+    fun addCache(cafes: List<Cafe>) {
+        cafeListCache.addAll(cafes)
+        for(cafe in cafes) {
+            cafesMap[cafe.cafe_Id] = cafe
+        }
     }
 
-    // 카페리스트와 카페리스트 캐시 접근
-    fun getCafes() = cafeList
     fun getCacheCafes(): List<Cafe> = cafeListCache
-    // pull to refresh 할때 캐시데이터 삭제
+
     fun clearCache() = cafeListCache.clear()
 
+    fun getCafeById(id: String): Cafe = cafesMap[id]!!
 
-    // 식당 상세페이지
-    private val cafe: MutableLiveData<Cafe> = MutableLiveData()
-    fun getCafeById(id: String): LiveData<Cafe> {
-        cafe.value = cafesMap[id]
-        return cafe
-    }
+    fun getCommentsById(id: String): Observable<List<Review>> = apiService.getComments(id)
 
-    fun getCommentsById(id: String): Observable<List<Review>> {
-        return apiService.getComments(id)
-    }
+    fun getUserById(id: String): Observable<User> = apiService.getUser(id)
 
-    fun getUserById(id: String): Observable<User> {
-        return apiService.getUser(id)
-    }
-
-
-    private val weeklyMenus: MutableLiveData<List<Menu>> = MutableLiveData()
-
-    // 일주일치 식단 데이터 네트워크에서 받기
-    private fun loadWeeklyMenus(cafeId: String, start: Long, end: Long): Disposable {
-        return apiService.getWeeklyMenus(cafeId, start, end)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    weeklyMenus.postValue(it)
-                }
-    }
-
-    // 일주일치 식단 데이터 접근
-    fun getWeeklyMenus(query: WeeklyMenusQuery): LiveData<List<Menu>> {
-        loadWeeklyMenus(query.cafeId, query.start, query.end)
-        return weeklyMenus
-    }
-
+    fun loadWeeklyMenus(cafeId: String, start: Long, end: Long): Observable<List<Menu>> =
+            apiService.getWeeklyMenus(cafeId, start, end)
 
     companion object {
         private var INSTANCE: CafeRepository? = null

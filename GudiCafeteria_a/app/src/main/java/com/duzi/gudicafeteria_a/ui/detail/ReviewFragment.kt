@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_review.*
 class ReviewFragment : Fragment() {
     private lateinit var adapter: ReviewAdapter
     private lateinit var cafeViewModel: CafeViewModel
-    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
@@ -30,24 +30,19 @@ class ReviewFragment : Fragment() {
 
         activity?.let { parent ->
             cafeViewModel = ViewModelProviders.of(parent).get(CafeViewModel::class.java)
-            cafeViewModel.getComments().observe(this, Observer { reviews  ->
+            cafeViewModel.getCommentsWithUser().observe(this, Observer { reviews ->
                 totalReviewCountText.text = "총 ${reviews!!.size}개의 리뷰가 있어요"
                 adapter.addList(reviews)
             })
         }
 
-        adapter = ReviewAdapter(context!!) { compositeDisposable += it}
+        adapter = ReviewAdapter(context!!)
         reviewRecyclerView.layoutManager = LinearLayoutManager(activity)
         reviewRecyclerView.adapter = adapter
 
         review_write.setOnClickListener {
 
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.clear()
     }
 
     companion object {

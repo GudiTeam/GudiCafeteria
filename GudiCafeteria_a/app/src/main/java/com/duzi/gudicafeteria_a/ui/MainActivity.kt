@@ -54,7 +54,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
 
     private val authType = AuthType.KAKAO_LOGIN_ALL
-    private val compositeDisposable = CompositeDisposable()
 
     private lateinit var recyclerAdapter: CafeAdapter
     private lateinit var sessionCallback: ISessionCallback
@@ -89,9 +88,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onDestroy() {
         super.onDestroy()
-        if(!compositeDisposable.isDisposed)
-            compositeDisposable.dispose()
-
         Session.getCurrentSession().removeCallback(sessionCallback)
     }
 
@@ -137,7 +133,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onLoadMore() {
         requestCafes("20181023")
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList("20181023", 1, 37.4858742, 126.8950053, 1))
     }
 
     private fun initToolbar() {
@@ -306,7 +301,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun requestCafes(date: String, sortType: Int = sortByCreated, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
-        compositeDisposable.add(CafeRepository.getInstance().loadCafeList(date, sortType, lat, lon, count))
+        cafeViewModel.loadCafeList(date, sortType, lat, lon, count)
     }
 
     private fun observeViewModel() {
