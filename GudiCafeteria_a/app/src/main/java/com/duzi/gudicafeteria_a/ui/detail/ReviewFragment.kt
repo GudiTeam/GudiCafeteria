@@ -10,14 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.data.Review
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_review.*
 
 class ReviewFragment : Fragment() {
     private lateinit var adapter: ReviewAdapter
-    private lateinit var cafeDetailViewModel: CafeDetailViewModel
+    private lateinit var cafeViewModel: CafeViewModel
     private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +29,8 @@ class ReviewFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         activity?.let { parent ->
-            cafeDetailViewModel = ViewModelProviders.of(parent).get(CafeDetailViewModel::class.java)
-            cafeDetailViewModel.getComments().observe(this, Observer { reviews  ->
+            cafeViewModel = ViewModelProviders.of(parent).get(CafeViewModel::class.java)
+            cafeViewModel.getComments().observe(this, Observer { reviews  ->
                 totalReviewCountText.text = "총 ${reviews!!.size}개의 리뷰가 있어요"
                 adapter.addList(reviews)
             })
@@ -39,6 +39,10 @@ class ReviewFragment : Fragment() {
         adapter = ReviewAdapter(context!!) { compositeDisposable += it}
         reviewRecyclerView.layoutManager = LinearLayoutManager(activity)
         reviewRecyclerView.adapter = adapter
+
+        review_write.setOnClickListener {
+
+        }
     }
 
     override fun onDestroy() {

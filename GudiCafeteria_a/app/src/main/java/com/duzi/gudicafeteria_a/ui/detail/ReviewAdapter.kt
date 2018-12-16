@@ -27,17 +27,26 @@ class ReviewAdapter(private val context: Context,
     //TODO [ISSUE] MVVM패턴에서 데이터는 ViewModel을 통해 Model 데이터를 가져오는 방식인데 Adapter안에서 추가로 데이터가 필요한 경우
     //TODO Adapter내에서 비동기로 데이터를 가져올 것인지 ViewModel을 통해서 데이터를 받아올 건지
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-       disposable.invoke(CafeRepository.create().getUser(list[position].user_Id)
+        disposable.invoke(CafeRepository.create().getUser(list[position].user_Id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .doOnError {
+                    e -> e.printStackTrace()
+                }
+                .subscribe ({
                     holder.itemView.userId.text = it.user_Nm
                     GlideApp.with(context)
                             .load(it.user_Img)
                             .placeholder(R.mipmap.ic_launcher_round)
                             .into(holder.itemView.userImage)
-                }
-       )
+                }, {
+                    holder.itemView.userId.text = "삭제된 유저"
+                    GlideApp.with(context)
+                            .load(R.mipmap.ic_launcher_round)
+                            .placeholder(R.mipmap.ic_launcher_round)
+                            .into(holder.itemView.userImage)
+                })
+        )
 
         holder.itemView.run {
             reviewRatingBar.rating = list[position].comment_score.toFloat()

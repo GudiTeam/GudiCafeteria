@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.support.design.widget.AppBarLayout
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -24,7 +22,7 @@ import com.duzi.gudicafeteria_a.data.User
 import com.duzi.gudicafeteria_a.repository.CafeRepository
 import com.duzi.gudicafeteria_a.ui.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
-import com.duzi.gudicafeteria_a.ui.cafe.CafeListViewModel
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
@@ -60,7 +58,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private lateinit var recyclerAdapter: CafeAdapter
     private lateinit var sessionCallback: ISessionCallback
-    private lateinit var cafeListViewModel: CafeListViewModel
+    private lateinit var cafeViewModel: CafeViewModel
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -312,8 +310,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun observeViewModel() {
-        cafeListViewModel = ViewModelProviders.of(this).get(CafeListViewModel::class.java)
-        cafeListViewModel.getCafes()
+        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        cafeViewModel.getCafes()
                 .observe(this, Observer {
                     if (it != null) {
                         recyclerAdapter.addAllData(it)
@@ -323,7 +321,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun setRefresh() {
-        cafeListViewModel.clearCache()
+        cafeViewModel.clearCache()
         recyclerAdapter.clearData()
     }
 

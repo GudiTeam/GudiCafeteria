@@ -8,6 +8,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
@@ -15,19 +16,20 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
 
 class CafeDetailActivity : AppCompatActivity() {
 
-    private lateinit var cafeDetailViewModel: CafeDetailViewModel
+    private lateinit var cafeViewModel: CafeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cafe_detail)
 
-        val cafeId= intent.extras.getString("CAFE_ID")
+        val cafeId= intent.extras.getString("CAFE_ID")?: "-1"
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
@@ -66,10 +68,16 @@ class CafeDetailActivity : AppCompatActivity() {
             Toast.makeText(this@CafeDetailActivity, "공유하기", Toast.LENGTH_SHORT).show()
         }
 
-        cafeDetailViewModel = ViewModelProviders.of(this).get(CafeDetailViewModel::class.java)
-        cafeDetailViewModel.setCafeId(cafeId)
-        cafeDetailViewModel.getCafe().observe(this, Observer {
+        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        cafeViewModel.setCafeId(cafeId)
+        cafeViewModel.getCafe().observe(this, Observer {
             cafe -> displayCafeInfo(cafe!!)
+        })
+
+        cafeViewModel.getCommentsWithUser().observe(this, Observer {
+            for(rwu in it!!) {
+                Log.d(com.duzi.gudicafeteria_a.util.TAG, "${rwu.review.comment} ${rwu.user.user_Nm}")
+            }
         })
     }
 

@@ -5,15 +5,18 @@ import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.data.Menu
 import com.duzi.gudicafeteria_a.data.Review
+import com.duzi.gudicafeteria_a.data.User
 import com.duzi.gudicafeteria_a.service.ApiService
 import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
 import com.duzi.gudicafeteria_a.ui.cafe.WeeklyMenusQuery
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class CafeRepository {
 
@@ -53,18 +56,13 @@ class CafeRepository {
         return cafe
     }
 
-    private val comments: MutableLiveData<List<Review>> = MutableLiveData()
-    fun getCommentsById(id: String): LiveData<List<Review>> {
-        // TODO [ISSUE]Call 대신 Observable을 했을 경우 이 disposable을 어떻게 관리할지 찾아보기,
-        val disposable = apiService.getComments(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    comments.postValue(it)
-                }
-        return comments
+    fun getCommentsById(id: String): Observable<List<Review>> {
+        return apiService.getComments(id)
     }
 
+    fun getUserById(id: String): Observable<User> {
+        return apiService.getUser(id)
+    }
 
 
     private val weeklyMenus: MutableLiveData<List<Menu>> = MutableLiveData()
@@ -89,8 +87,7 @@ class CafeRepository {
     companion object {
         private var INSTANCE: CafeRepository? = null
 
-        fun getInstance() =
-                INSTANCE ?: synchronized(CafeRepository::class.java) {
+        fun getInstance() = INSTANCE ?: synchronized(CafeRepository::class.java) {
                     INSTANCE ?: CafeRepository().also { INSTANCE = it }
                 }
 
