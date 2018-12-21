@@ -1,8 +1,9 @@
-package com.duzi.gudicafeteria_a.ui.detail
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import com.duzi.gudicafeteria_a.ui.review.ReviewFragment
 
 class CafeDetailTabAdapter(fm: FragmentManager,
                            private var totalTabs: Int) : FragmentPagerAdapter(fm) {

@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.detail
+package com.duzi.gudicafeteria_a.ui.review
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -6,13 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.data.Review
 import com.duzi.gudicafeteria_a.data.ReviewWithUser
-import com.duzi.gudicafeteria_a.repository.CafeRepository
 import com.duzi.gudicafeteria_a.util.GlideApp
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.review_list_item.view.*
 
 class ReviewAdapter(private val mContext: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {

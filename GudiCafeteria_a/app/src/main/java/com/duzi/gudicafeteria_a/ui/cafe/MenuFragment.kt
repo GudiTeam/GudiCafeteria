@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.detail
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,8 +12,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
-import com.duzi.gudicafeteria_a.ui.cafe.WeeklyMenusQuery
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 class MenuFragment : Fragment() {
@@ -64,8 +62,10 @@ class MenuFragment : Fragment() {
 
     companion object {
         private var INSTANCE: MenuFragment? = null
-        fun getInstance() = INSTANCE ?: synchronized(MenuFragment::class.java) {
-            INSTANCE ?: MenuFragment().also { INSTANCE = it }
+        fun getInstance() = INSTANCE
+                ?: synchronized(MenuFragment::class.java) {
+            INSTANCE
+                    ?: MenuFragment().also { INSTANCE = it }
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.autopager
+package com.duzi.gudicafeteria_a.ui.custom.autopager
 
 import android.view.View
 import android.view.ViewGroup

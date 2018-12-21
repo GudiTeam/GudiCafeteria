@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.detail
+package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
@@ -8,7 +8,6 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
@@ -16,7 +15,6 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*

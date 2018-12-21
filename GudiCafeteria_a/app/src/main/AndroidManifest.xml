@@ -30,23 +30,25 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".ui.MainActivity"
+        <activity
+            android:name=".ui.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.map.MapActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.detail.CafeDetailActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.notice.NoticeActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ui.map.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.cafe.CafeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.notice.NoticeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.review.ReviewAddActivity"></activity>
     </application>
 
 </manifest>

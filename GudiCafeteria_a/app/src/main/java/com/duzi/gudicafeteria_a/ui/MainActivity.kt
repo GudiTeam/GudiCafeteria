@@ -20,13 +20,13 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.data.User
 import com.duzi.gudicafeteria_a.repository.CafeRepository
-import com.duzi.gudicafeteria_a.ui.autopager.AutoPagerAdapter
+import com.duzi.gudicafeteria_a.ui.custom.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
-import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
+import com.duzi.gudicafeteria_a.ui.cafe.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.duzi.gudicafeteria_a.util.*

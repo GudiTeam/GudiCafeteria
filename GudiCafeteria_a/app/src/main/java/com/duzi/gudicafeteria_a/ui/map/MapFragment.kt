@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.ui.detail.CafeDetailActivity
+import com.duzi.gudicafeteria_a.ui.cafe.CafeDetailActivity
 import kotlinx.android.synthetic.main.fragment_map_item.*
 
 class MapFragment: Fragment() {
