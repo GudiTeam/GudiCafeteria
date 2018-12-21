@@ -1,18 +1,12 @@
 package com.duzi.gudicafeteria_a.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.data.Menu
 import com.duzi.gudicafeteria_a.data.Review
 import com.duzi.gudicafeteria_a.data.User
 import com.duzi.gudicafeteria_a.service.ApiService
 import com.duzi.gudicafeteria_a.service.ApiService.Companion.HTTP_API_BASE_URL
-import com.duzi.gudicafeteria_a.ui.cafe.WeeklyMenusQuery
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -40,7 +34,10 @@ class CafeRepository {
 
     fun getCacheCafes(): List<Cafe> = cafeListCache
 
-    fun clearCache() = cafeListCache.clear()
+    fun clearCache() {
+        cafeListCache.clear()
+        cafesMap.clear()
+    }
 
     fun getCafeById(id: String): Cafe = cafesMap[id]!!
 

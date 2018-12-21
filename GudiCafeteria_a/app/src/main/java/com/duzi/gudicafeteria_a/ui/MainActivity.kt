@@ -40,7 +40,6 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_view.*
@@ -69,7 +68,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         initToolbar()
         initLayout()
         initMenu()
-        observeViewModel()
         requestAccessTokenInfo()
         initSession()
     }
@@ -78,12 +76,16 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         super.onResume()
 
         setRefresh()
-        initLocation()
+        if(::cafeViewModel.isInitialized) {
+            recyclerAdapter.addAllData(cafeViewModel.getCacheCafes())
+            pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        if(::locationCallback.isInitialized)
+            fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onDestroy() {
@@ -99,7 +101,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override val initView: () -> Unit = {
-        // TODO 퍼미션 허가 후에 UI와 상관없는 네트워크 작업
+        observeViewModel()
+        initLocation()
     }
 
     override fun onBackPressed() {
@@ -127,7 +130,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
 
     override fun onRefresh() {
-        setRefresh()
+        clearCache()
         requestCafes("20181023")
     }
 
@@ -176,6 +179,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         }
 
         btnMap.setOnClickListener {
+            // TODO add 'Filter type'
             startActivity(Intent(this@MainActivity, MapActivity::class.java))
         }
 
@@ -274,7 +278,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult?.let {
                     for((i, location) in it.locations.withIndex()) {
-                        Log.d(TAG, "#$i ${location.latitude} , ${location.longitude}")
+                        Log.d(APP_TAG, "#$i ${location.latitude} , ${location.longitude}")
                     }
                 }
             }
@@ -285,15 +289,15 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 .addOnSuccessListener { location ->
                     if(location == null) {
                         requestCafes("20181023")
-                        Log.e(TAG, "location get fail")
+                        Log.e(APP_TAG, "location get fail")
                     } else {
                         requestCafes("20181023", sortByDisance, location.latitude, location.longitude, 1)
-                        Log.d(TAG, "${location.latitude} , ${location.longitude}")
+                        Log.d(APP_TAG, "${location.latitude} , ${location.longitude}")
                     }
                 }
                 .addOnFailureListener {
                     requestCafes("20181023")
-                    Log.e(TAG, "location error is ${it.message}")
+                    Log.e(APP_TAG, "location error is ${it.message}")
                     it.printStackTrace()
                 }
 
@@ -315,8 +319,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 })
     }
 
-    private fun setRefresh() {
+    private fun clearCache() {
         cafeViewModel.clearCache()
+        recyclerAdapter.clearData()
+    }
+
+    private fun setRefresh() {
         recyclerAdapter.clearData()
     }
 
@@ -420,13 +428,13 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     private fun requestSignUp(userId: String, nickName: String, userImg: String, remark: String) {
         CafeRepository.create().insertUser(User(userId, nickName, userImg, remark)).enqueue(object: Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                Log.d(com.duzi.gudicafeteria_a.util.TAG, "requestSignUp Error ${t.message}")
+                Log.d(APP_TAG, "requestSignUp Error ${t.message}")
                 t.printStackTrace()
             }
 
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 val body = response.body()
-                Log.d(com.duzi.gudicafeteria_a.util.TAG, "requestSignUp Success : $body")
+                Log.d(APP_TAG, "requestSignUp Success : $body")
             }
         })
     }

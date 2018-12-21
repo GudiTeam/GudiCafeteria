@@ -1,15 +1,18 @@
 package com.duzi.gudicafeteria_a.ui.map
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View.GONE
-import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.util.APP_TAG
 import com.duzi.gudicafeteria_a.util.Utils.bitmapDescriptorFromVector
+import com.duzi.gudicafeteria_a.util.sortByCreated
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,6 +28,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapClickListener {
 
+    private lateinit var cafeViewModel: CafeViewModel
     private lateinit var googleMap: GoogleMap
     private lateinit var adapter: MapAdapter
     private val lists = arrayListOf<Cafe>()
@@ -36,7 +40,28 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
+        // TODO set 'Filter type'
+
+        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        cafeViewModel.getCafes().observe(this, Observer {
+
+            lists.addAll(it!!)
+            for(cafe in it) {
+                val marker = googleMap.addMarker(MarkerOptions()
+                        .position(LatLng(cafe.build_X, cafe.build_Y))
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_marker)))
+                markerList.add(marker)
+            }
+
+            adapter.addAll(it)
+            adapter.notifyDataSetChanged()
+        })
+
         initLayout()
+    }
+
+    private fun requestCafes(date: String, sortType: Int = sortByCreated, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
+        cafeViewModel.loadCafeList(date, sortType, lat, lon, count)
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
@@ -68,7 +93,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         googleMap.setOnMarkerClickListener(this)
         googleMap.setOnMapClickListener(this)
 
-        lists.addAll(getViewModel().getCacheCafes())
+        lists.addAll(cafeViewModel.getCacheCafes())
 
         for(cafe in lists) {
             val marker = googleMap.addMarker(MarkerOptions()
@@ -130,9 +155,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
         viewPagerInfo.adapter = adapter
 
         moreSearch.setOnClickListener {
-            Toast.makeText(this@MapActivity, "지도 데이터 추가 로드", Toast.LENGTH_SHORT).show()
+            requestCafes("20181023")
+            Log.d(APP_TAG, "지도 데이터 추가 로드")
         }
     }
-
-    private fun getViewModel(): CafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
 }

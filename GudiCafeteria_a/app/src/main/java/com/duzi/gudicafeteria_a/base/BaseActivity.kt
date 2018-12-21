@@ -7,14 +7,12 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract val initView: () -> Unit
     abstract val requestedPermissionList: List<String>
     abstract val layoutResID: Int
-    protected val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +65,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQ_REQUEST) {
             initView()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if(!disposables.isDisposed) {
-            disposables.dispose()
         }
     }
 
