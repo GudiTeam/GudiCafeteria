@@ -1,13 +1,12 @@
 package com.duzi.gudicafeteria_a.ui.map
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View.GONE
 import com.duzi.gudicafeteria_a.R
+import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import com.duzi.gudicafeteria_a.util.APP_TAG
@@ -22,11 +21,17 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_map.*
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback,
+class MapActivity : BaseActivity(), OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMarkerDragListener,
         GoogleMap.OnMapClickListener {
+
+    override val layoutResID: Int
+        get() = R.layout.activity_map
+
+    override val requestedPermissionList: List<String>
+        get() =  listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
 
     private lateinit var cafeViewModel: CafeViewModel
     private lateinit var googleMap: GoogleMap
@@ -36,13 +41,21 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
     private val markerList = ArrayList<Marker>()
     private var flag = true
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
 
         // TODO set 'Filter type'
 
-        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        initLayout()
+    }
+
+    override val initView: () -> Unit = {
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        cafeViewModel = getViewModel()
         cafeViewModel.getCafes().observe(this, Observer {
 
             lists.addAll(it!!)
@@ -56,12 +69,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback,
             adapter.addAll(it)
             adapter.notifyDataSetChanged()
         })
-
-        initLayout()
     }
 
     private fun requestCafes(date: String, sortType: Int = sortByCreated, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
-        cafeViewModel.loadCafeList(date, sortType, lat, lon, count)
+        cafeViewModel.loadCafes(date, sortType, lat, lon, count)
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {

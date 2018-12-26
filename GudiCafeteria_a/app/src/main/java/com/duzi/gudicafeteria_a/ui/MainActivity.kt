@@ -18,8 +18,12 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
+import com.duzi.gudicafeteria_a.base.BaseViewModel
+import com.duzi.gudicafeteria_a.base.Injection
 import com.duzi.gudicafeteria_a.data.User
-import com.duzi.gudicafeteria_a.repository.CafeRepository
+import com.duzi.gudicafeteria_a.repository.AppRepository
+import com.duzi.gudicafeteria_a.service.ApiErrorResponse
+import com.duzi.gudicafeteria_a.service.ApiSuccessResponse
 import com.duzi.gudicafeteria_a.ui.custom.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
@@ -29,6 +33,7 @@ import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.cafe.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
+import com.duzi.gudicafeteria_a.ui.user.UserViewModel
 import com.duzi.gudicafeteria_a.util.*
 import com.google.android.gms.location.*
 import com.kakao.auth.*
@@ -54,9 +59,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private val authType = AuthType.KAKAO_LOGIN_ALL
 
+    private lateinit var cafeViewModel: CafeViewModel
+    private lateinit var userViewModel: UserViewModel
+
     private lateinit var recyclerAdapter: CafeAdapter
     private lateinit var sessionCallback: ISessionCallback
-    private lateinit var cafeViewModel: CafeViewModel
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -305,11 +312,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun requestCafes(date: String, sortType: Int = sortByCreated, lat: Double = 0.0, lon: Double = 0.0, count: Int = 1) {
-        cafeViewModel.loadCafeList(date, sortType, lat, lon, count)
+        cafeViewModel.loadCafes(date, sortType, lat, lon, count)
     }
 
     private fun observeViewModel() {
-        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        cafeViewModel = getViewModel()
         cafeViewModel.getCafes()
                 .observe(this, Observer {
                     if (it != null) {
@@ -317,6 +324,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
                     }
                 })
+
+        userViewModel = getViewModel()
     }
 
     private fun clearCache() {
@@ -426,17 +435,16 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun requestSignUp(userId: String, nickName: String, userImg: String, remark: String) {
-        CafeRepository.create().insertUser(User(userId, nickName, userImg, remark)).enqueue(object: Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                Log.d(APP_TAG, "requestSignUp Error ${t.message}")
-                t.printStackTrace()
+        userViewModel.insertUser(User(userId, nickName, userImg, remark)) {
+            when(it) {
+                is ApiSuccessResponse<Int> -> {
+                    Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()
+                }
+                is ApiErrorResponse<Int> -> {
+                    Toast.makeText(this, "${it.code} ${it.errorMessage}", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                val body = response.body()
-                Log.d(APP_TAG, "requestSignUp Success : $body")
-            }
-        })
+        }
     }
 
     private fun appBarCollapsed() {

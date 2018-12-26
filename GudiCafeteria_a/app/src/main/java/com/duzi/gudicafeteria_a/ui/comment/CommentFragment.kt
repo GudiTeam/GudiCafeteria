@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.review
+package com.duzi.gudicafeteria_a.ui.comment
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
@@ -14,8 +14,8 @@ import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
 import kotlinx.android.synthetic.main.fragment_review.*
 
-class ReviewFragment : Fragment() {
-    private lateinit var adapter: ReviewAdapter
+class CommentFragment : Fragment() {
+    private lateinit var adapter: CommentAdapter
     private lateinit var cafeViewModel: CafeViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -34,21 +34,21 @@ class ReviewFragment : Fragment() {
             })
         }
 
-        adapter = ReviewAdapter(context!!)
+        adapter = CommentAdapter(context!!)
         reviewRecyclerView.layoutManager = LinearLayoutManager(activity)
         reviewRecyclerView.adapter = adapter
 
         review_write.setOnClickListener {
-            startActivity(Intent(context, ReviewAddActivity::class.java))
+            startActivity(Intent(context, CommentAddActivity::class.java))
         }
     }
 
     companion object {
-        private var INSTANCE: ReviewFragment? = null
+        private var INSTANCE: CommentFragment? = null
         fun getInstance() = INSTANCE
-                ?: synchronized(ReviewFragment::class.java) {
+                ?: synchronized(CommentFragment::class.java) {
             INSTANCE
-                    ?: ReviewFragment().also { INSTANCE = it }
+                    ?: CommentFragment().also { INSTANCE = it }
         }
     }
 }

@@ -1,10 +1,10 @@
-package com.duzi.gudicafeteria_a.ui.review
+package com.duzi.gudicafeteria_a.ui.comment
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.duzi.gudicafeteria_a.R
 
-class ReviewAddActivity : AppCompatActivity() {
+class CommentAddActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

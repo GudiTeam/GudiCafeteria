@@ -1,4 +1,4 @@
-package com.duzi.gudicafeteria_a.ui.review
+package com.duzi.gudicafeteria_a.ui.comment
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -10,7 +10,7 @@ import com.duzi.gudicafeteria_a.data.ReviewWithUser
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.review_list_item.view.*
 
-class ReviewAdapter(private val mContext: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CommentAdapter(private val mContext: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val list: ArrayList<ReviewWithUser> by lazy { arrayListOf<ReviewWithUser>() }
 

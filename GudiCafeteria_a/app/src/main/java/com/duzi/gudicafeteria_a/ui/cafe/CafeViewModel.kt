@@ -4,8 +4,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import com.duzi.gudicafeteria_a.base.BaseViewModel
 import com.duzi.gudicafeteria_a.data.*
-import com.duzi.gudicafeteria_a.repository.CafeRepository
+import com.duzi.gudicafeteria_a.repository.AppDataSource
+import com.duzi.gudicafeteria_a.repository.AppRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,33 +15,32 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 
-class CafeViewModel: ViewModel() {
-    private val repo: CafeRepository by lazy { CafeRepository.getInstance() }
-    private val disposables = CompositeDisposable()
+class CafeViewModel(dataSource: AppDataSource): BaseViewModel(dataSource) {
     private val cafesLiveData= MutableLiveData<List<Cafe>>()
     private val query = MutableLiveData<WeeklyMenusQuery>()
-    private val weeklyMenus = MutableLiveData<List<Menu>>()
+
     private val weeklyMenusLiveData = Transformations.switchMap(query) { querySet ->
-            disposables += repo.loadWeeklyMenus(querySet.cafeId, querySet.start, querySet.end)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        weeklyMenus.postValue(it)
-                    }
+        val weeklyMenus = MutableLiveData<List<Menu>>()
+        disposables += dataSource.getWeeklyMenus(querySet.cafeId, querySet.start, querySet.end)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    weeklyMenus.postValue(it)
+                }
 
         weeklyMenus
-
     }
 
     private val cafeId = MutableLiveData<String>()
-    private val cafeLivedData = MutableLiveData<Cafe>()
     private val cafe = Transformations.switchMap(cafeId) { id ->
-        cafeLivedData.value = repo.getCafeById(id)
+        val cafeLivedData = MutableLiveData<Cafe>()
+        cafeLivedData.value = dataSource.getCafeById(id)
         cafeLivedData
     }
-    private val commentsLiveData = MutableLiveData<List<Review>>()
+
     private val comments = Transformations.switchMap(cafeId) { id ->
-        disposables += repo.getCommentsById(id)
+        val commentsLiveData = MutableLiveData<List<Comment>>()
+        disposables += dataSource.getCommentsById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -49,16 +50,18 @@ class CafeViewModel: ViewModel() {
         commentsLiveData
     }
 
-    private val commentsWithUserLiveData = MutableLiveData<List<ReviewWithUser>>()
+
     private val commentsWithUser = Transformations.switchMap(cafeId) { id ->
-        val userObservable: Observable<List<User>> = repo.getCommentsById(id).concatMapIterable { comments -> comments }
-                .concatMap { comment -> repo.getUserById(comment.user_Id) }
+        val commentsWithUserLiveData = MutableLiveData<List<ReviewWithUser>>()
+
+        val userObservable: Observable<List<User>> = dataSource.getCommentsById(id).concatMapIterable { comments -> comments }
+                .concatMap { comment -> dataSource.getUserById(comment.user_Id) }
                 .toList()
                 .toObservable()
 
-        disposables += Observable.combineLatest(repo.getCommentsById(id),
+        disposables += Observable.combineLatest(dataSource.getCommentsById(id),
                 userObservable,
-                BiFunction<List<Review>, List<User>, List<ReviewWithUser>> { comment, user ->
+                BiFunction<List<Comment>, List<User>, List<ReviewWithUser>> { comment, user ->
                     val size = comment.size
                     val lists = mutableListOf<ReviewWithUser>()
                     for(i in 0 until size) {
@@ -77,22 +80,27 @@ class CafeViewModel: ViewModel() {
     }
 
     fun getCafes(): LiveData<List<Cafe>> = cafesLiveData
-    fun loadCafeList(date: String, sortType: Int, lat: Double, lon: Double, count: Int){
-        disposables += repo.loadCafeList(date, sortType, lat, lon, count)
+    fun loadCafes(date: String, sortType: Int, lat: Double, lon: Double, count: Int){
+        disposables += dataSource.getCafes(date, sortType, lat, lon, count)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    repo.addCache(it)
+                    (dataSource as AppRepository).addCache(it)
                     cafesLiveData.postValue(it)
                 }
     }
 
-    fun getCacheCafes(): List<Cafe> = repo.getCacheCafes()
-    fun clearCache() = repo.clearCache()
+    fun getCacheCafes(): List<Cafe> =
+            (dataSource as AppRepository).getCachedCafeList()
+
+    fun clearCache() = (dataSource as AppRepository).clearCache()
+
     fun setCafeId(id: String) {
         cafeId.value = id
     }
     fun getCafe(): LiveData<Cafe> = cafe
+
+
     fun getComments() = comments
     fun getCommentsWithUser(): LiveData<List<ReviewWithUser>> = commentsWithUser!!
 

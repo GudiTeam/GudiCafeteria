@@ -1,6 +1,6 @@
 package com.duzi.gudicafeteria_a.data
 
-data class Review(
+data class Comment(
     val cafe_Id: String,
     val user_Id: String,
     val seq: String,

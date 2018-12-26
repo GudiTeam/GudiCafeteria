@@ -14,6 +14,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
+import com.duzi.gudicafeteria_a.base.BaseViewModel
+import com.duzi.gudicafeteria_a.base.Injection
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
@@ -66,7 +68,7 @@ class CafeDetailActivity : AppCompatActivity() {
             Toast.makeText(this@CafeDetailActivity, "공유하기", Toast.LENGTH_SHORT).show()
         }
 
-        cafeViewModel = ViewModelProviders.of(this).get(CafeViewModel::class.java)
+        cafeViewModel = getViewModel()
         cafeViewModel.setCafeId(cafeId)
         cafeViewModel.getCafe().observe(this, Observer {
             cafe -> displayCafeInfo(cafe!!)
@@ -102,5 +104,10 @@ class CafeDetailActivity : AppCompatActivity() {
     private fun appBarExpanded() {
         collapsingtoolbarlayout.title = " "
         collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@CafeDetailActivity, android.R.color.transparent))
+    }
+
+    inline fun <reified T : BaseViewModel> getViewModel(): T {
+        val viewModelFactory = Injection.provideViewModelFactory()
+        return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
     }
 }

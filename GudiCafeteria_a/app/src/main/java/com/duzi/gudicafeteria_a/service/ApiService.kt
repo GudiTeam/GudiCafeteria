@@ -2,7 +2,6 @@ package com.duzi.gudicafeteria_a.service
 
 import com.duzi.gudicafeteria_a.data.*
 import io.reactivex.Observable
-import org.w3c.dom.Comment
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -25,7 +24,7 @@ interface ApiService {
 
     // 카페 Id에 해당되는 댓글 목록 리스트 ( 상세페이지에서 댓글리스트 출력/댓글달기)
     @GET("Cafeteria_S/allcomments/{cafeId}")
-    fun getComments(@Path("cafeId") cafeId: String): Observable<List<Review>>
+    fun getComments(@Path("cafeId") cafeId: String): Observable<List<Comment>>
 
     // 유저 Id에 해당되는 댓글 목록 리스트 ( 댓글목록 관리/수정/삭제)
     @POST("Cafeteria_S/comment/insert")
@@ -37,7 +36,7 @@ interface ApiService {
                       @Path("seq") seq: Int): Call<Int>
 
     @GET("/Cafeteria_S/user/comment/{userId}")
-    fun getMyComments(@Path("userId") userId: String): Observable<List<Review>>
+    fun getMyComments(@Path("userId") userId: String): Observable<List<Comment>>
 
     // 공지사항 전체리스트
     @GET("Cafeteria_S/allnotices")
@@ -56,7 +55,7 @@ interface ApiService {
 
     // 유저 정보 ( 로그인/삭제 )
     @GET("/Cafeteria_S/user/{userId}")
-    fun getUser(@Path("userId") userId: String): Observable<User>
+    fun getUserById(@Path("userId") userId: String): Observable<User>
 
     @POST("/Cafeteria_S/user/insert")
     fun insertUser(@Body user: User): Call<Int>

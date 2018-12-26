@@ -1,5 +1,6 @@
 package com.duzi.gudicafeteria_a.base
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +25,11 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             initView()
         }
+    }
+
+    inline fun <reified T : BaseViewModel> getViewModel(): T {
+        val viewModelFactory = Injection.provideViewModelFactory()
+        return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
     }
 
     private fun isCheckRuntimePermission(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
