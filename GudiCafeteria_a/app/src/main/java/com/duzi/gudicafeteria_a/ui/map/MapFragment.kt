@@ -1,7 +1,6 @@
 package com.duzi.gudicafeteria_a.ui.map
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -34,14 +33,7 @@ class MapFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         mapCardView.setOnClickListener {
-
-            Intent(activity, CafeDetailActivity::class.java).let {
-                val bundle = Bundle()
-                bundle.putString("CAFE_ID", cafe?.cafe_Id)
-                it.putExtras(bundle)
-                startActivity(it)
-            }
-
+            CafeDetailActivity.open(context!!, cafe!!.cafe_Id)
         }
 
         distance.text = "500m"

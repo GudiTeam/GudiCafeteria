@@ -2,7 +2,6 @@ package com.duzi.gudicafeteria_a.ui
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
@@ -18,19 +17,16 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
-import com.duzi.gudicafeteria_a.base.BaseViewModel
-import com.duzi.gudicafeteria_a.base.Injection
 import com.duzi.gudicafeteria_a.data.User
-import com.duzi.gudicafeteria_a.repository.AppRepository
 import com.duzi.gudicafeteria_a.service.ApiErrorResponse
 import com.duzi.gudicafeteria_a.service.ApiSuccessResponse
-import com.duzi.gudicafeteria_a.ui.custom.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.cafe.CafeAdapter
+import com.duzi.gudicafeteria_a.ui.cafe.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.custom.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
-import com.duzi.gudicafeteria_a.ui.cafe.CafeDetailActivity
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.duzi.gudicafeteria_a.ui.user.UserViewModel
@@ -48,9 +44,6 @@ import com.kakao.util.exception.KakaoException
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.navigation_view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListener, FilterListener {
 
@@ -470,11 +463,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun onClick(cafeId: String) {
-        val intent = Intent(this@MainActivity, CafeDetailActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("CAFE_ID", cafeId)
-        intent.putExtras(bundle)
-
-        startActivity(intent)
+        CafeDetailActivity.open(this, cafeId)
     }
 }

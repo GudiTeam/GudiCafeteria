@@ -2,39 +2,41 @@ package com.duzi.gudicafeteria_a.ui.cafe
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.base.BaseViewModel
-import com.duzi.gudicafeteria_a.base.Injection
+import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.data.Cafe
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
 
-class CafeDetailActivity : AppCompatActivity() {
+class CafeDetailActivity : BaseActivity() {
+
+    override val initView: () -> Unit = {}
+    override val requestedPermissionList: List<String> = listOf()
+    override val layoutResID: Int = R.layout.activity_cafe_detail
 
     private lateinit var cafeViewModel: CafeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cafe_detail)
 
-        val cafeId= intent.extras.getString("CAFE_ID")?: "-1"
+        val cafeId= intent.getStringExtra(CAFE_ID) ?: "-1"
 
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.menu_fragment)))
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.review_fragment)))
 
-        viewpager.adapter = CafeDetailTabAdapter(supportFragmentManager, tabLayout.tabCount)
+        viewpager.adapter = CafeDetailTabAdapter(supportFragmentManager, tabLayout.tabCount, cafeId)
         viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         coordinatortablayout.setTranslucentStatusBar(this)
@@ -106,8 +108,13 @@ class CafeDetailActivity : AppCompatActivity() {
         collapsingtoolbarlayout.setContentScrimColor(ContextCompat.getColor(this@CafeDetailActivity, android.R.color.transparent))
     }
 
-    inline fun <reified T : BaseViewModel> getViewModel(): T {
-        val viewModelFactory = Injection.provideViewModelFactory()
-        return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    companion object {
+        private const val CAFE_ID = "CAFE_ID"
+        fun open(context: Context, cafeId: String) {
+            val intent = Intent(context, CafeDetailActivity::class.java)
+            intent.putExtra(CAFE_ID, cafeId)
+            context.startActivity(intent)
+        }
+
     }
 }

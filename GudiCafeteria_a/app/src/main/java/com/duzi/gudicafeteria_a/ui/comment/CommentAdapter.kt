@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duzi.gudicafeteria_a.R
-import com.duzi.gudicafeteria_a.data.ReviewWithUser
-import com.duzi.gudicafeteria_a.util.GlideApp
+import com.duzi.gudicafeteria_a.data.Comment
 import kotlinx.android.synthetic.main.review_list_item.view.*
 
-class CommentAdapter(private val mContext: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CommentAdapter(private val mContext: Context,
+                     private val userCallback: (Comment, ViewHolder) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val list: ArrayList<ReviewWithUser> by lazy { arrayListOf<ReviewWithUser>() }
+    private val list: ArrayList<Comment> by lazy { arrayListOf<Comment>() }
 
     override fun onCreateViewHolder(parent: ViewGroup, holderType: Int): RecyclerView.ViewHolder =
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.review_list_item, parent, false))
@@ -22,20 +22,19 @@ class CommentAdapter(private val mContext: Context): RecyclerView.Adapter<Recycl
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         holder.itemView.run {
-            val reviewWithUser = list[position]
-            holder.itemView.userId.text = reviewWithUser.user.user_Nm
-            GlideApp.with(mContext)
-                    .load(reviewWithUser.user.user_Img)
-                    .placeholder(R.mipmap.ic_launcher_round)
-                    .into(holder.itemView.userImage)
+            val comment = list[position]
 
-            reviewRatingBar.rating = reviewWithUser.review.comment_score.toFloat()
-            reviewContents.text = reviewWithUser.review.comment
+            // FIXME 여기서 ViewModel과 LifecycleOwner를 받아서 처리를 해야하는건지 Activity로 holder 정보를 보내서 처리해야하는건지 잘모르겠음...
+            userCallback(comment, holder as ViewHolder)
+
+
+            reviewRatingBar.rating = comment.comment_score.toFloat()
+            reviewContents.text = comment.comment
             date.text = "이번주"
         }
     }
 
-    fun addList(list: List<ReviewWithUser>) {
+    fun addList(list: List<Comment>) {
         this.list.clear()
         this.list.addAll(list)
     }

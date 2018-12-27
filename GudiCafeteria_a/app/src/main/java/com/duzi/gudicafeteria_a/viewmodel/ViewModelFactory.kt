@@ -4,8 +4,8 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.duzi.gudicafeteria_a.repository.AppDataSource
 import com.duzi.gudicafeteria_a.ui.cafe.CafeViewModel
+import com.duzi.gudicafeteria_a.ui.comment.CommentViewModel
 import com.duzi.gudicafeteria_a.ui.user.UserViewModel
-import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val dataSource: AppDataSource): ViewModelProvider.Factory {
@@ -14,6 +14,7 @@ class ViewModelFactory(private val dataSource: AppDataSource): ViewModelProvider
         return when {
             modelClass.isAssignableFrom(CafeViewModel::class.java) -> CafeViewModel(dataSource) as T
             modelClass.isAssignableFrom(UserViewModel::class.java) -> UserViewModel(dataSource) as T
+            modelClass.isAssignableFrom(CommentViewModel::class.java) -> CommentViewModel(dataSource) as T
 
             else -> throw IllegalArgumentException("Unknown ViewModel class..")
         }
