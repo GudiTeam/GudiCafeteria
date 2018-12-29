@@ -29,6 +29,7 @@ import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
+import com.duzi.gudicafeteria_a.ui.user.UserInstance
 import com.duzi.gudicafeteria_a.ui.user.UserViewModel
 import com.duzi.gudicafeteria_a.util.*
 import com.google.android.gms.location.*
@@ -428,7 +429,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     private fun requestSignUp(userId: String, nickName: String, userImg: String, remark: String) {
-        userViewModel.insertUser(User(userId, nickName, userImg, remark)) {
+        val user = User(userId, nickName, userImg, remark)
+        UserInstance.setUserInfo(user)
+
+        userViewModel.insertUser(user) {
             when(it) {
                 is ApiSuccessResponse<Int> -> {
                     Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()

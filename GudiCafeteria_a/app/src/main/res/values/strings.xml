@@ -42,4 +42,5 @@
     <string name="developer">made by KJH and JSH</string>
     <string name="advertise_require">광고문의</string>
     <string name="developer_info">개발자 및 오픈소스 정보</string>
+    <string name="add_review">리뷰쓰기</string>
 </resources>

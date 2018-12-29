@@ -30,10 +30,17 @@ interface ApiService {
     @POST("Cafeteria_S/comment/insert")
     fun insertComment(@Body comment: Comment): Call<Int>
 
-    @DELETE("/Cafeteria_S/user/delete/{cafeId}/{userId}/{seq}")
+    @DELETE("/Cafeteria_S/comment/delete/{cafeId}/{userId}/{seq}")
     fun deleteComment(@Path("cafeId") cafeId: String,
                       @Path("userId") userId: String,
-                      @Path("seq") seq: Int): Call<Int>
+                      @Path("seq") seq: String): Call<Int>
+
+    @PUT("Cafeteria_S/comment/update/{cafeId}/{userId}/{seq}/{score}/{comment}")
+    fun updateComment(@Path("cafeId") cafeId: String,
+                      @Path("userId") userId: String,
+                      @Path("seq") seq: String,
+                      @Path("score") score: String,
+                      @Path("comment") comment: String): Call<Int>
 
     @GET("/Cafeteria_S/user/comment/{userId}")
     fun getMyComments(@Path("userId") userId: String): Observable<List<Comment>>

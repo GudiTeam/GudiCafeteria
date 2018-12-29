@@ -54,8 +54,12 @@ class AppRepository(
         return remoteDataSource.insertComment(comment)
     }
 
-    override fun deleteComment(cafeId: String, userId: String, seq: Int): Call<Int> {
+    override fun deleteComment(cafeId: String, userId: String, seq: String): Call<Int> {
         return remoteDataSource.deleteComment(cafeId, userId, seq)
+    }
+
+    override fun updateComment(cafeId: String, userId: String, seq: String, score: String, comment: String): Call<Int>  {
+        return remoteDataSource.updateComment(cafeId, userId, seq, score, comment)
     }
 
     override fun getUserById(id: String): Observable<User> {

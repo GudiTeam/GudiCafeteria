@@ -47,7 +47,16 @@ interface AppDataSource {
      */
     fun deleteComment(cafeId: String,
                       userId: String,
-                      seq: Int): Call<Int>
+                      seq: String): Call<Int>
+
+    /**
+     * 식당 리뷰 수정
+     */
+    fun updateComment(cafeId: String,
+                      userId: String,
+                      seq: String,
+                      score: String,
+                      comment: String): Call<Int>
 
     /**
      * 유저 정보 가져오기

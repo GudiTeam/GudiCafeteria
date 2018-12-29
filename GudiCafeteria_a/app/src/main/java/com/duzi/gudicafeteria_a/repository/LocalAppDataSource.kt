@@ -30,7 +30,11 @@ object LocalAppDataSource: AppDataSource {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteComment(cafeId: String, userId: String, seq: Int): Call<Int> {
+    override fun deleteComment(cafeId: String, userId: String, seq: String): Call<Int> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateComment(cafeId: String, userId: String, seq: String, score: String, comment: String): Call<Int>  {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

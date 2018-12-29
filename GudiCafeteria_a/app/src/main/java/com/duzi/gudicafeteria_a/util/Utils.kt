@@ -10,9 +10,16 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.view.View
+import android.widget.Toast
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.kakao.network.ErrorResult
+import com.kakao.usermgmt.UserManagement
+import com.kakao.usermgmt.callback.MeV2ResponseCallback
+import com.kakao.usermgmt.response.MeV2Response
+import kotlinx.android.synthetic.main.navigation_view.*
 
 const val APP_TAG = "Cafeteria"
 const val sortByDisance = 1
@@ -86,4 +93,17 @@ object Utils {
     fun isGranted(context: Context, permission: String): Boolean =
             ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
 
+    fun showDialog(context: Context, title: String, positive: () -> Unit, negative: () -> Unit) {
+        AlertDialog.Builder(context)
+                .setTitle(title)
+                .setPositiveButton("확인") { dialogInterface, _ ->
+                    positive()
+                    dialogInterface.dismiss()
+                }
+                .setNegativeButton("취소") { dialogInterface, _ ->
+                    negative()
+                    dialogInterface.dismiss()
+                }
+                .show()
+    }
 }

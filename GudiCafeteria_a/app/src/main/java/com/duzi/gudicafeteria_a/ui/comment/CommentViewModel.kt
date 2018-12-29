@@ -29,28 +29,50 @@ class CommentViewModel(dataSource: AppDataSource): BaseViewModel(dataSource) {
         return comments
     }
 
-    fun insertComment(comment: Comment, callback: (ApiResponse<Int>) -> Unit) {
+
+    fun insertComment(comment: Comment): LiveData<ApiResponse<Int>> {
+        val responseLiveData = MutableLiveData<ApiResponse<Int>>()
         dataSource.insertComment(comment).enqueue(object: Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                callback(ApiResponse.create(t))
+                responseLiveData.postValue(ApiResponse.create(t))
             }
 
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                callback(ApiResponse.create(response))
+                responseLiveData.postValue(ApiResponse.create(response))
             }
         })
+        return responseLiveData
     }
 
-    fun deleteComment(comment: Comment, callback: (ApiResponse<Int>) -> Unit) {
-        dataSource.insertComment(comment).enqueue(object: Callback<Int> {
+
+    fun deleteComment(comment: Comment): LiveData<ApiResponse<Int>> {
+        val responseLiveData = MutableLiveData<ApiResponse<Int>>()
+        dataSource.deleteComment(comment.cafe_Id, comment.user_Id, comment.seq.toString()).enqueue(object: Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                callback(ApiResponse.create(t))
+                responseLiveData.postValue(ApiResponse.create(t))
             }
 
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                callback(ApiResponse.create(response))
+                responseLiveData.postValue(ApiResponse.create(response))
             }
         })
+        return responseLiveData
+    }
+
+
+    fun updateComment(comment: Comment): LiveData<ApiResponse<Int>> {
+        val responseLiveData = MutableLiveData<ApiResponse<Int>>()
+        dataSource.updateComment(comment.cafe_Id, comment.user_Id, comment.seq.toString(),
+                comment.comment_score, comment.comment).enqueue(object: Callback<Int> {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                responseLiveData.postValue(ApiResponse.create(t))
+            }
+
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                responseLiveData.postValue(ApiResponse.create(response))
+            }
+        })
+        return responseLiveData
     }
 
 }

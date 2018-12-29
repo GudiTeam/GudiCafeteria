@@ -2,6 +2,7 @@ package com.duzi.gudicafeteria_a.util
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 
 fun Context.isConnectedToInternet(): Boolean {
