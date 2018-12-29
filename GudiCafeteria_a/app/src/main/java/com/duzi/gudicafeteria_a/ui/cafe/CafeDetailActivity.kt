@@ -80,6 +80,7 @@ class CafeDetailActivity : BaseActivity() {
     @SuppressLint("SetTextI18n", "NewApi")
     private fun displayCafeInfo(cafe: Cafe) {
         cafeTitle.text = cafe.cafe_Nm
+        mainRatingBar.rating = cafe.build_Score.toFloat() //FIXME 리뷰를 작성해도 카페 리스트를 다시 받지않으면 동기화가 안되는 이슈
         price.text = "${cafe.price}원"
         operation.text = cafe.oper_Time
         address.text = "${cafe.build_Addr}\n${cafe.build_Nm}"
