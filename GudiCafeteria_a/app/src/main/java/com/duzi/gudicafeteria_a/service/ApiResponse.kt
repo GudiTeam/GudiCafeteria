@@ -22,6 +22,10 @@ sealed class ApiResponse<T> {
                 ApiErrorResponse(response.code(), msg)
             }
         }
+
+        fun <T> create(response: T): ApiResponse<T> {
+            return ApiSuccessResponse(response)
+        }
     }
 }
 

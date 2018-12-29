@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import com.duzi.gudicafeteria_a.base.BaseViewModel
 import com.duzi.gudicafeteria_a.data.Favorite
 import com.duzi.gudicafeteria_a.repository.AppDataSource
+import com.duzi.gudicafeteria_a.service.ApiResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -25,25 +26,29 @@ class FavoriteViewModel(appDataSource: AppDataSource): BaseViewModel(appDataSour
     }
 
 
-    fun insertFavorite(favorite: Favorite): LiveData<Int> {
-        val responseLiveData = MutableLiveData<Int>()
+    fun insertFavorite(favorite: Favorite): LiveData<ApiResponse<Int>> {
+        val responseLiveData = MutableLiveData<ApiResponse<Int>>()
         disposables += dataSource.insertFavorite(favorite)
                 .toObservable()
-                .subscribe {
-                    responseLiveData.postValue(it)
-                }
+                .subscribe ({
+                    responseLiveData.postValue(ApiResponse.create(it))
+                }, {
+                    responseLiveData.postValue(ApiResponse.create(it))
+                })
 
         return responseLiveData
     }
 
 
-    fun deleteFavorite(cafeId: String, userId: String): LiveData<Int> {
-        val responseLiveData = MutableLiveData<Int>()
+    fun deleteFavorite(cafeId: String, userId: String): LiveData<ApiResponse<Int>> {
+        val responseLiveData = MutableLiveData<ApiResponse<Int>>()
         disposables += dataSource.deleteFavorite(cafeId, userId)
                 .toObservable()
-                .subscribe {
-                    responseLiveData.postValue(it)
-                }
+                .subscribe ({
+                    responseLiveData.postValue(ApiResponse.create(it))
+                }, {
+                    responseLiveData.postValue(ApiResponse.create(it))
+                })
 
         return responseLiveData
     }

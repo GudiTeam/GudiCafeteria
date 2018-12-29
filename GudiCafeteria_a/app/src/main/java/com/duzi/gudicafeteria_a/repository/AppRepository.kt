@@ -73,15 +73,15 @@ class AppRepository(
     }
 
     override fun getFavoritesById(userId: String): Observable<List<Favorite>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.getFavoritesById(userId)
     }
 
     override fun insertFavorite(favorite: Favorite): Single<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.insertFavorite(favorite)
     }
 
     override fun deleteFavorite(cafeId: String, userId: String): Single<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return remoteDataSource.deleteFavorite(cafeId, userId)
     }
 
     companion object {

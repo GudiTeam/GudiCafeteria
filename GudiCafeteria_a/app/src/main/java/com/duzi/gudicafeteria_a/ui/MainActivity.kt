@@ -27,6 +27,7 @@ import com.duzi.gudicafeteria_a.ui.custom.autopager.AutoPagerAdapter
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterBottomDialog
 import com.duzi.gudicafeteria_a.ui.custom.filter.FilterListener
 import com.duzi.gudicafeteria_a.ui.custom.recycler.PullLoadMoreRecyclerView
+import com.duzi.gudicafeteria_a.ui.favorite.FavoriteViewModel
 import com.duzi.gudicafeteria_a.ui.map.MapActivity
 import com.duzi.gudicafeteria_a.ui.notice.NoticeActivity
 import com.duzi.gudicafeteria_a.ui.user.UserInstance
@@ -55,6 +56,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private lateinit var cafeViewModel: CafeViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var favoriteViewModel: FavoriteViewModel
 
     private lateinit var recyclerAdapter: CafeAdapter
     private lateinit var sessionCallback: ISessionCallback
@@ -320,6 +322,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 })
 
         userViewModel = getViewModel()
+
+        favoriteViewModel = getViewModel()
     }
 
     private fun clearCache() {
@@ -349,6 +353,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 GlideApp.with(this@MainActivity)
                         .load(result.profileImagePath)
                         .into(userImage)
+
+                favoriteViewModel.getFavoritesById(result.id.toString()).observe(this@MainActivity, Observer {
+                    for(favorite in it!!) {
+                        Log.d(APP_TAG, "#Favorites  user: ${favorite.user_Id} cafe: ${favorite.cafe_Id}")
+                    }
+                })
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
