@@ -1,11 +1,9 @@
 package com.duzi.gudicafeteria_a.repository
 
-import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.Comment
-import com.duzi.gudicafeteria_a.data.Menu
-import com.duzi.gudicafeteria_a.data.User
+import com.duzi.gudicafeteria_a.data.*
 import com.duzi.gudicafeteria_a.service.ApiService
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -57,10 +55,17 @@ object RemoteAppDataSource: AppDataSource {
         return apiService.deleteUser(userId)
     }
 
+    override fun getFavoritesById(userId: String): Observable<List<Favorite>> {
+        return apiService.getFavoritesById(userId)
+    }
 
+    override fun insertFavorite(favorite: Favorite): Single<Int> {
+        return apiService.insertFavorite(favorite)
+    }
 
-
-
+    override fun deleteFavorite(cafeId: String, userId: String): Single<Int> {
+        return apiService.deleteFavorite(cafeId, userId)
+    }
 
     private fun create(): ApiService {
         val retrofit = Retrofit.Builder()

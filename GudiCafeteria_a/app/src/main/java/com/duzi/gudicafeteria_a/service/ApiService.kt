@@ -2,6 +2,7 @@ package com.duzi.gudicafeteria_a.service
 
 import com.duzi.gudicafeteria_a.data.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -51,14 +52,14 @@ interface ApiService {
 
     // 유저 Id에 해당되는 즐겨찾기 리스트 ( 즐겨찾기 관리/수정/삭제)
     @GET("Cafeteria_S/allfavorites/{userId}")
-    fun getAllFavoritesById(@Path("userId") userId: String): Observable<List<Favorite>>
+    fun getFavoritesById(@Path("userId") userId: String): Observable<List<Favorite>>
 
     @POST("Cafeteria_S/favorite/insert")
-    fun insertFavorite(@Body favorite: Favorite): Call<Int>
+    fun insertFavorite(@Body favorite: Favorite): Single<Int>
 
     @DELETE("Cafeteria_S/favorite/delete/{cafe_id}/{user_id}")
     fun deleteFavorite(@Path("cafeId") cafeId: String,
-                       @Path("userId") userId: String)
+                       @Path("userId") userId: String): Single<Int>
 
     // 유저 정보 ( 로그인/삭제 )
     @GET("/Cafeteria_S/user/{userId}")

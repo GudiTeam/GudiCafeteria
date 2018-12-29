@@ -1,10 +1,8 @@
 package com.duzi.gudicafeteria_a.repository
 
-import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.Comment
-import com.duzi.gudicafeteria_a.data.Menu
-import com.duzi.gudicafeteria_a.data.User
+import com.duzi.gudicafeteria_a.data.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
 
 interface AppDataSource {
@@ -72,4 +70,21 @@ interface AppDataSource {
      * 유저 삭제
      */
     fun deleteUser(userId: String): Call<Int>
+
+
+    /**
+     * user의 즐겨찾기
+     */
+    fun getFavoritesById(userId: String): Observable<List<Favorite>>
+
+    /**
+     * 즐겨찾기 추가
+     */
+    fun insertFavorite(favorite: Favorite): Single<Int>
+
+    /**
+     * 즐겨찾기 삭제
+     */
+    fun deleteFavorite(cafeId: String, userId: String): Single<Int>
+
 }

@@ -1,10 +1,8 @@
 package com.duzi.gudicafeteria_a.repository
 
-import com.duzi.gudicafeteria_a.data.Cafe
-import com.duzi.gudicafeteria_a.data.Menu
-import com.duzi.gudicafeteria_a.data.Comment
-import com.duzi.gudicafeteria_a.data.User
+import com.duzi.gudicafeteria_a.data.*
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Call
 import java.util.*
 
@@ -72,6 +70,18 @@ class AppRepository(
 
     override fun deleteUser(userId: String): Call<Int> {
         return remoteDataSource.deleteUser(userId)
+    }
+
+    override fun getFavoritesById(userId: String): Observable<List<Favorite>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun insertFavorite(favorite: Favorite): Single<Int> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun deleteFavorite(cafeId: String, userId: String): Single<Int> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {

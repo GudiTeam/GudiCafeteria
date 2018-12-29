@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.duzi.gudicafeteria_a.R
 import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.data.Cafe
+import com.duzi.gudicafeteria_a.ui.favorite.FavoriteViewModel
 import com.duzi.gudicafeteria_a.util.GlideApp
 import kotlinx.android.synthetic.main.activity_cafe_detail.*
 import kotlinx.android.synthetic.main.view_coordinatortablayout.*
