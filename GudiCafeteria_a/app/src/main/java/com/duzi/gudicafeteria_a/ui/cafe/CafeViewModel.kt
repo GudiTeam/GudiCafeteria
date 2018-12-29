@@ -66,9 +66,3 @@ class CafeViewModel(dataSource: AppDataSource): BaseViewModel(dataSource) {
     fun getWeeklyMenus(): LiveData<List<Menu>> = weeklyMenusLiveData
 
 }
-
-data class WeeklyMenusQuery(
-        val cafeId: String,
-        val start: Long,
-        val end: Long
-)
