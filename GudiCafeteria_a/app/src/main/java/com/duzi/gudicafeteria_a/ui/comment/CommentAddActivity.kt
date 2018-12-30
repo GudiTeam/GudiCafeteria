@@ -33,6 +33,7 @@ class CommentAddActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_black_24dp)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         cafeId = intent.getStringExtra(CAFE_ID)
         userId = intent.getStringExtra(USER_ID)

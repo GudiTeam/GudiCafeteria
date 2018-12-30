@@ -58,16 +58,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
-        android:inputType="text"
+        android:gravity="top"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentRatingBar"
-        tools:text="너무 맛있어요" />
+        tools:text="너무 맛있어요\n또올께요~~~~~~~~~\n완전맛집" />
 
 
 </android.support.constraint.ConstraintLayout>
