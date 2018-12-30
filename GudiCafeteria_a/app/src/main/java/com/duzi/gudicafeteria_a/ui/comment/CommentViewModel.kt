@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URLEncoder
 
 class CommentViewModel(dataSource: AppDataSource): BaseViewModel(dataSource) {
 
@@ -60,10 +61,13 @@ class CommentViewModel(dataSource: AppDataSource): BaseViewModel(dataSource) {
     }
 
 
-    fun updateComment(comment: Comment): LiveData<ApiResponse<Int>> {
+    fun updateComment(comment: Comment, updatedComment: String, updatedScore: String): LiveData<ApiResponse<Int>> {
         val responseLiveData = MutableLiveData<ApiResponse<Int>>()
+
+        val encodedUpdatedComment = URLEncoder.encode(updatedComment, "UTF-8")
+
         dataSource.updateComment(comment.cafe_Id, comment.user_Id, comment.seq.toString(),
-                comment.comment_score, comment.comment).enqueue(object: Callback<Int> {
+                updatedScore, encodedUpdatedComment).enqueue(object: Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
                 responseLiveData.postValue(ApiResponse.create(t))
             }

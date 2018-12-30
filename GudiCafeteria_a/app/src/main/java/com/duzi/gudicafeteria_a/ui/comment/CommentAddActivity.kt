@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.duzi.gudicafeteria_a.R
@@ -11,6 +12,7 @@ import com.duzi.gudicafeteria_a.base.BaseActivity
 import com.duzi.gudicafeteria_a.data.Comment
 import com.duzi.gudicafeteria_a.service.ApiErrorResponse
 import com.duzi.gudicafeteria_a.service.ApiSuccessResponse
+import com.duzi.gudicafeteria_a.util.APP_TAG
 import kotlinx.android.synthetic.main.activity_review_add.*
 
 class CommentAddActivity : BaseActivity() {
@@ -75,10 +77,10 @@ class CommentAddActivity : BaseActivity() {
         if(cafeId.isNullOrEmpty() || userId.isNullOrEmpty())
             return
 
-        comment = Comment(cafeId!!, userId!!, edtComment.text.toString(), commentRatingBar.rating.toString())
+        comment = comment ?: Comment(cafeId!!, userId!!, edtComment.text.toString(), commentRatingBar.rating.toString())
         comment?.let { it ->
             val liveData = if(isModified) {
-                commentViewModel.updateComment(it)
+                commentViewModel.updateComment(it, edtComment.text.toString(), commentRatingBar.rating.toString())
             } else {
                 commentViewModel.insertComment(it)
             }
@@ -87,7 +89,10 @@ class CommentAddActivity : BaseActivity() {
                 response ->
                 when(response) {
                     is ApiSuccessResponse<Int> -> { finish() }
-                    is ApiErrorResponse<Int> -> { finish() }
+                    is ApiErrorResponse<Int> -> {
+                        Log.d(APP_TAG, "#Comment insert error  ${response.code} ${response.errorMessage}")
+                        finish()
+                    }
                 }
             })
         }
