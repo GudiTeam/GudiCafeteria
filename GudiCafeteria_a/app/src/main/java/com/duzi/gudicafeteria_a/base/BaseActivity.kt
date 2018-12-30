@@ -1,5 +1,6 @@
 package com.duzi.gudicafeteria_a.base
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -7,14 +8,12 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract val initView: () -> Unit
     abstract val requestedPermissionList: List<String>
     abstract val layoutResID: Int
-    protected val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +25,11 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             initView()
         }
+    }
+
+    inline fun <reified T : BaseViewModel> getViewModel(): T {
+        val viewModelFactory = Injection.provideViewModelFactory()
+        return ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
     }
 
     private fun isCheckRuntimePermission(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -67,13 +71,6 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQ_REQUEST) {
             initView()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if(!disposables.isDisposed) {
-            disposables.dispose()
         }
     }
 

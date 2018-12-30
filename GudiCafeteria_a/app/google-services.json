@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "213889505852",
+    "firebase_url": "https://gudicafeteria.firebaseio.com",
+    "project_id": "gudicafeteria",
+    "storage_bucket": "gudicafeteria.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213889505852:android:4646c6a82a3efe1b",
+        "android_client_info": {
+          "package_name": "com.duzi.gudicafeteria_a"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213889505852-j7cgkledue56v4fiqqprqdgu7ggfmls0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duzi.gudicafeteria_a",
+            "certificate_hash": "502ec90d430d3606ba30549f0b7c207daa023da8"
+          }
+        },
+        {
+          "client_id": "213889505852-gk1ok07tp3lu8a2a0ion2dtlj8f5muml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDePmQPnfzYIMAGyBPogsDwTLAxapIjUec"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213889505852-gk1ok07tp3lu8a2a0ion2dtlj8f5muml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

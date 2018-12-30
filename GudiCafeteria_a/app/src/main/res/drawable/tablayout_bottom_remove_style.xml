@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+    layer-list는 drawable을 위 순서대로 하나씩 그려준다
+    처음 item은 여백이 없는 @color/split_border 색인 도형을 그려주고
+    다음 item에서 top 여백이 1인 white 도형을 그려준다
+    결론적으로 상단에 길이가 1dp인 실선이 하나 생긴다
+    -->
+
+    <item android:top="0dp"
+        android:right="0dp"
+        android:left="0dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/split_border" />
+        </shape>
+    </item>
+
+    <item android:top="0.5dp"
+        android:right="0dp"
+        android:left="0.5dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+</layer-list>

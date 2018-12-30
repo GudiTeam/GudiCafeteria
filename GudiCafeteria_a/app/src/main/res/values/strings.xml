@@ -1,5 +1,46 @@
 <resources>
-    <string name="app_name">GudiCafeteria_a</string>
+    <string name="app_name">구내식당</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="menu_fragment">메뉴</string>
+    <string name="review_fragment">리뷰</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="imageView">ImageView</string>
+    <string name="star">찜하기</string>
+    <string name="share">공유</string>
+    <string name="no_menu">오늘 식당 메뉴가 없습니다.</string>
+    <string name="lunch">점심</string>
+    <string name="rice">밥</string>
+    <string name="soup">국</string>
+    <string name="side1">사이드1</string>
+    <string name="side2">사이드2</string>
+    <string name="side3">사이드3</string>
+    <string name="side4">사이드4</string>
+    <string name="side5">사이드5</string>
+    <string name="side6">사이드6</string>
+    <string name="side7">사이드7</string>
+    <string name="side8">사이드8</string>
+    <string name="dinner">저녁</string>
+    <string name="dessert1">디저트1</string>
+    <string name="dessert2">디저트2</string>
+    <string name="week_menu">일주일 식단 보기</string>
+    <string name="notice">공지사항</string>
+    <string name="review_write">리뷰를 남겨주세요</string>
+    <string name="sort_help">도움순</string>
+    <string name="sort_created">작성순</string>
+    <string name="no_review">리뷰가 없습니다</string>
+    <string name="map">지도</string>
+    <string name="logout">카카오계정 로그아웃</string>
+    <string name="kakao_login">카카오계정으로 로그인</string>
+    <string name="favorite">찜하기</string>
+    <string name="review_manage">리뷰관리</string>
+    <string name="setting">환경설정</string>
+    <string name="advertising_image_view">Advertising Image View</string>
+    <string name="developer">made by KJH and JSH</string>
+    <string name="advertise_require">광고문의</string>
+    <string name="developer_info">개발자 및 오픈소스 정보</string>
+    <string name="add_review">리뷰쓰기</string>
 </resources>

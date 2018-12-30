@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#4bc4eb</color>
+    <color name="colorPrimaryDark">#0091ea</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorIcon">#4bc4eb</color>
 
     <color name="default_bg">#ff3f83c4</color>
     <color name="default_bg_pressed">#9c000000</color>
     <color name="default_bg_disabled">#ff999999</color>
     <color name="default_text_color">#ffffff</color>
+
+    <color name="split_border">#CECEC4</color>
+    <color name="basic_background">#FFFFFF</color>
+    <color name="tab_basic_background">#CECEC4</color>
+
+    <color name="tab_text_basic">#CECEC4</color>
+    <color name="kakao_color">#FFF600</color>
+    <color name="kakao_text_color">#49280B</color>
+
+    <color name="MAP_ITEM_STATE_PRESSED_COLOR">#D0EADD</color>
+    <color name="MAP_ITEM_STATE_DEFAULT_COLOR">#FFFFFF</color>
 </resources>
