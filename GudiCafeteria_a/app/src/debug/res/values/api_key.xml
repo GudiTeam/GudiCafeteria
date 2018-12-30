@@ -1,4 +1,0 @@
-<resources>
-    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyBg7NL-dDvS_aRqon76IKZ5b5lOZxnOWXc</string>
-    <string name="kakao_api_key">0d1c3cfb52ffe0b392951ddc30aaade9</string>
-</resources>

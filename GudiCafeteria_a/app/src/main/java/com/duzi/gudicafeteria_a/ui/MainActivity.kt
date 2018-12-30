@@ -343,9 +343,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         val keys = arrayListOf("properties.nickname", "properties.profile_image", "properties.thumbnail_image")
         UserManagement.getInstance().me(keys, object: MeV2ResponseCallback() {
             override fun onSuccess(result: MeV2Response?) {
-                Toast.makeText(this@MainActivity,
-                        "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
-                        Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity,
+                //        "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
+                //        Toast.LENGTH_SHORT).show()
 
                 setLogin()
                 requestSignUp(result?.id.toString(), result?.nickname!!, result.profileImagePath!!, "")
@@ -363,9 +363,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
                 // TODO Redirect Login.
-                Toast.makeText(this@MainActivity,
+                /*Toast.makeText(this@MainActivity,
                         "errorCode:${errorResult?.errorCode}",
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT).show()*/
 
             }
         })
@@ -396,12 +396,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         AuthService.getInstance().requestAccessTokenInfo(object: ApiResponseCallback<AccessTokenInfoResponse>() {
             override fun onSuccess(result: AccessTokenInfoResponse?) {
                 // 유저id와 토큰 만료기간 체크
-                Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
                 // TODO redirect login
-                Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNotSignedUp() {
@@ -418,15 +418,15 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
                         override fun onSuccess(result: Long?) {
                             setLogout()
-                            Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onSessionClosed(errorResult: ErrorResult?) {
-                            Toast.makeText(this@MainActivity, "세션이 종료된 상태", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "세션이 종료된 상태", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onNotSignedUp() {
-                            Toast.makeText(this@MainActivity, "미가입 상태", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "미가입 상태", Toast.LENGTH_SHORT).show()
                         }
 
                     })
@@ -445,10 +445,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         userViewModel.insertUser(user) {
             when(it) {
                 is ApiSuccessResponse<Int> -> {
-                    Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()
                 }
                 is ApiErrorResponse<Int> -> {
-                    Toast.makeText(this, "${it.code} ${it.errorMessage}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "${it.code} ${it.errorMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -23,6 +23,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 배포용 KEY
+            resValue "string", "google_maps_api_key", "AIzaSyD7E2WtpFkKPStT_WICrHqwPrBtVcw6ZZA"
+            resValue "string", "kakao_api_key", "0d1c3cfb52ffe0b392951ddc30aaade9"
+        }
+        debug {
+            // 개발용 KEY
+            resValue "string", "google_maps_api_key", "AIzaSyBg7NL-dDvS_aRqon76IKZ5b5lOZxnOWXc"
+            resValue "string", "kakao_api_key", "0d1c3cfb52ffe0b392951ddc30aaade9"
         }
     }
     buildToolsVersion '28.0.3'
