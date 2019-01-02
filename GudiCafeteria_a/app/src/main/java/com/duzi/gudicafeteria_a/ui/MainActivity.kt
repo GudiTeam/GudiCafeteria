@@ -53,6 +53,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
 
     private val authType = AuthType.KAKAO_LOGIN_ALL
+    private var lastLongitude: Double? = null
+    private var lastLatitude: Double? = null
 
     private lateinit var cafeViewModel: CafeViewModel
     private lateinit var userViewModel: UserViewModel
@@ -79,10 +81,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         super.onResume()
 
         setRefresh()
-        if(::cafeViewModel.isInitialized) {
-            recyclerAdapter.addAllData(cafeViewModel.getCacheCafes())
-            pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
-        }
+        observeViewModel()
+        //if(::cafeViewModel.isInitialized) {
+        //    recyclerAdapter.addAllData(cafeViewModel.getCacheCafes())
+        //    pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+        //}
     }
 
     override fun onPause() {
@@ -104,7 +107,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override val initView: () -> Unit = {
-        observeViewModel()
+        //observeViewModel()
         initLocation()
     }
 
@@ -134,11 +137,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         clearCache()
-        requestCafes("20181023")
+        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
     }
 
     override fun onLoadMore() {
-        requestCafes("20181023")
+        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
     }
 
     private fun initToolbar() {
@@ -294,8 +297,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         requestCafes("20181023")
                         Log.e(APP_TAG, "location get fail")
                     } else {
-                        requestCafes("20181023", sortByDisance, location.latitude, location.longitude, 1)
-                        Log.d(APP_TAG, "${location.latitude} , ${location.longitude}")
+                        lastLatitude = location.latitude
+                        lastLongitude = location.longitude
+                        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
+                        Log.d(APP_TAG, "$lastLatitude , $lastLongitude")
                     }
                 }
                 .addOnFailureListener {
@@ -313,13 +318,18 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private fun observeViewModel() {
         cafeViewModel = getViewModel()
-        cafeViewModel.getCafes()
-                .observe(this, Observer {
-                    if (it != null) {
-                        recyclerAdapter.addAllData(it)
-                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
-                    }
+        cafeViewModel.getCafes().observe(this, Observer { cafes ->
+            val userId = UserInstance.getUserId()
+            if(userId.isNullOrEmpty()) {
+                recyclerAdapter.addAllData(cafes!!)
+                pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+            } else {
+                favoriteViewModel.getFavoritesById(userId!!).observe(this@MainActivity, Observer { favorites ->
+                    recyclerAdapter.addAllData(cafes!!.toMutableList(), favorites!!)
+                    pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
                 })
+            }
+        })
 
         userViewModel = getViewModel()
 
@@ -353,12 +363,6 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 GlideApp.with(this@MainActivity)
                         .load(result.profileImagePath)
                         .into(userImage)
-
-                favoriteViewModel.getFavoritesById(result.id.toString()).observe(this@MainActivity, Observer {
-                    for(favorite in it!!) {
-                        Log.d(APP_TAG, "#Favorites  user: ${favorite.user_Id} cafe: ${favorite.cafe_Id}")
-                    }
-                })
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
