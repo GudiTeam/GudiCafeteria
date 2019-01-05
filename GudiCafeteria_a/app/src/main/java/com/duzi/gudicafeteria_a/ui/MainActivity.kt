@@ -53,6 +53,8 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     override val requestedPermissionList: List<String> = listOf("android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION")
 
     private val authType = AuthType.KAKAO_LOGIN_ALL
+    private var lastLongitude: Double? = null
+    private var lastLatitude: Double? = null
 
     private lateinit var cafeViewModel: CafeViewModel
     private lateinit var userViewModel: UserViewModel
@@ -79,10 +81,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         super.onResume()
 
         setRefresh()
-        if(::cafeViewModel.isInitialized) {
-            recyclerAdapter.addAllData(cafeViewModel.getCacheCafes())
-            pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
-        }
+        observeViewModel()
+        //if(::cafeViewModel.isInitialized) {
+        //    recyclerAdapter.addAllData(cafeViewModel.getCacheCafes())
+        //    pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+        //}
     }
 
     override fun onPause() {
@@ -104,7 +107,7 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
     }
 
     override val initView: () -> Unit = {
-        observeViewModel()
+        //observeViewModel()
         initLocation()
     }
 
@@ -134,11 +137,11 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     override fun onRefresh() {
         clearCache()
-        requestCafes("20181023")
+        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
     }
 
     override fun onLoadMore() {
-        requestCafes("20181023")
+        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
     }
 
     private fun initToolbar() {
@@ -294,8 +297,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                         requestCafes("20181023")
                         Log.e(APP_TAG, "location get fail")
                     } else {
-                        requestCafes("20181023", sortByDisance, location.latitude, location.longitude, 1)
-                        Log.d(APP_TAG, "${location.latitude} , ${location.longitude}")
+                        lastLatitude = location.latitude
+                        lastLongitude = location.longitude
+                        requestCafes("20181023", sortByDisance, lastLatitude!!, lastLongitude!!, 1)
+                        Log.d(APP_TAG, "$lastLatitude , $lastLongitude")
                     }
                 }
                 .addOnFailureListener {
@@ -313,13 +318,18 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
 
     private fun observeViewModel() {
         cafeViewModel = getViewModel()
-        cafeViewModel.getCafes()
-                .observe(this, Observer {
-                    if (it != null) {
-                        recyclerAdapter.addAllData(it)
-                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
-                    }
+        cafeViewModel.getCafes().observe(this, Observer { cafes ->
+            val userId = UserInstance.getUserId()
+            if(userId.isNullOrEmpty()) {
+                recyclerAdapter.addAllData(cafes!!)
+                pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
+            } else {
+                favoriteViewModel.getFavoritesById(userId!!).observe(this@MainActivity, Observer { favorites ->
+                    recyclerAdapter.addAllData(cafes!!.toMutableList(), favorites!!)
+                    pullLoadMoreRecyclerView.setPullLoadMoreCompleted()
                 })
+            }
+        })
 
         userViewModel = getViewModel()
 
@@ -343,9 +353,9 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         val keys = arrayListOf("properties.nickname", "properties.profile_image", "properties.thumbnail_image")
         UserManagement.getInstance().me(keys, object: MeV2ResponseCallback() {
             override fun onSuccess(result: MeV2Response?) {
-                Toast.makeText(this@MainActivity,
-                        "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
-                        Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity,
+                //        "#2 id:${result?.id}  가입여부:${result?.hasSignedUp()} nickname:${result?.nickname}",
+                //        Toast.LENGTH_SHORT).show()
 
                 setLogin()
                 requestSignUp(result?.id.toString(), result?.nickname!!, result.profileImagePath!!, "")
@@ -353,19 +363,13 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                 GlideApp.with(this@MainActivity)
                         .load(result.profileImagePath)
                         .into(userImage)
-
-                favoriteViewModel.getFavoritesById(result.id.toString()).observe(this@MainActivity, Observer {
-                    for(favorite in it!!) {
-                        Log.d(APP_TAG, "#Favorites  user: ${favorite.user_Id} cafe: ${favorite.cafe_Id}")
-                    }
-                })
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
                 // TODO Redirect Login.
-                Toast.makeText(this@MainActivity,
+                /*Toast.makeText(this@MainActivity,
                         "errorCode:${errorResult?.errorCode}",
-                        Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT).show()*/
 
             }
         })
@@ -396,12 +400,12 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         AuthService.getInstance().requestAccessTokenInfo(object: ApiResponseCallback<AccessTokenInfoResponse>() {
             override fun onSuccess(result: AccessTokenInfoResponse?) {
                 // 유저id와 토큰 만료기간 체크
-                Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity, "userId:${result?.userId} expiresInMills:${result?.expiresInMillis}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onSessionClosed(errorResult: ErrorResult?) {
                 // TODO redirect login
-                Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@MainActivity, "세션 종료된 상태", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNotSignedUp() {
@@ -418,15 +422,15 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
                     UserManagement.getInstance().requestUnlink(object: UnLinkResponseCallback() {
                         override fun onSuccess(result: Long?) {
                             setLogout()
-                            Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "카카오 계정 UnLink!", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onSessionClosed(errorResult: ErrorResult?) {
-                            Toast.makeText(this@MainActivity, "세션이 종료된 상태", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "세션이 종료된 상태", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onNotSignedUp() {
-                            Toast.makeText(this@MainActivity, "미가입 상태", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(this@MainActivity, "미가입 상태", Toast.LENGTH_SHORT).show()
                         }
 
                     })
@@ -445,10 +449,10 @@ class MainActivity : BaseActivity(), PullLoadMoreRecyclerView.PullLoadMoreListen
         userViewModel.insertUser(user) {
             when(it) {
                 is ApiSuccessResponse<Int> -> {
-                    Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, it.body.toString(), Toast.LENGTH_SHORT).show()
                 }
                 is ApiErrorResponse<Int> -> {
-                    Toast.makeText(this, "${it.code} ${it.errorMessage}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "${it.code} ${it.errorMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
